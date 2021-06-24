@@ -11,10 +11,12 @@ namespace ZombieAttack
         [SerializeField] Transform finalObjectiveTransform = null;
         [SerializeField] Wave[] waves = null;
         public int currentWave = 0;
-        int killedEnemies = 0;
-        int currentMaxEnemies = 0;
+        int killedEnemies = 0;       
         int[] spawnedEnemies;
-
+        int CurrentWaveMaxEnemies
+        {
+            get => waves[currentWave].MaxEnemies;
+        }
         public static EnemyManager instance;
 
         private void Awake()
@@ -88,11 +90,8 @@ namespace ZombieAttack
                     SpawnEnemy();
                 }
             }
-            else
-            {
+            else          
                 CancelInvoke(nameof(SpawnEnemy));
-                currentWave++;
-            }
         }
 
         private void SetupEnemy(GameObject enemy)
@@ -108,9 +107,9 @@ namespace ZombieAttack
         {
             killedEnemies++;
             enemyHealth.OnEnemyDead -= IncreaseKillCount;
-            if (killedEnemies >= currentMaxEnemies)
+            if (killedEnemies >= CurrentWaveMaxEnemies)
             {
-                if (currentWave > waves.Length - 1)
+                if (currentWave >= waves.Length)
                 {
                     currentWave = 0;
                     //Vittoria del gioco
@@ -119,6 +118,7 @@ namespace ZombieAttack
                 }
                 else
                 {
+                    currentWave++;
                     //Vittoria dell'ondata
                     GameManager.instance.SetStatusGame(GameManager.GameState.WaveWon);
                     UI_Manager.instance.SetFinishScreen(GameManager.GameState.WaveWon);
