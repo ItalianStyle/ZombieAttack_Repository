@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 
-namespace Larochiens_Adventure
+namespace ZombieAttack
 {
     public class PauseListener : MonoBehaviour
     {
+        /*
         [SerializeField] bool pauseState = false;
 
         // Update is called once per frame
@@ -16,5 +17,6 @@ namespace Larochiens_Adventure
                 UI_Manager.instance.SetFinishScreen(GameManager.GameState.Paused);
             }
         }
+        */
     }
 }

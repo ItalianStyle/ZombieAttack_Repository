@@ -11,6 +11,7 @@ namespace ZombieAttack
 {
     public class GameManager : MonoBehaviour
     {
+     /*
         public enum CharacterType { Player, Boss, Enemy }
         public static event Action GamePaused;
         public static event Action GameResumed;
@@ -30,9 +31,6 @@ namespace ZombieAttack
 
         public GameObject player = null;
 
-        [Header("")]
-        [SerializeField] CinemachineFreeLook inputToCamera = null;
-
         PauseListener pauseListener = null;
         
         public enum GameState { Won, Lost, Paused, Resumed, BeginGameWithTutorial, notDefined }
@@ -40,7 +38,7 @@ namespace ZombieAttack
 
         public bool isPaused = false;
         public bool isBossActive = false;
-
+     */
         public static GameManager instance;
 
         private void OnEnable()
@@ -53,9 +51,10 @@ namespace ZombieAttack
 
             DontDestroyOnLoad(this);
 
-            SceneManager.sceneLoaded += OnSceneLoaded;
+            //SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
+        /*
         private void OnSceneLoaded(Scene scene, LoadSceneMode arg1)
         {
             //Togli la eventuale pausa da un tentativo precendente del giocatore
@@ -92,16 +91,13 @@ namespace ZombieAttack
             }
         }
 
-        //Attiva o disattiva l'input del giocatore alla camera
-        public void SetCamera(bool value) => inputToCamera.enabled = value;
-
         //Attiva il il movimento del giocatore e il lanciatore di spade a seconda della situazione
         public void CanEnablePlayer(bool canEnable)
         {
             //Attiva il movimento
             player.GetComponent<PlayerMovement>().enabled = canEnable;
             //se è la situazione iniziale dove il giocatore non ha ancora raccolto l'arma, non attivare il lanciatore di spade
-            player.GetComponent<ObjectThrower>().enabled = player.GetComponent<Equipment>().currentWeaponType is Equipment.WeaponType.None ? false : canEnable;
+            GetComponent<ObjectThrower>().enabled = player.GetComponent<Equipment>().currentWeaponType is Equipment.WeaponType.None ? false : canEnable;
         }
 
         //Prendi tutti i riferimenti in base alla scena corrente
@@ -116,7 +112,7 @@ namespace ZombieAttack
 
                 case 1:
                     player = GameObject.FindGameObjectWithTag("Player");
-                    pauseListener = FindObjectOfType<PauseListener>();
+                    //pauseListener = FindObjectOfType<PauseListener>();
 
                     resumeButton = GameObject.FindGameObjectWithTag("ResumeButton").GetComponent<Button>();
                     skipTutorialButton = GameObject.FindGameObjectWithTag("SkipButton").GetComponent<Button>();
@@ -127,7 +123,7 @@ namespace ZombieAttack
                     chestClosed = GameObject.FindGameObjectWithTag("Finish");
                     chestOpened = GameObject.FindGameObjectWithTag("Chest_Open").GetComponent<MeshRenderer>();
 
-                    inputToCamera = FindObjectOfType<CinemachineFreeLook>();
+                    //inputToCamera = FindObjectOfType<CinemachineFreeLook>();
                     break;
 
                 default:
@@ -193,7 +189,7 @@ namespace ZombieAttack
                     pauseListener.enabled = false;
 
                     //Disattivo l'input della telecamera
-                    SetCamera(false);
+                    //SetCamera(false);
 
                     break;
 
@@ -202,10 +198,10 @@ namespace ZombieAttack
                     pauseListener.enabled = true;
 
                     //Riattivo l'HUD del gioco
-                    UI_Manager.instance.SetHUD(true);
+                    //UI_Manager.instance.SetHUD(true);
 
                     //Attivo l'input della telecamera
-                    SetCamera(true);
+                    //SetCamera(true);
 
                     //Informo che il gioco è ripreso
                     GameResumed?.Invoke();
@@ -257,5 +253,6 @@ namespace ZombieAttack
                 yield return null;
             } while ((currentTime <= time) || objectToScale.transform.localScale.x < maxScale.x - bufferMaxScale.x);
         }
+     */
     }
 }
