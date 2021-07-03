@@ -15,4 +15,12 @@ public class Enemy : MonoBehaviour
             if (health <= 0f) gameObject.SetActive(false);
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Player"))
+        {
+            collision.transform.GetComponent<PlayerHealth>().DealDamage(collisionDamage);
+        }
+    }
 }

@@ -465,27 +465,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 329292727, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b, type: 3}
-      propertyPath: m_TagString
-      value: Muzzle
-      objectReference: {fileID: 0}
-    - target: {fileID: 591351649, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b, type: 3}
-      propertyPath: shootForce
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 591351649, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b, type: 3}
-      propertyPath: damage
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 143411753064199228, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b,
+    - target: {fileID: 1581917130832240786, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b,
         type: 3}
-      propertyPath: pooledObjects.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 143411753064199228, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b,
-        type: 3}
-      propertyPath: itemsToPool.Array.data[0].amountToPool
-      value: 5
+      propertyPath: m_Constraints
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 3176618467733478389, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b,
         type: 3}
@@ -547,7 +530,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 742572127, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b, type: 3}
-    - {fileID: 128512147, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b, type: 3}
