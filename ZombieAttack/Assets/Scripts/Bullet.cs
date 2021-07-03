@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public event Action<float> OnEnemyHit;
-
     Rigidbody bulletRigidbody;
     float damage;
 
@@ -19,7 +17,7 @@ public class Bullet : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Enemy"))
         {
-            OnEnemyHit?.Invoke(damage);
+            collision.transform.GetComponent<Enemy>().DealDamage(damage);
         }
         gameObject.SetActive(false);
     }
