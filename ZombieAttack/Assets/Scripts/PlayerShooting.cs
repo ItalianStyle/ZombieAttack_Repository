@@ -8,6 +8,11 @@ namespace ZombieAttack
     {
         Gun currentGun;
 
+        private void Awake()
+        {
+            currentGun = transform.Find("Gun").GetComponent<Gun>();    
+        }
+
         private void Update()
         {
             if (Input.GetMouseButton(0))
