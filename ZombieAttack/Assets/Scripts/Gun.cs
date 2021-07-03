@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gun : MonoBehaviour
+namespace ZombieAttack
 {
-    public void Shoot()
+    public class Gun : MonoBehaviour
     {
+        public void Shoot()
+        {
 
+        }
     }
 }

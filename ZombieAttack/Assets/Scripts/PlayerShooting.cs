@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerShooting : MonoBehaviour
+namespace ZombieAttack
 {
-    Gun currentGun;
-
-    private void Update()
+    public class PlayerShooting : MonoBehaviour
     {
-        if (Input.GetMouseButton(0))
+        Gun currentGun;
+
+        private void Update()
         {
-            currentGun.Shoot();
+            if (Input.GetMouseButton(0))
+            {
+                currentGun.Shoot();
+            }
         }
     }
 }
