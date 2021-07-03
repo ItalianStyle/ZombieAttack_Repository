@@ -1,18 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [Tooltip("How fast player can move?")]
+    [SerializeField] float movementSpeed = 10f;
+    [Tooltip("How fast player can rotate around himself?")]
+    [SerializeField] float rotationSpeed = 30f;
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
-        
+        //Apply movement
+        transform.Translate(Input.GetAxis("Vertical") * movementSpeed * transform.forward, Space.World);
+
+        //Apply rotation
+        transform.Rotate(Input.GetAxis("Horizontal") * rotationSpeed * transform.up);
     }
 }
