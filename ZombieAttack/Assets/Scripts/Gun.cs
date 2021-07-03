@@ -12,6 +12,7 @@ namespace ZombieAttack
         [SerializeField] float reloadTime = .2f;
         [SerializeField] float shootForce = 10f;
         [SerializeField] float bulletLifetime = 1f;
+        [SerializeField] float damage = 1f;
         bool canShoot = true;
 
         private void Awake()
@@ -26,20 +27,18 @@ namespace ZombieAttack
             if (canShoot)
             {
                 GameObject bullet = bulletMagazine.GetPooledObject("Bullet");
-                Transform bulletTransform = bullet.transform;
-
-                bulletTransform.parent = muzzleTransform;
-                //Resetto la posizione
-                bulletTransform.localPosition = Vector3.zero;
-
                 
+                //Posiziono il bullet
+                bullet.transform.parent = muzzleTransform;
+                bullet.transform.localPosition = Vector3.zero;
+                bullet.transform.parent = null;
+                bullet.transform.rotation = Quaternion.LookRotation(playerTransform.forward, playerTransform.up);
                 
-                bulletTransform.parent = null;
-                //Setto la rotazione
-                bulletTransform.rotation = Quaternion.LookRotation(playerTransform.forward, playerTransform.up);
+                //Shooting
                 bullet.SetActive(true);
+                bullet.GetComponent<Bullet>().Throw(bullet.transform.forward * shootForce, ForceMode.Impulse, damage);
                 
-                bulletTransform.GetComponent<Rigidbody>().AddForce(bulletTransform.forward * shootForce, ForceMode.Impulse);
+                //Post-shoot stuff
                 StartCoroutine(Reload());
                 StartCoroutine("CountBulletLifetime", bullet);
                 canShoot = false;
