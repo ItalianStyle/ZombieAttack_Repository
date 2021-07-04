@@ -92,8 +92,9 @@ GameObject:
   - component: {fileID: 2202002693716102190}
   - component: {fileID: 2202002693716102186}
   - component: {fileID: 2202002693716102353}
-  - component: {fileID: 2202002693716102189}
   - component: {fileID: 6234034948952428420}
+  - component: {fileID: 2202002693716102189}
+  - component: {fileID: 7913972518268400123}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -193,20 +194,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2202002693716102189
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2202002693716102352}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0981d004c89a3ca4c8476eafb1adc397, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 100
-  collisionDamage: 10
 --- !u!195 &6234034948952428420
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -229,3 +216,29 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &2202002693716102189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2202002693716102352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0981d004c89a3ca4c8476eafb1adc397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  collisionDamage: 10
+--- !u!114 &7913972518268400123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2202002693716102352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 407a961c5ac814143ab34e1fd359d07b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
