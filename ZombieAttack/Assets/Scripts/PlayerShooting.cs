@@ -7,6 +7,7 @@ namespace ZombieAttack
     public class PlayerShooting : MonoBehaviour
     {
         Gun currentGun;
+        [SerializeField] SimpleHealthBar gunBar = null;
 
         private void Awake()
         {
@@ -17,7 +18,7 @@ namespace ZombieAttack
         {
             if (Input.GetMouseButton(0))
             {
-                currentGun.Shoot();
+                currentGun.Shoot(gunBar);
             }
         }
     }

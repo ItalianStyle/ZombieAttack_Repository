@@ -11,10 +11,12 @@ namespace ZombieAttack
 
         private void OnTriggerEnter(Collider other)
         {
-            gameObject.SetActive(false);
-
             if (other.gameObject.CompareTag("Enemy"))
-                other.transform.GetComponent<EnemyHealth>().DealDamage(damage);
+            {
+                Debug.Log("Nemico colpito");
+                gameObject.SetActive(false);
+                other.transform.GetComponent<Health>().DealDamage(damage);
+            }
         }
 
         private void OnDisable()
