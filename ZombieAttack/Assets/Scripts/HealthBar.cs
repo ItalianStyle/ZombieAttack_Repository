@@ -8,7 +8,7 @@ namespace ZombieAttack
     public class HealthBar : MonoBehaviour
     {
         public SimpleHealthBar healthBar;
-        [SerializeField] Health playerHealth;
+        [SerializeField] Health playerHealth = null;
         Camera mainCamera;
 
         private void Awake()

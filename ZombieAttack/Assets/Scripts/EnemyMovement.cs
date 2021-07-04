@@ -7,7 +7,7 @@ namespace ZombieAttack
     {
         NavMeshAgent enemyAgent;
 
-        [SerializeField] GameObject destination;
+        [SerializeField] GameObject destination = null;
 
         private void Awake()
         {
@@ -31,8 +31,7 @@ namespace ZombieAttack
         private void OnTriggerExit(Collider other)
         {
             if (other.gameObject.CompareTag("Finish"))
-            {
-                
+            {               
                 enemyAgent.isStopped = false;
             }
         }

@@ -7,7 +7,7 @@ namespace ZombieAttack
     public class PlayerShooting : MonoBehaviour
     {
         Gun currentGun;
-        [SerializeField] SimpleHealthBar gunBar;
+        [SerializeField] SimpleHealthBar gunBar = null;
 
         private void Awake()
         {

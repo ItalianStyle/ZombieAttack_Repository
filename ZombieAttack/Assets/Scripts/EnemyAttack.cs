@@ -12,10 +12,10 @@ namespace ZombieAttack
         [SerializeField] float meleeDamage = 10f;
 
         [Tooltip("How much time should the enemy wait before dealing damage again to Player.")]
-        [SerializeField] float timeToDealCollisionDmg;
+        [SerializeField] float timeToDealCollisionDmg = .1f;
 
         [Tooltip("How much time should the enemy wait before dealing damage again to FinalObjective.")]
-        [SerializeField] float timeToDealMeleeDmg;
+        [SerializeField] float timeToDealMeleeDmg = .1f;
         
         bool canDamagePlayer = true;
         bool canDamageObjective = true;
