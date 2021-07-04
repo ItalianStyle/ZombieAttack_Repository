@@ -21,7 +21,7 @@ namespace ZombieAttack
             playerTransform = transform.parent;
         }
 
-        public void Shoot()
+        public void Shoot(SimpleHealthBar gunBar)
         {
             if (canShoot)
             {
@@ -38,15 +38,21 @@ namespace ZombieAttack
                 bullet.GetComponent<Bullet>().Throw(bullet.transform.forward * shootForce, ForceMode.Impulse, damage);
                 
                 //Post-shoot stuff
-                StartCoroutine(Reload());
+                StartCoroutine("Reload", gunBar);
                 StartCoroutine("CountBulletLifetime", bullet);
                 canShoot = false;
             }
         }
 
-        IEnumerator Reload()
+        IEnumerator Reload(SimpleHealthBar gunBar)
         {
-            yield return new WaitForSeconds(reloadTime);
+            float elapsed = 0f;
+            while(elapsed < reloadTime)
+            {
+                elapsed += Time.deltaTime;
+                gunBar.UpdateBar(elapsed, reloadTime);
+                yield return null;
+            }
             canShoot = true;
         }
 

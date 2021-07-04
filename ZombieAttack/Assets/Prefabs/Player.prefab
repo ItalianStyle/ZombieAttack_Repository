@@ -309,7 +309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0981d004c89a3ca4c8476eafb1adc397, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  maxHealth: 100
 --- !u!114 &215815789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -336,6 +336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ee86fbbdbdbf7c46bd93b0623d0b432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gunBar: {fileID: 0}
 --- !u!1001 &6216645863903029123
 PrefabInstance:
   m_ObjectHideFlags: 0

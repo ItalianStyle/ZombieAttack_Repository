@@ -7,25 +7,31 @@ namespace ZombieAttack
 {
     public class HealthBar : MonoBehaviour
     {
-        public SimpleHealthBar enemyHealthBar;
-
+        public SimpleHealthBar healthBar;
+        [SerializeField] Health playerHealth;
         Camera mainCamera;
 
         private void Awake()
         {
             mainCamera = Camera.main;
-            GetComponentInParent<Health>().OnHealthPctChanged += HandleHealthChanged;
+            if (playerHealth is null)
+                GetComponentInParent<Health>().OnHealthPctChanged += HandleHealthChanged;
+            else
+                playerHealth.OnHealthPctChanged += HandleHealthChanged;
         }
 
         private void HandleHealthChanged(float currentHealth, float maxHealth)
         {
-            enemyHealthBar.UpdateBar(currentHealth, maxHealth);
+            healthBar.UpdateBar(currentHealth, maxHealth);
         }
 
         private void LateUpdate()
         {
-            transform.LookAt(mainCamera.transform);
-            transform.Rotate(0, 180, 0);
+            if (playerHealth is null)
+            {
+                transform.LookAt(mainCamera.transform);
+                transform.Rotate(0, 180, 0);
+            }
         }
     }
 }
