@@ -2,7 +2,7 @@
 
 namespace ZombieAttack
 {
-    public class EnemyHealth : MonoBehaviour
+    public class Health : MonoBehaviour
     {
         [SerializeField] float health = 100;
 

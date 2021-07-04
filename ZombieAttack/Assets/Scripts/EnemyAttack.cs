@@ -10,7 +10,7 @@ namespace ZombieAttack
         {
             if (collision.gameObject.CompareTag("Player"))
             {
-                collision.transform.GetComponent<PlayerHealth>().DealDamage(collisionDamage);
+                collision.transform.GetComponent<Health>().DealDamage(collisionDamage);
             }
         }
     }
