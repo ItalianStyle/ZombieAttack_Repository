@@ -16,7 +16,8 @@ namespace ZombieAttack
 
         private void Update()
         {
-            enemyAgent.SetDestination(destination.transform.position);
+            if(!enemyAgent.isStopped)
+                enemyAgent.SetDestination(destination.transform.position);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -24,6 +25,15 @@ namespace ZombieAttack
             if(other.gameObject.CompareTag("Finish"))
             {
                 enemyAgent.isStopped = true;
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.gameObject.CompareTag("Finish"))
+            {
+                
+                enemyAgent.isStopped = false;
             }
         }
     }
