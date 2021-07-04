@@ -1,14 +1,17 @@
 ﻿using UnityEngine;
 
-public class EnemyAttack : MonoBehaviour
+namespace ZombieAttack
 {
-    [SerializeField] float collisionDamage = 10f;
-
-    private void OnCollisionEnter(Collision collision)
+    public class EnemyAttack : MonoBehaviour
     {
-        if (collision.gameObject.CompareTag("Player"))
+        [SerializeField] float collisionDamage = 10f;
+
+        private void OnCollisionEnter(Collision collision)
         {
-            collision.transform.GetComponent<PlayerHealth>().DealDamage(collisionDamage);
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                collision.transform.GetComponent<PlayerHealth>().DealDamage(collisionDamage);
+            }
         }
     }
 }

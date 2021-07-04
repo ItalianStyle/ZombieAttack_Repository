@@ -1,17 +1,22 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyMovement : MonoBehaviour
+namespace ZombieAttack
 {
-    NavMeshAgent enemyAgent;
-
-    private void Awake()
+    public class EnemyMovement : MonoBehaviour
     {
-        enemyAgent = GetComponent<NavMeshAgent>();
-    }
+        NavMeshAgent enemyAgent;
 
-    private void Update()
-    {
-            
+        [SerializeField] GameObject destination;
+
+        private void Awake()
+        {
+            enemyAgent = GetComponent<NavMeshAgent>();
+        }
+
+        private void Update()
+        {
+            enemyAgent.SetDestination(destination.transform.position);
+        }
     }
 }

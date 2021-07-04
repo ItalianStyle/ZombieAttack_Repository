@@ -1,15 +1,18 @@
 ﻿using UnityEngine;
 
-public class EnemyHealth : MonoBehaviour
+namespace ZombieAttack
 {
-    [SerializeField] float health = 100;
-
-    public void DealDamage(float damage)
+    public class EnemyHealth : MonoBehaviour
     {
-        if(health > 0f)
+        [SerializeField] float health = 100;
+
+        public void DealDamage(float damage)
         {
-            health -= damage;
-            if (health <= 0f) gameObject.SetActive(false);
+            if (health > 0f)
+            {
+                health -= damage;
+                if (health <= 0f) gameObject.SetActive(false);
+            }
         }
     }
 }
