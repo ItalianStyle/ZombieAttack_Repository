@@ -18,5 +18,13 @@ namespace ZombieAttack
         {
             enemyAgent.SetDestination(destination.transform.position);
         }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if(other.gameObject.CompareTag("Finish"))
+            {
+                enemyAgent.isStopped = true;
+            }
+        }
     }
 }

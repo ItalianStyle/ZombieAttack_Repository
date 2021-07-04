@@ -11,7 +11,16 @@ namespace ZombieAttack
             if (health > 0f)
             {
                 health -= damage;
-                if (health <= 0f) gameObject.SetActive(false);
+                if (health <= 0f)
+                {
+                    gameObject.SetActive(false);
+                    if (gameObject.CompareTag("Finish"))
+                    {
+                        //Game Over
+                        Debug.Log("GAME OVER");
+                    }
+                        
+                }
             }
         }
     }
