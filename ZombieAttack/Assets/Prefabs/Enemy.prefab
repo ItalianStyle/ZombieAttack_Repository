@@ -180,7 +180,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 80
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!136 &2202002693716102353
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -242,6 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 407a961c5ac814143ab34e1fd359d07b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destination: {fileID: 0}
 --- !u!114 &3574383134260671594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,3 +256,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collisionDamage: 10
+  meleeDamage: 10
+  timeToDealCollisionDmg: 0
+  timeToDealMeleeDmg: 0
