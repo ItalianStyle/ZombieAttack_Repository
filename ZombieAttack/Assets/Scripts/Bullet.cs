@@ -1,39 +1,33 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Bullet : MonoBehaviour
+namespace ZombieAttack
 {
-    public event Action<float> OnEnemyHit;
-
-    Rigidbody bulletRigidbody;
-    float damage;
-
-    private void Awake()
+    public class Bullet : MonoBehaviour
     {
-        bulletRigidbody = GetComponent<Rigidbody>();
-    }
+        Rigidbody bulletRigidbody;
+        float damage;
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if(collision.gameObject.CompareTag("Enemy"))
+        private void Awake() => bulletRigidbody = GetComponent<Rigidbody>();
+
+        private void OnTriggerEnter(Collider other)
         {
-            OnEnemyHit?.Invoke(damage);
+            gameObject.SetActive(false);
+
+            if (other.gameObject.CompareTag("Enemy"))
+                other.transform.GetComponent<EnemyHealth>().DealDamage(damage);
         }
-        gameObject.SetActive(false);
-    }
 
-    private void OnDisable()
-    {
-        transform.rotation = Quaternion.identity;
-        transform.position = Vector3.zero;
-        bulletRigidbody.velocity = Vector3.zero;
-    }
+        private void OnDisable()
+        {
+            transform.rotation = Quaternion.identity;
+            transform.position = Vector3.zero;
+            bulletRigidbody.velocity = Vector3.zero;
+        }
 
-    public void Throw(Vector3 force, ForceMode forceMode, float damage)
-    {
-        bulletRigidbody.AddForce(force, forceMode);
-        this.damage = damage;
+        public void Throw(Vector3 force, ForceMode forceMode, float damage)
+        {
+            bulletRigidbody.AddForce(force, forceMode);
+            this.damage = damage;
+        }
     }
 }

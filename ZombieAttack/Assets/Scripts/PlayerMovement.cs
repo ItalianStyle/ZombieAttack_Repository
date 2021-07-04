@@ -8,12 +8,17 @@ namespace ZombieAttack
         [SerializeField] float movementSpeed = 10f;
         [Tooltip("How fast player can rotate around himself?")]
         [SerializeField] float rotationSpeed = 30f;
+        CharacterController playerController;
+
+        private void Awake()
+        {
+            playerController = GetComponent<CharacterController>();
+        }
 
         private void FixedUpdate()
         {
             //Apply movement
-            transform.Translate(Input.GetAxis("Vertical") * movementSpeed * transform.forward, Space.World);
-
+            playerController.SimpleMove(Input.GetAxis("Vertical") * movementSpeed * transform.forward);
             //Apply rotation
             transform.Rotate(Input.GetAxis("Horizontal") * rotationSpeed * transform.up);
         }
