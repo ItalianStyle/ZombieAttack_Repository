@@ -294,11 +294,10 @@ MonoBehaviour:
   finishScreen: {fileID: 891466490}
   playerPanel: {fileID: 1306317403}
   finalObjectiveHPBarPanel: {fileID: 4911065013292994501}
-  titleFinishScreenColors: []
-  titlesFinishScreen:
-  - Hai vinto!
-  - Hai perso
-  - Pausa
+  finishScreens:
+  - {fileID: 11400000, guid: 030361c851ba74d4f9aa10df7107925c, type: 2}
+  - {fileID: 11400000, guid: d1f6536c7c9ad7f4f989f7ea369ccf4c, type: 2}
+  - {fileID: 11400000, guid: 327a34a33ae6e6e40995cb1233c6f40f, type: 2}
   playButton: {fileID: 1592184237}
   resumeButton: {fileID: 1775754527}
 --- !u!4 &348456257
