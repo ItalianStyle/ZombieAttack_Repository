@@ -27,8 +27,7 @@ namespace ZombieAttack
         //[SerializeField] CanvasGroup[] enemiesHPBars = null; 
         */
         [Header("End screen stats")]
-        [SerializeField] Color[] titleFinishScreenColors = null;
-        [SerializeField] string[] titlesFinishScreen = null;
+        [SerializeField] FinishScreen[] finishScreens;
         
         [Header("Buttons")]
         [SerializeField] GameObject playButton = null;
@@ -179,6 +178,10 @@ namespace ZombieAttack
 
                     //Trova HP bar del boss
                     finalObjectiveHPBarPanel = GameObject.FindGameObjectWithTag("FinalObjectivePanel").GetComponent<CanvasGroup>();
+
+                    //Trova i bottoni
+                    playButton = GameObject.FindGameObjectWithTag("PlayButton");
+                    resumeButton = GameObject.FindGameObjectWithTag("ResumeButton");
                     break;
                     /*
                 case 1:
@@ -234,8 +237,8 @@ namespace ZombieAttack
 
             if ((int)gameState < 3)
             {
-                titleFinishScreen.text = titlesFinishScreen[(int)gameState];
-                titleFinishScreen.color = titleFinishScreenColors[(int)gameState];
+                titleFinishScreen.text = finishScreens[(int)gameState].titleText;
+                titleFinishScreen.color = finishScreens[(int)gameState].titleColor;
             }
             else
                 Debug.LogError("Lo stato di gioco non può essere usato come indice per il titolo di endScreen (" + gameState + ")");
