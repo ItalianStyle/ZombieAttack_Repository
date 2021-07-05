@@ -80,16 +80,6 @@ namespace ZombieAttack
             }
         }
         
-        //Attiva il il movimento del giocatore e il lanciatore di spade a seconda della situazione
-        public void CanEnablePlayer(bool canEnable)
-        {
-            //Attiva il movimento
-            player.GetComponent<PlayerMovement>().enabled = canEnable;
-            //se è la situazione iniziale dove il giocatore non ha ancora raccolto l'arma, non attivare il lanciatore di spade
-            //GetComponent<PlayerShooting>().enabled = player.GetComponent<Equipment>().currentWeaponType is Equipment.WeaponType.None ? false : canEnable;
-            player.GetComponent<PlayerShooting>().enabled = canEnable;
-        }
-        
         //Prendi tutti i riferimenti in base alla scena corrente
         private void GetReferences(int sceneIndex)
         {
@@ -101,6 +91,7 @@ namespace ZombieAttack
                     pauseListener = FindObjectOfType<PauseListener>();
 
                     player = GameObject.FindGameObjectWithTag("Player");
+                    resumeButton = GameObject.FindGameObjectWithTag("ResumeButton").GetComponent<Button>();
                     break;
 
                 case 1:
@@ -192,7 +183,17 @@ namespace ZombieAttack
                     break;
             }
         }
-        
+
+        //Attiva il il movimento del giocatore e il lanciatore di spade a seconda della situazione
+        public void CanEnablePlayer(bool canEnable)
+        {
+            //Attiva il movimento
+            player.GetComponent<PlayerMovement>().enabled = canEnable;
+            //se è la situazione iniziale dove il giocatore non ha ancora raccolto l'arma, non attivare il lanciatore di spade
+            //GetComponent<PlayerShooting>().enabled = player.GetComponent<Equipment>().currentWeaponType is Equipment.WeaponType.None ? false : canEnable;
+            player.GetComponent<PlayerShooting>().enabled = canEnable;
+        }
+
         //Se true, libera il mouse, se false il mouse viene bloccato
         private static void SetMousePointer(bool canUnlockMouse)
         {
