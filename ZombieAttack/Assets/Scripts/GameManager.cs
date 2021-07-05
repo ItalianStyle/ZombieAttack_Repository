@@ -11,8 +11,8 @@ namespace ZombieAttack
 {
     public class GameManager : MonoBehaviour
     {
-     /*
-        public enum CharacterType { Player, Boss, Enemy }
+        public enum EntityType { Player, FinalObjective, Enemy }
+     
         public static event Action GamePaused;
         public static event Action GameResumed;
 
@@ -21,24 +21,16 @@ namespace ZombieAttack
         [SerializeField] Button resumeButton = null;
         [SerializeField] Button exitGameButton = null;
         [SerializeField] Button skipTutorialButton = null;
-
-        [Header("Mesh References")]
-        [SerializeField] GameObject bossDoorClosed = null;
-        [SerializeField] GameObject bossDoorOpen = null;
-
-        [SerializeField] GameObject chestClosed = null;
-        [SerializeField] MeshRenderer chestOpened = null;
-
+     
         public GameObject player = null;
-
+        
         PauseListener pauseListener = null;
         
         public enum GameState { Won, Lost, Paused, Resumed, BeginGameWithTutorial, notDefined }
         public GameState currentGameState = GameState.notDefined;
-
+       
         public bool isPaused = false;
-        public bool isBossActive = false;
-     */
+     
         public static GameManager instance;
 
         private void OnEnable()
@@ -51,16 +43,16 @@ namespace ZombieAttack
 
             DontDestroyOnLoad(this);
 
-            //SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
-        /*
+        
         private void OnSceneLoaded(Scene scene, LoadSceneMode arg1)
         {
             //Togli la eventuale pausa da un tentativo precendente del giocatore
             Time.timeScale = 1f;
             //Disattiva il boss
-            isBossActive = false;
+            //isBossActive = false;
 
             //Prendi tutte le reference della scena attuale
             GetReferences(scene.buildIndex);
@@ -69,12 +61,10 @@ namespace ZombieAttack
             switch (scene.buildIndex)
             {
                 case 0:
-                    GetComponent<ObjectPooler>().enabled = false;
                     exitGameButton.onClick.AddListener(QuitGame);
                     break;
 
                 case 1:
-                    GetComponent<ObjectPooler>().enabled = true;
                     SetStatusGame(GameState.BeginGameWithTutorial);
                     
                     //Prepara i bottoni dei menu
@@ -82,7 +72,6 @@ namespace ZombieAttack
                     exitGameButton.onClick.AddListener(MainMenu);
                     skipTutorialButton.onClick.AddListener(delegate { SetMousePointer(false); });
 
-                    ManageBossDoor(false);
                     break;
 
                 default:
@@ -90,16 +79,17 @@ namespace ZombieAttack
                     break;
             }
         }
-
+        
         //Attiva il il movimento del giocatore e il lanciatore di spade a seconda della situazione
         public void CanEnablePlayer(bool canEnable)
         {
             //Attiva il movimento
             player.GetComponent<PlayerMovement>().enabled = canEnable;
             //se è la situazione iniziale dove il giocatore non ha ancora raccolto l'arma, non attivare il lanciatore di spade
-            GetComponent<ObjectThrower>().enabled = player.GetComponent<Equipment>().currentWeaponType is Equipment.WeaponType.None ? false : canEnable;
+            //GetComponent<PlayerShooting>().enabled = player.GetComponent<Equipment>().currentWeaponType is Equipment.WeaponType.None ? false : canEnable;
+            player.GetComponent<PlayerShooting>().enabled = canEnable;
         }
-
+        
         //Prendi tutti i riferimenti in base alla scena corrente
         private void GetReferences(int sceneIndex)
         {
@@ -108,20 +98,17 @@ namespace ZombieAttack
             switch (sceneIndex)
             {
                 case 0:
+                    pauseListener = FindObjectOfType<PauseListener>();
+
+                    player = GameObject.FindGameObjectWithTag("Player");
                     break;
 
                 case 1:
                     player = GameObject.FindGameObjectWithTag("Player");
-                    //pauseListener = FindObjectOfType<PauseListener>();
+                    pauseListener = FindObjectOfType<PauseListener>();
 
                     resumeButton = GameObject.FindGameObjectWithTag("ResumeButton").GetComponent<Button>();
                     skipTutorialButton = GameObject.FindGameObjectWithTag("SkipButton").GetComponent<Button>();
-
-                    bossDoorClosed = GameObject.FindGameObjectWithTag("Door_closed");
-                    bossDoorOpen = GameObject.FindGameObjectWithTag("Door_open");
-
-                    chestClosed = GameObject.FindGameObjectWithTag("Finish");
-                    chestOpened = GameObject.FindGameObjectWithTag("Chest_Open").GetComponent<MeshRenderer>();
 
                     //inputToCamera = FindObjectOfType<CinemachineFreeLook>();
                     break;
@@ -131,7 +118,7 @@ namespace ZombieAttack
                     break;
             }
         }
-
+        
         public void LoadGame() => SceneManager.LoadScene("Gioco");
 
         public void ResumeGame()
@@ -144,7 +131,7 @@ namespace ZombieAttack
         public void MainMenu() => SceneManager.LoadScene(0);
 
         public void QuitGame() => Application.Quit();
-
+        
         public void SetStatusGame(GameState newGameState)
         {
             currentGameState = newGameState;
@@ -174,9 +161,6 @@ namespace ZombieAttack
             switch (currentGameState)
             {
                 case GameState.Won:
-                    //Apri lo scrigno del tesoro
-                    chestClosed.GetComponent<MeshRenderer>().enabled = false;
-                    chestOpened.enabled = true;
 
                     //Disattivo il trigger per la pausa
                     pauseListener.enabled = false;
@@ -208,36 +192,14 @@ namespace ZombieAttack
                     break;
             }
         }
-
+        
         //Se true, libera il mouse, se false il mouse viene bloccato
         private static void SetMousePointer(bool canUnlockMouse)
         {
             Cursor.lockState = canUnlockMouse ? CursorLockMode.None : CursorLockMode.Locked;
             Cursor.visible = canUnlockMouse ? true : false;
         }
-
-        //Apri o chiudi il portone della stanza boss
-        public void ManageBossDoor(bool canOpen)
-        {
-            BoxCollider[] doorColliders = new BoxCollider[2];
-
-            if (bossDoorClosed && bossDoorOpen)
-            {
-                bossDoorClosed.GetComponent<MeshRenderer>().enabled = !canOpen;
-                bossDoorClosed.GetComponent<BoxCollider>().enabled = !canOpen;
-
-                bossDoorOpen.GetComponent<MeshRenderer>().enabled = canOpen;
-
-                doorColliders = bossDoorOpen.GetComponentsInChildren<BoxCollider>();
-                if (doorColliders.Length > 0)
-                {
-                    foreach (BoxCollider collider in doorColliders)
-                        collider.enabled = canOpen;
-                }
-            }
-            else
-                Debug.LogError("Riferimenti alle porte mancanti! Verifica eventualmente i tag di ricerca");
-        }
+        /*
 
         //Source: https://answers.unity.com/questions/805199/how-do-i-scale-a-gameobject-over-time.html
         //Coroutine per far crescere i pupazzi di neve

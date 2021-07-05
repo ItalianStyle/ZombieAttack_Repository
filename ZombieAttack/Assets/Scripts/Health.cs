@@ -43,6 +43,8 @@ namespace ZombieAttack
                     if (gameObject.CompareTag("Finish"))  //Check if it's FinalObjective
                     {
                         Debug.Log("GAME OVER");  //Game Over
+                        GameManager.instance.SetStatusGame(GameManager.GameState.Lost);
+                        UI_Manager.instance.SetFinishScreen(GameManager.GameState.Lost);
                     }
                     else if (gameObject.CompareTag("Player"))
                     {

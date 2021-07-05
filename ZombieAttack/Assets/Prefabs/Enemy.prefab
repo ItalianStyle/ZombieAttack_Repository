@@ -257,7 +257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collisionDamage: 10
-  meleeDamage: 1
+  meleeDamage: 10
   timeToDealCollisionDmg: 1
   timeToDealMeleeDmg: 2
 --- !u!1001 &3515300838318194241
