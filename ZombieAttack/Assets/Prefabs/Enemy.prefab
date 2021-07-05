@@ -230,7 +230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0981d004c89a3ca4c8476eafb1adc397, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 2
 --- !u!114 &7913972518268400123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,7 +257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collisionDamage: 10
-  meleeDamage: 10
+  meleeDamage: 1
   timeToDealCollisionDmg: 1
   timeToDealMeleeDmg: 2
 --- !u!1001 &3515300838318194241
