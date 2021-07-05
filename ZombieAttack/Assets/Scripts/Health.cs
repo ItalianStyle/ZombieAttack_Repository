@@ -6,18 +6,37 @@ namespace ZombieAttack
     public class Health : MonoBehaviour
     {
         [SerializeField] float maxHealth = 100;
-        float currentHealth;
+
+        float _currentHealth;
+        float CurrentHealth
+        {
+            get => _currentHealth;
+
+            set
+            {              
+                //Check for min and max values for health
+                if (_currentHealth < 0f)
+                    _currentHealth = 0f;
+                else if (_currentHealth > maxHealth)
+                    _currentHealth = maxHealth;
+                else
+                    _currentHealth = value;
+
+                //Fire the event everytime health is changed
+                OnHealthPctChanged(CurrentHealth, maxHealth);
+            }
+        }
 
         public event Action<float, float> OnHealthPctChanged = delegate { }; //delegate is to avoid null checks
 
-        private void OnEnable() => currentHealth = maxHealth;
+        private void OnEnable() => CurrentHealth = maxHealth;
 
         void ModifyHealth(float amount)
         {
-            if (currentHealth > 0f && currentHealth <= maxHealth)
+            if (CurrentHealth > 0f && CurrentHealth <= maxHealth)
             {
-                currentHealth += amount;
-                if (currentHealth <= 0f)
+                CurrentHealth += amount;
+                if (CurrentHealth == 0f)
                 {
                     gameObject.SetActive(false);
 
@@ -34,10 +53,7 @@ namespace ZombieAttack
                         //Play sound
                         //Earn money
                     }
-                }
-                else if (currentHealth > maxHealth)
-                    currentHealth = maxHealth;
-                OnHealthPctChanged(currentHealth, maxHealth);
+                }             
             }
         }
 
