@@ -32,10 +32,7 @@ namespace ZombieAttack
 
         private void OnEnable() => CurrentHealth = maxHealth;
 
-        private void OnDisable()
-        {
-            CurrentHealth = maxHealth;
-        }
+        private void OnDisable() => CurrentHealth = maxHealth;
 
         void ModifyHealth(float amount)
         {
