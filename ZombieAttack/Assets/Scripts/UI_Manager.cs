@@ -13,35 +13,38 @@ namespace ZombieAttack
         public enum MenuType { MainMenu, Settings, Credits }
 
         Animator scrollingCredits = null;
-
+        */
         [Header("Panels")]
         [SerializeField] CanvasGroup finishScreen = null;
-        [SerializeField] CanvasGroup bossHPBarPanel = null;
+        [SerializeField] CanvasGroup playerPanel = null;
+        [SerializeField] CanvasGroup finalObjectiveHPBarPanel = null;
+        /*
         [SerializeField] CanvasGroup playerHPBarPanel = null;
         [SerializeField] CanvasGroup tutorialPanel = null;
         [SerializeField] CanvasGroup mainMenuPanel = null;
         [SerializeField] CanvasGroup settingsPanel = null;
         [SerializeField] CanvasGroup creditsPanel = null;
         //[SerializeField] CanvasGroup[] enemiesHPBars = null; 
-
+        */
         [Header("End screen stats")]
         [SerializeField] Color[] titleFinishScreenColors = null;
         [SerializeField] string[] titlesFinishScreen = null;
-
+        
         [Header("Buttons")]
         [SerializeField] GameObject playButton = null;
-        [SerializeField] Button settingsButton = null;
+        /*[SerializeField] Button settingsButton = null;
         [SerializeField] Button creditsButton = null;
         [SerializeField] Button returnButtonFromSettings = null;
         [SerializeField] Button returnButtonFromCredits = null;
-        [SerializeField] GameObject resumeButton = null;
-
+        */[SerializeField] GameObject resumeButton = null;
+        /*
         [Header("Settings Sliders")]
         [SerializeField] Slider masterVolumeSlider = null;
         [SerializeField] Slider backgroundVolumeSlider = null;
         [SerializeField] Slider sfxVolumeSlider = null;
-
+        */
         Text titleFinishScreen = null;
+        /*
         Equipment playerEquipment = null;
         SimpleHealthBar bossHPBar = null;
         SimpleHealthBar playerHPBar = null;
@@ -60,7 +63,7 @@ namespace ZombieAttack
                 else return null;
             }
         }
-        
+        */
         public static UI_Manager instance;
 
         private void OnEnable()
@@ -75,7 +78,7 @@ namespace ZombieAttack
 
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
-
+        
         private void OnSceneLoaded(Scene scene, LoadSceneMode arg1)
         {
             StartGameUI(scene.buildIndex);
@@ -87,8 +90,8 @@ namespace ZombieAttack
 
             switch (sceneIndex)
             {
-                case 0:  
-                    //Setto la UI
+                case 0:
+                    /*//Setto la UI
                     SetCanvasGroup(mainMenuPanel, true);
                     SetCanvasGroup(settingsPanel, false);
                     SetCanvasGroup(creditsPanel, false);
@@ -108,16 +111,22 @@ namespace ZombieAttack
                     masterVolumeSlider.onValueChanged.AddListener(delegate { MyAudioManager.instance.SetVolume(masterVolumeSlider.value, MyAudioManager.VolumeType.Master); });
                     backgroundVolumeSlider.onValueChanged.AddListener(delegate { MyAudioManager.instance.SetVolume(backgroundVolumeSlider.value, MyAudioManager.VolumeType.Background); });
                     sfxVolumeSlider.onValueChanged.AddListener(delegate { MyAudioManager.instance.SetVolume(sfxVolumeSlider.value, MyAudioManager.VolumeType.SFX); });
-                    
+                    */
+                    SetCanvasGroup(finishScreen, false);
+                    titleFinishScreen.enabled = false;
+
+                    SetCanvasGroup(finalObjectiveHPBarPanel, true);
+                    SetCanvasGroup(playerPanel, true);
+                    //SetCanvasGroup(tutorialPanel, true);
                     break;
 
                 case 1:
                     SetCanvasGroup(finishScreen, false);
                     titleFinishScreen.enabled = false;
 
-                    SetCanvasGroup(bossHPBarPanel, false);
-                    SetCanvasGroup(playerHPBarPanel, false);
-                    SetCanvasGroup(tutorialPanel, true);
+                    SetCanvasGroup(finalObjectiveHPBarPanel, false);
+                    SetCanvasGroup(playerPanel, false);
+                    //SetCanvasGroup(tutorialPanel, true);
                     break;
 
                 default:
@@ -125,7 +134,7 @@ namespace ZombieAttack
                     break;
             }
         }
-
+        /*
         private void UpdateVolumeSettings()
         {
             masterVolumeSlider.value = AudioListener.volume;
@@ -138,14 +147,14 @@ namespace ZombieAttack
         {
             scrollingCredits.SetBool("CanScrollCredits", canScroll);
         }
-
+        */
         //Trova i riferimenti alla UI in ogni scena
         private void GetReferences(int sceneIndex)
         {
             switch (sceneIndex)
             {
                 case 0:
-                    mainMenuPanel = GameObject.FindGameObjectWithTag("MainMenu_Panel").GetComponent<CanvasGroup>();
+                    /*mainMenuPanel = GameObject.FindGameObjectWithTag("MainMenu_Panel").GetComponent<CanvasGroup>();
                     settingsPanel = GameObject.FindGameObjectWithTag("Settings_Panel").GetComponent<CanvasGroup>();
                     creditsPanel = GameObject.FindGameObjectWithTag("Credits_Panel").GetComponent<CanvasGroup>();
                     
@@ -159,8 +168,19 @@ namespace ZombieAttack
                     masterVolumeSlider = GameObject.Find("UI_Canvas/SettingsPanel/masterVolumeSlider").GetComponent<Slider>();
                     backgroundVolumeSlider = GameObject.Find("UI_Canvas/SettingsPanel/backgroundVolumeSlider").GetComponent<Slider>();
                     sfxVolumeSlider = GameObject.Find("UI_Canvas/SettingsPanel/sfxVolumeSlider").GetComponent<Slider>();
-                    break;
+                    */
 
+                    //Trova riferimento agli screen
+                    finishScreen = GameObject.FindGameObjectWithTag("FinishPanel").GetComponent<CanvasGroup>();
+                    titleFinishScreen = finishScreen.transform.GetChild(0).GetComponent<Text>();
+
+                    //Trova HP bar del player
+                    playerPanel = GameObject.FindGameObjectWithTag("PlayerPanel").GetComponent<CanvasGroup>();
+
+                    //Trova HP bar del boss
+                    finalObjectiveHPBarPanel = GameObject.FindGameObjectWithTag("FinalObjectivePanel").GetComponent<CanvasGroup>();
+                    break;
+                    /*
                 case 1:
                     //Trova equipaggiamento player
                     playerEquipment = GameObject.FindGameObjectWithTag("Player").GetComponent<Equipment>();
@@ -186,49 +206,23 @@ namespace ZombieAttack
                     playButton = GameObject.FindGameObjectWithTag("PlayButton");
                     resumeButton = GameObject.FindGameObjectWithTag("ResumeButton");
                     break;
-
+                    */
                 default:
                     Debug.LogError("Indice di scena non riconosciuto");
                     break;
             }
         }
-
-        public void SetReloadIcon(bool canShow, Pickup.PickupType pickupType)
-        {
-            switch (pickupType)
-            {
-                case Pickup.PickupType.Sword:
-                    swordIcon.SetEquipmentIcon(canShow);
-                    break;
-
-                case Pickup.PickupType.Shield:
-                    shieldIcon.SetEquipmentIcon(canShow);
-                    break;
-
-                case Pickup.PickupType.FinalSword:
-                    finalSwordIcon.SetEquipmentIcon(canShow);
-                    break;
-
-                case Pickup.PickupType.NotDefined:
-                default:
-                    Debug.LogError("Tipo pickup non definito");
-                    break;
-            }
-        }
-
+        
         public void SetFinishScreen(GameManager.GameState gameState)
         {
             //Metti in pausa
             Time.timeScale = 0f;
 
             //Disabilita UI dell'equipaggiamento del giocatore
-            SetReloadIcon(false, Pickup.PickupType.Sword);
-            SetReloadIcon(false, Pickup.PickupType.Shield);
-            SetReloadIcon(false, Pickup.PickupType.FinalSword);
 
             //Disabilita la UI delle barre HP
-            SetHPBar(GameManager.CharacterType.Player, false);
-            SetHPBar(GameManager.CharacterType.Boss, false);
+            SetHPBar(GameManager.EntityType.Player, false);
+            SetHPBar(GameManager.EntityType.FinalObjective, false);
 
             //Abilita l'end screen
             //0 -> Win
@@ -252,14 +246,14 @@ namespace ZombieAttack
 
             SetCanvasGroup(finishScreen, true);
         }
-
+        
         public void SetCanvasGroup(CanvasGroup canvasGroup, bool canShow)
         {
             canvasGroup.alpha = canShow ? 1f : 0f;
             canvasGroup.interactable = canShow;
             canvasGroup.blocksRaycasts = canShow;
         }
-
+        /*
         public void UpdateEquipmentIcon(EquipmentIcon.IconType equipmentIcon, float currentValue, float maxValue)
         {
             switch (equipmentIcon)
@@ -298,19 +292,19 @@ namespace ZombieAttack
             else
                 Debug.LogError("Barra HP non riconosciuta");
         }
-
-        public void SetHPBar(GameManager.CharacterType characterType, bool canActive)
+        */
+        public void SetHPBar(GameManager.EntityType characterType, bool canActive)
         {
             //Controlla quale barra degli HP deve essere attivata
             switch (characterType)
             {
-                case GameManager.CharacterType.Player:
-                    SetCanvasGroup(playerHPBarPanel, canActive);
+                case GameManager.EntityType.Player:
+                    SetCanvasGroup(playerPanel, canActive);
                     break;
 
-                //Se è il boss attiva la barra degli HP, altrimenti non fare niente
-                case GameManager.CharacterType.Boss:
-                    SetCanvasGroup(bossHPBarPanel, canActive);
+                //Se è il finalObjective attiva la barra degli HP, altrimenti non fare niente
+                case GameManager.EntityType.FinalObjective:
+                    SetCanvasGroup(finalObjectiveHPBarPanel, canActive);
                     break;
 
                 default:
@@ -318,16 +312,17 @@ namespace ZombieAttack
                     break;
             }
         }
-
+        
         public void SetHUD(bool canShow)
         {
+            /*
             //Se il player ha una spada
             if (playerEquipment.currentWeaponType != Equipment.WeaponType.None)
-                SetHPBar(GameManager.CharacterType.Player, canShow);
+                SetHPBar(GameManager.EntityType.Player, canShow);
 
             //Se il boss è presente, riattiva la sua barra HP
             if (GameManager.instance.isBossActive)
-                SetHPBar(GameManager.CharacterType.Boss, true);
+                SetHPBar(GameManager.EntityType.FinalObjective, true);
 
             //Verifica che equipaggiamento ha il giocatore
             if (playerEquipment.currentWeaponType is Equipment.WeaponType.Sword)
@@ -338,8 +333,10 @@ namespace ZombieAttack
 
             if (playerEquipment.HasShield)
                 SetReloadIcon(canShow, Pickup.PickupType.Shield);
+            */
         }
 
+        /*
         //Faccio cambiare la posizione della camera in base al menu attivo
         public void SetCamera(MenuType menuType)
         {

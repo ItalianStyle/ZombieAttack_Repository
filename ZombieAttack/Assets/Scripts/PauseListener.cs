@@ -4,7 +4,6 @@ namespace ZombieAttack
 {
     public class PauseListener : MonoBehaviour
     {
-        /*
         [SerializeField] bool pauseState = false;
 
         // Update is called once per frame
@@ -16,7 +15,6 @@ namespace ZombieAttack
                 GameManager.instance.SetStatusGame(GameManager.GameState.Paused);
                 UI_Manager.instance.SetFinishScreen(GameManager.GameState.Paused);
             }
-        }
-        */
+        }       
     }
 }
