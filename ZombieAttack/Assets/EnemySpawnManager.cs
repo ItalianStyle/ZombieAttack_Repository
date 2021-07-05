@@ -50,7 +50,7 @@ namespace ZombieAttack
             GameObject enemy = objPooler.GetPooledObject("Enemy");
             
             //Choose spawnpoint
-            enemy.transform.position = spawnPoints[Random.Range(0, spawnPoints.Count - 1)].position;
+            enemy.transform.position = spawnPoints[Random.Range(0, spawnPoints.Count)].position;
 
             enemy.GetComponent<EnemyMovement>().SetDestination(finalObjectiveTransform);
 

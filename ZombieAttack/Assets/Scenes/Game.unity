@@ -1083,7 +1083,7 @@ MonoBehaviour:
   - objectToPool: {fileID: 2202002693716102352, guid: 9a4c8757e82449845a1c5f271d6268d8,
       type: 3}
     amountToPool: 10
-    shouldExpand: 0
+    shouldExpand: 1
   pooledObjects: []
 --- !u!114 &2110660841
 MonoBehaviour:
@@ -1100,7 +1100,7 @@ MonoBehaviour:
   spawnPoints: []
   finalObjectiveTransform: {fileID: 0}
   timeBetweenSpawns: 2
-  maxEnemies: 10
+  maxEnemies: 20
 --- !u!4 &2110660842
 Transform:
   m_ObjectHideFlags: 0
