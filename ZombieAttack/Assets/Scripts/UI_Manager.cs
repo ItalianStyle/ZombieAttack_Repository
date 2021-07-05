@@ -27,7 +27,7 @@ namespace ZombieAttack
         //[SerializeField] CanvasGroup[] enemiesHPBars = null; 
         */
         [Header("End screen stats")]
-        [SerializeField] FinishScreen[] finishScreens;
+        [SerializeField] FinishScreen[] finishScreens = null;
         
         [Header("Buttons")]
         [SerializeField] GameObject playButton = null;
