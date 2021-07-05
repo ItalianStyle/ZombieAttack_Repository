@@ -1076,6 +1076,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 249.7276
       objectReference: {fileID: 0}
+    - target: {fileID: 3574383134260671594, guid: 9a4c8757e82449845a1c5f271d6268d8,
+        type: 3}
+      propertyPath: meleeDamage
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7913972518268400123, guid: 9a4c8757e82449845a1c5f271d6268d8,
         type: 3}
       propertyPath: destination
