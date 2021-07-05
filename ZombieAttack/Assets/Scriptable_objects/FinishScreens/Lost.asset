@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2cf62c049689e554583e97e98575fc50, type: 3}
-  m_Name: New Finish Screen
+  m_Name: Lost
   m_EditorClassIdentifier: 
-  titleText: 
-  titleColor: {r: 0, g: 0, b: 0, a: 0}
+  titleText: Hai perso
+  titleColor: {r: 1, g: 0, b: 0, a: 1}

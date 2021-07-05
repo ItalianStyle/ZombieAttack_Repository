@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cf62c049689e554583e97e98575fc50, type: 3}
   m_Name: Victory
   m_EditorClassIdentifier: 
+  titleText: Hai vinto!
+  titleColor: {r: 0, g: 1, b: 0, a: 1}
