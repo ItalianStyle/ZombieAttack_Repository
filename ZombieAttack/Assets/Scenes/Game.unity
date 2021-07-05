@@ -932,6 +932,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FinalObjective
       objectReference: {fileID: 0}
+    - target: {fileID: 4911065014616920222, guid: e58b772020cfee84086e99de58ed999e,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 8426024761768151813, guid: e58b772020cfee84086e99de58ed999e,
         type: 3}
       propertyPath: healthBar
