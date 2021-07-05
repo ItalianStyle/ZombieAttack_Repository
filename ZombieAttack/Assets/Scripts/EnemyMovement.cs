@@ -7,7 +7,7 @@ namespace ZombieAttack
     {
         NavMeshAgent enemyAgent;
 
-        [SerializeField] GameObject destination = null;
+        [SerializeField] Transform destination = null;
 
         private void Awake()
         {
@@ -16,8 +16,8 @@ namespace ZombieAttack
 
         private void Update()
         {
-            if(!enemyAgent.isStopped)
-                enemyAgent.SetDestination(destination.transform.position);
+            if (!enemyAgent.isStopped)
+                enemyAgent.SetDestination(destination.position);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -34,6 +34,11 @@ namespace ZombieAttack
             {               
                 enemyAgent.isStopped = false;
             }
+        }
+
+        public void SetDestination(Transform destinationTransform)
+        {
+            destination = destinationTransform;
         }
     }
 }
