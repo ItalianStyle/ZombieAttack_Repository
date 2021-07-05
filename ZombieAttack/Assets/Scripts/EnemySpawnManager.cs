@@ -16,17 +16,17 @@ namespace ZombieAttack
         int currentEnemies = 0;
         ObjectPooler objPooler;
 
-        public static EnemySpawnManager instance;
+        //public static EnemySpawnManager instance;
 
         private void Awake()
         {
-            if (instance is null)
+            /*if (instance is null)
             {
                 instance = this;
-                DontDestroyOnLoad(gameObject);
             }
             else if (instance != this)
-                Destroy(this.gameObject);          
+                Destroy(this.gameObject);  
+            */        
         }
 
         private void OnEnable()

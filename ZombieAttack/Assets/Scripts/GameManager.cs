@@ -20,7 +20,7 @@ namespace ZombieAttack
         [SerializeField] Button playButton = null;
         [SerializeField] Button resumeButton = null;
         [SerializeField] Button exitGameButton = null;
-        [SerializeField] Button skipTutorialButton = null;
+        //[SerializeField] Button skipTutorialButton = null;
      
         public GameObject player = null;
         
@@ -65,12 +65,12 @@ namespace ZombieAttack
                     break;
 
                 case 1:
-                    SetStatusGame(GameState.BeginGameWithTutorial);
-                    
+                    //SetStatusGame(GameState.BeginGameWithTutorial);
+                    SetStatusGame(GameState.Resumed);
                     //Prepara i bottoni dei menu
                     resumeButton.onClick.AddListener(ResumeGame);
                     exitGameButton.onClick.AddListener(MainMenu);
-                    skipTutorialButton.onClick.AddListener(delegate { SetMousePointer(false); });
+                    //skipTutorialButton.onClick.AddListener(delegate { SetMousePointer(false); });
 
                     break;
 
@@ -88,10 +88,6 @@ namespace ZombieAttack
             switch (sceneIndex)
             {
                 case 0:
-                    pauseListener = FindObjectOfType<PauseListener>();
-
-                    player = GameObject.FindGameObjectWithTag("Player");
-                    resumeButton = GameObject.FindGameObjectWithTag("ResumeButton").GetComponent<Button>();
                     break;
 
                 case 1:
@@ -99,7 +95,7 @@ namespace ZombieAttack
                     pauseListener = FindObjectOfType<PauseListener>();
 
                     resumeButton = GameObject.FindGameObjectWithTag("ResumeButton").GetComponent<Button>();
-                    skipTutorialButton = GameObject.FindGameObjectWithTag("SkipButton").GetComponent<Button>();
+                    //skipTutorialButton = GameObject.FindGameObjectWithTag("SkipButton").GetComponent<Button>();
 
                     //inputToCamera = FindObjectOfType<CinemachineFreeLook>();
                     break;
@@ -173,7 +169,7 @@ namespace ZombieAttack
                     pauseListener.enabled = true;
 
                     //Riattivo l'HUD del gioco
-                    //UI_Manager.instance.SetHUD(true);
+                    UI_Manager.instance.SetHUD(true);
 
                     //Attivo l'input della telecamera
                     //SetCamera(true);
