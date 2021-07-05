@@ -21,7 +21,9 @@ namespace ZombieAttack
         /*
         [SerializeField] CanvasGroup playerHPBarPanel = null;
         [SerializeField] CanvasGroup tutorialPanel = null;
+        */
         [SerializeField] CanvasGroup mainMenuPanel = null;
+        /*
         [SerializeField] CanvasGroup settingsPanel = null;
         [SerializeField] CanvasGroup creditsPanel = null;
         //[SerializeField] CanvasGroup[] enemiesHPBars = null; 
@@ -90,9 +92,9 @@ namespace ZombieAttack
             switch (sceneIndex)
             {
                 case 0:
-                    /*//Setto la UI
+                    //Setto la UI
                     SetCanvasGroup(mainMenuPanel, true);
-                    SetCanvasGroup(settingsPanel, false);
+                    /*SetCanvasGroup(settingsPanel, false);
                     SetCanvasGroup(creditsPanel, false);
 
                     //Aggiungo la funzionalità ai bottoni
@@ -111,11 +113,7 @@ namespace ZombieAttack
                     backgroundVolumeSlider.onValueChanged.AddListener(delegate { MyAudioManager.instance.SetVolume(backgroundVolumeSlider.value, MyAudioManager.VolumeType.Background); });
                     sfxVolumeSlider.onValueChanged.AddListener(delegate { MyAudioManager.instance.SetVolume(sfxVolumeSlider.value, MyAudioManager.VolumeType.SFX); });
                     */
-                    SetCanvasGroup(finishScreen, false);
-                    titleFinishScreen.enabled = false;
 
-                    SetCanvasGroup(finalObjectiveHPBarPanel, true);
-                    SetCanvasGroup(playerPanel, true);
                     //SetCanvasGroup(tutorialPanel, true);
                     break;
 
@@ -123,8 +121,8 @@ namespace ZombieAttack
                     SetCanvasGroup(finishScreen, false);
                     titleFinishScreen.enabled = false;
 
-                    SetCanvasGroup(finalObjectiveHPBarPanel, false);
-                    SetCanvasGroup(playerPanel, false);
+                    SetCanvasGroup(finalObjectiveHPBarPanel, true);
+                    SetCanvasGroup(playerPanel, true);
                     //SetCanvasGroup(tutorialPanel, true);
                     break;
 
@@ -150,11 +148,12 @@ namespace ZombieAttack
         //Trova i riferimenti alla UI in ogni scena
         private void GetReferences(int sceneIndex)
         {
+            playButton = GameObject.FindGameObjectWithTag("PlayButton");
             switch (sceneIndex)
             {
                 case 0:
-                    /*mainMenuPanel = GameObject.FindGameObjectWithTag("MainMenu_Panel").GetComponent<CanvasGroup>();
-                    settingsPanel = GameObject.FindGameObjectWithTag("Settings_Panel").GetComponent<CanvasGroup>();
+                    mainMenuPanel = GameObject.Find("UI/MainMenuPanel").GetComponent<CanvasGroup>();
+                    /*settingsPanel = GameObject.FindGameObjectWithTag("Settings_Panel").GetComponent<CanvasGroup>();
                     creditsPanel = GameObject.FindGameObjectWithTag("Credits_Panel").GetComponent<CanvasGroup>();
                     
                     scrollingCredits = creditsPanel.transform.GetChild(1).GetChild(0).GetComponent<Animator>();
@@ -169,47 +168,31 @@ namespace ZombieAttack
                     sfxVolumeSlider = GameObject.Find("UI_Canvas/SettingsPanel/sfxVolumeSlider").GetComponent<Slider>();
                     */
 
-                    //Trova riferimento agli screen
-                    finishScreen = GameObject.FindGameObjectWithTag("FinishPanel").GetComponent<CanvasGroup>();
-                    titleFinishScreen = finishScreen.transform.GetChild(0).GetComponent<Text>();
-
-                    //Trova HP bar del player
-                    playerPanel = GameObject.FindGameObjectWithTag("PlayerPanel").GetComponent<CanvasGroup>();
-
-                    //Trova HP bar del boss
-                    finalObjectiveHPBarPanel = GameObject.FindGameObjectWithTag("FinalObjectivePanel").GetComponent<CanvasGroup>();
-
-                    //Trova i bottoni
-                    playButton = GameObject.FindGameObjectWithTag("PlayButton");
-                    resumeButton = GameObject.FindGameObjectWithTag("ResumeButton");
-                    break;
-                    /*
-                case 1:
-                    //Trova equipaggiamento player
-                    playerEquipment = GameObject.FindGameObjectWithTag("Player").GetComponent<Equipment>();
-
-                    //Trova riferimento agli screen
-                    finishScreen = GameObject.FindGameObjectWithTag("FinishScreen").GetComponent<CanvasGroup>();
-                    titleFinishScreen = finishScreen.transform.GetChild(0).GetComponent<Text>();
-
-                    //Trova HP bar del boss
-                    bossHPBarPanel = GameObject.FindGameObjectWithTag("BossHP_Panel").GetComponent<CanvasGroup>();
-
-                    //Trova HP bar del player
-                    playerHPBarPanel = GameObject.FindGameObjectWithTag("PlayerHP_Panel").GetComponent<CanvasGroup>();
-
-                    //Trova le barre HP del boss e del player
-                    //bossHPBar = GameObject.Find("UI/BossHPBarPanel/BossHPBar_Background/BossHPBar").GetComponent<SimpleHealthBar>();
-                    //playerHPBar = GameObject.Find("UI/PlayerHPBarPanel/PlayerHPBar_Background/PlayerHPBar").GetComponent<SimpleHealthBar>();
-
-                    //Trova il riferimento al tutorial
-                    tutorialPanel = GameObject.FindGameObjectWithTag("TutorialPanel").GetComponent<CanvasGroup>();
-
                     //Trova il riferimento ai bottoni
-                    playButton = GameObject.FindGameObjectWithTag("PlayButton");
-                    resumeButton = GameObject.FindGameObjectWithTag("ResumeButton");
+                    
                     break;
-                    */
+                
+            case 1:
+                //Trova equipaggiamento player
+                //playerEquipment = GameObject.FindGameObjectWithTag("Player").GetComponent<Equipment>();
+
+                //Trova riferimento agli screen
+                finishScreen = GameObject.FindGameObjectWithTag("FinishPanel").GetComponent<CanvasGroup>();
+                titleFinishScreen = finishScreen.transform.GetChild(0).GetComponent<Text>();
+
+                //Trova HP bar del boss
+                finalObjectiveHPBarPanel = GameObject.FindGameObjectWithTag("FinalObjectivePanel").GetComponent<CanvasGroup>();
+
+                //Trova HP bar del player
+                playerPanel = GameObject.FindGameObjectWithTag("PlayerPanel").GetComponent<CanvasGroup>();
+
+                //Trova il riferimento al tutorial
+                //tutorialPanel = GameObject.FindGameObjectWithTag("TutorialPanel").GetComponent<CanvasGroup>();
+
+                //Trova il riferimento ai bottoni
+                resumeButton = GameObject.FindGameObjectWithTag("ResumeButton");
+                break;
+                
                 default:
                     Debug.LogError("Indice di scena non riconosciuto");
                     break;
@@ -337,6 +320,9 @@ namespace ZombieAttack
             if (playerEquipment.HasShield)
                 SetReloadIcon(canShow, Pickup.PickupType.Shield);
             */
+            SetCanvasGroup(finishScreen, !canShow);
+            SetHPBar(GameManager.EntityType.Player, canShow);
+            SetHPBar(GameManager.EntityType.FinalObjective, canShow);
         }
 
         /*
