@@ -16,20 +16,17 @@ namespace ZombieAttack
         int currentEnemies = 0;
         ObjectPooler objPooler;
 
-        public static EnemySpawnManager instance;
+        //public static EnemySpawnManager instance;
 
         private void Awake()
         {
-            if (instance is null)
+            /*if (instance is null)
             {
                 instance = this;
-                DontDestroyOnLoad(gameObject);
             }
             else if (instance != this)
-                Destroy(this.gameObject);
-
-            finalObjectiveTransform = GameObject.FindGameObjectWithTag("Finish").transform;
-            objPooler = GetComponent<ObjectPooler>();
+                Destroy(this.gameObject);  
+            */        
         }
 
         private void OnEnable()
@@ -38,10 +35,10 @@ namespace ZombieAttack
             {
                 spawnPoints.Add(transform.GetChild(i));
             }
-        }
 
-        private void Start()
-        {
+            finalObjectiveTransform = GameObject.FindGameObjectWithTag("Finish").transform;
+            objPooler = GameObject.Find("Enemies").GetComponent<ObjectPooler>();
+            currentEnemies = 0;
             SpawnEnemy();
         }
 

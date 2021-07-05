@@ -12,6 +12,7 @@ TagManager:
   - FinalObjectivePanel
   - PlayButton
   - QuitGameButton
+  - ResumeButton
   layers:
   - Default
   - TransparentFX

@@ -20,7 +20,7 @@ namespace ZombieAttack
         [SerializeField] Button playButton = null;
         [SerializeField] Button resumeButton = null;
         [SerializeField] Button exitGameButton = null;
-        [SerializeField] Button skipTutorialButton = null;
+        //[SerializeField] Button skipTutorialButton = null;
      
         public GameObject player = null;
         
@@ -65,12 +65,12 @@ namespace ZombieAttack
                     break;
 
                 case 1:
-                    SetStatusGame(GameState.BeginGameWithTutorial);
-                    
+                    //SetStatusGame(GameState.BeginGameWithTutorial);
+                    SetStatusGame(GameState.Resumed);
                     //Prepara i bottoni dei menu
                     resumeButton.onClick.AddListener(ResumeGame);
                     exitGameButton.onClick.AddListener(MainMenu);
-                    skipTutorialButton.onClick.AddListener(delegate { SetMousePointer(false); });
+                    //skipTutorialButton.onClick.AddListener(delegate { SetMousePointer(false); });
 
                     break;
 
@@ -78,16 +78,6 @@ namespace ZombieAttack
                     Debug.LogError("Indice di scena non riconosciuto");
                     break;
             }
-        }
-        
-        //Attiva il il movimento del giocatore e il lanciatore di spade a seconda della situazione
-        public void CanEnablePlayer(bool canEnable)
-        {
-            //Attiva il movimento
-            player.GetComponent<PlayerMovement>().enabled = canEnable;
-            //se è la situazione iniziale dove il giocatore non ha ancora raccolto l'arma, non attivare il lanciatore di spade
-            //GetComponent<PlayerShooting>().enabled = player.GetComponent<Equipment>().currentWeaponType is Equipment.WeaponType.None ? false : canEnable;
-            player.GetComponent<PlayerShooting>().enabled = canEnable;
         }
         
         //Prendi tutti i riferimenti in base alla scena corrente
@@ -98,9 +88,6 @@ namespace ZombieAttack
             switch (sceneIndex)
             {
                 case 0:
-                    pauseListener = FindObjectOfType<PauseListener>();
-
-                    player = GameObject.FindGameObjectWithTag("Player");
                     break;
 
                 case 1:
@@ -108,7 +95,7 @@ namespace ZombieAttack
                     pauseListener = FindObjectOfType<PauseListener>();
 
                     resumeButton = GameObject.FindGameObjectWithTag("ResumeButton").GetComponent<Button>();
-                    skipTutorialButton = GameObject.FindGameObjectWithTag("SkipButton").GetComponent<Button>();
+                    //skipTutorialButton = GameObject.FindGameObjectWithTag("SkipButton").GetComponent<Button>();
 
                     //inputToCamera = FindObjectOfType<CinemachineFreeLook>();
                     break;
@@ -182,7 +169,7 @@ namespace ZombieAttack
                     pauseListener.enabled = true;
 
                     //Riattivo l'HUD del gioco
-                    //UI_Manager.instance.SetHUD(true);
+                    UI_Manager.instance.SetHUD(true);
 
                     //Attivo l'input della telecamera
                     //SetCamera(true);
@@ -192,7 +179,17 @@ namespace ZombieAttack
                     break;
             }
         }
-        
+
+        //Attiva il il movimento del giocatore e il lanciatore di spade a seconda della situazione
+        public void CanEnablePlayer(bool canEnable)
+        {
+            //Attiva il movimento
+            player.GetComponent<PlayerMovement>().enabled = canEnable;
+            //se è la situazione iniziale dove il giocatore non ha ancora raccolto l'arma, non attivare il lanciatore di spade
+            //GetComponent<PlayerShooting>().enabled = player.GetComponent<Equipment>().currentWeaponType is Equipment.WeaponType.None ? false : canEnable;
+            player.GetComponent<PlayerShooting>().enabled = canEnable;
+        }
+
         //Se true, libera il mouse, se false il mouse viene bloccato
         private static void SetMousePointer(bool canUnlockMouse)
         {
