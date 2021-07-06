@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace ZombieAttack
@@ -6,7 +7,12 @@ namespace ZombieAttack
     public class Health : MonoBehaviour
     {
         [SerializeField] float maxHealth = 100;
+        [Header("Hits effects")]
+        [SerializeField] Color damagedColor = Color.yellow;
+        [SerializeField] float timeOfDamagedColor = .1f;
 
+        Material currentMaterial;
+        Color normalColor;
         float _currentHealth;
         float CurrentHealth
         {
@@ -30,7 +36,17 @@ namespace ZombieAttack
         public event Action<float, float> OnHealthPctChanged = delegate { }; //delegate is to avoid null checks
         public event Action<Health> OnEnemyDead = delegate { };
 
-        private void OnEnable() => CurrentHealth = maxHealth;
+        private void Awake()
+        {
+            currentMaterial = GetComponent<Renderer>().material;
+            normalColor = currentMaterial.color;
+        }
+
+        private void OnEnable()
+        {
+            CurrentHealth = maxHealth;
+            currentMaterial.SetColor("_Color", normalColor);
+        }
 
         private void OnDisable() => CurrentHealth = maxHealth;
 
@@ -39,6 +55,8 @@ namespace ZombieAttack
             if (CurrentHealth > 0f && CurrentHealth <= maxHealth)
             {
                 CurrentHealth += amount;
+                StartCoroutine("ColorDamaged", damagedColor);
+                
                 if (CurrentHealth <= 0f)
                 {
                     gameObject.SetActive(false);
@@ -52,6 +70,8 @@ namespace ZombieAttack
                     else if (gameObject.CompareTag("Player"))
                     {
                         Debug.Log("Sei morto");
+                        GameManager.instance.SetStatusGame(GameManager.GameState.Lost);
+                        UI_Manager.instance.SetFinishScreen(GameManager.GameState.Lost);
                     }
                     else if (gameObject.CompareTag("Enemy"))
                     {
@@ -62,6 +82,13 @@ namespace ZombieAttack
                     }
                 }             
             }
+        }
+
+        IEnumerator ColorDamaged(Color damageColor)
+        {
+            currentMaterial.SetColor("_Color", damageColor);
+            yield return new WaitForSeconds(timeOfDamagedColor);
+            currentMaterial.SetColor("_Color", normalColor);        
         }
 
         public void DealDamage(float damage) => ModifyHealth(-damage);

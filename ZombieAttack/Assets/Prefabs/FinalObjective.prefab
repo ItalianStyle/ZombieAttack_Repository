@@ -109,6 +109,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  damagedColor: {r: 0.9942193, g: 1, b: 0, a: 1}
+  timeOfDamagedColor: 0.1
 --- !u!135 &4911065014616920228
 SphereCollider:
   m_ObjectHideFlags: 0
