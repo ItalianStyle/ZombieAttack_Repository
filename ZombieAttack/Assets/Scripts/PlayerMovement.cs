@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 namespace ZombieAttack
 {
@@ -30,7 +31,19 @@ namespace ZombieAttack
 
         public void FaceCamera()
         {
-            transform.rotation = Quaternion.Euler(0, cam.transform.eulerAngles.y, 0);
+            StartCoroutine("SmoothFaceCamera");
+        }
+
+        IEnumerator SmoothFaceCamera()
+        {
+            float elapsed = 0f;
+            float timeToFaceCamera = 2f;
+            while(elapsed < timeToFaceCamera)
+            {
+                transform.eulerAngles = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, cam.transform.eulerAngles.y, 0), elapsed / timeToFaceCamera).eulerAngles;
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
         }
     }
 }
