@@ -13,30 +13,31 @@ namespace ZombieAttack
         [SerializeField] float bulletLifetime = 1f;
         [SerializeField] float damage = 1f;
         bool canShoot = true;
+        Camera cam;
 
         private void Awake()
         {
             bulletMagazine = GetComponent<ObjectPooler>();
             muzzleTransform = transform.Find("Muzzle");
             playerTransform = transform.parent;
+            cam = Camera.main;
         }
 
         public void Shoot(SimpleHealthBar gunBar)
         {
             if (canShoot)
             {
-                GameObject bullet = bulletMagazine.GetPooledObject("Bullet");
-                
+                playerTransform.GetComponent<PlayerMovement>().FaceCamera();
+                                
                 //Posiziono il bullet
-                bullet.transform.parent = muzzleTransform;
-                bullet.transform.localPosition = Vector3.zero;
-                bullet.transform.parent = null;
-                bullet.transform.rotation = Quaternion.LookRotation(playerTransform.forward, playerTransform.up);
+                GameObject bullet = bulletMagazine.GetPooledObject("Bullet");
+                bullet.transform.position = muzzleTransform.position;
+                bullet.transform.forward = muzzleTransform.forward;
                 
                 //Shooting
                 bullet.SetActive(true);
                 bullet.GetComponent<Bullet>().Throw(bullet.transform.forward * shootForce, ForceMode.Impulse, damage);
-                
+
                 //Post-shoot stuff
                 StartCoroutine("Reload", gunBar);
                 StartCoroutine("CountBulletLifetime", bullet);

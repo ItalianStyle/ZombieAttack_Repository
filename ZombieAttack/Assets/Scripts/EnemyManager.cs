@@ -50,6 +50,7 @@ namespace ZombieAttack
 
             enemy.GetComponent<EnemyMovement>().SetDestination(finalObjectiveTransform);
             enemy.GetComponent<Health>().OnEnemyDead += IncreaseKillCount;
+            enemy.GetComponent<Rigidbody>().velocity = Vector3.zero;
             enemy.SetActive(true);
 
             currentEnemies++;
