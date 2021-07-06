@@ -39,5 +39,10 @@ namespace ZombieAttack
                 transform.rotation = Quaternion.Slerp(transform.rotation, target, .1f);
             }
         }
+
+        public void FaceCamera()
+        {
+            transform.rotation = Quaternion.Euler(0, cam.transform.eulerAngles.y, 0);
+        }
     }
 }
