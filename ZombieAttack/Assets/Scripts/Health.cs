@@ -28,15 +28,18 @@ namespace ZombieAttack
         }
 
         public event Action<float, float> OnHealthPctChanged = delegate { }; //delegate is to avoid null checks
+        public event Action<Health> OnEnemyDead = delegate { };
 
         private void OnEnable() => CurrentHealth = maxHealth;
+
+        private void OnDisable() => CurrentHealth = maxHealth;
 
         void ModifyHealth(float amount)
         {
             if (CurrentHealth > 0f && CurrentHealth <= maxHealth)
             {
                 CurrentHealth += amount;
-                if (CurrentHealth == 0f)
+                if (CurrentHealth <= 0f)
                 {
                     gameObject.SetActive(false);
 
@@ -52,6 +55,8 @@ namespace ZombieAttack
                     }
                     else if (gameObject.CompareTag("Enemy"))
                     {
+                        //Aggiorno il counter dei morti
+                        OnEnemyDead.Invoke(this);
                         //Play sound
                         //Earn money
                     }
