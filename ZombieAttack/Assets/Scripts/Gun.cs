@@ -13,30 +13,40 @@ namespace ZombieAttack
         [SerializeField] float bulletLifetime = 1f;
         [SerializeField] float damage = 1f;
         bool canShoot = true;
+        Camera cam;
 
         private void Awake()
         {
             bulletMagazine = GetComponent<ObjectPooler>();
             muzzleTransform = transform.Find("Muzzle");
             playerTransform = transform.parent;
+            cam = Camera.main;
         }
 
         public void Shoot(SimpleHealthBar gunBar)
         {
             if (canShoot)
             {
-                GameObject bullet = bulletMagazine.GetPooledObject("Bullet");
+                playerTransform.GetComponent<PlayerMovement>().FaceCamera();
+                Ray ray = cam.ViewportPointToRay(new Vector3(.5f, .5f, 0));
+                RaycastHit hit;
+                Vector3 targetPoint;
+                
+                if (Physics.Raycast(ray, out hit))
+                    targetPoint = hit.point;
+                else targetPoint = ray.GetPoint(75);
+
+                Vector3 targetDir = (targetPoint - muzzleTransform.position);
                 
                 //Posiziono il bullet
-                bullet.transform.parent = muzzleTransform;
-                bullet.transform.localPosition = Vector3.zero;
-                bullet.transform.parent = null;
-                bullet.transform.rotation = Quaternion.LookRotation(playerTransform.forward, playerTransform.up);
+                GameObject bullet = bulletMagazine.GetPooledObject("Bullet");
+                bullet.transform.position = muzzleTransform.position;
+                bullet.transform.forward = targetDir;
                 
                 //Shooting
                 bullet.SetActive(true);
-                bullet.GetComponent<Bullet>().Throw(bullet.transform.forward * shootForce, ForceMode.Impulse, damage);
-                
+                bullet.GetComponent<Bullet>().Throw(targetDir.normalized * shootForce, ForceMode.Impulse, damage);
+
                 //Post-shoot stuff
                 StartCoroutine("Reload", gunBar);
                 StartCoroutine("CountBulletLifetime", bullet);
