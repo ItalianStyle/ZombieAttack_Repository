@@ -20,18 +20,6 @@ namespace ZombieAttack
         bool canDamagePlayer = true;
         bool canDamageObjective = true;
 
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (canDamagePlayer)
-            {
-                if (collision.gameObject.CompareTag("Player"))
-                {
-                    collision.transform.GetComponent<Health>().DealDamage(collisionDamage);
-                    StartCoroutine(nameof(WaitForDealDamage), true);
-                }
-            }
-        }
-
         private void OnTriggerStay(Collider other)
         {
             if (canDamageObjective)
@@ -40,6 +28,15 @@ namespace ZombieAttack
                 {
                     other.transform.GetComponent<Health>().DealDamage(meleeDamage);
                     StartCoroutine(nameof(WaitForDealDamage), false);
+                }
+            }
+
+            if (canDamagePlayer)
+            {
+                if (other.gameObject.CompareTag("Player"))
+                {
+                    other.transform.GetComponent<Health>().DealDamage(collisionDamage);
+                    StartCoroutine(nameof(WaitForDealDamage), true);
                 }
             }
         }
