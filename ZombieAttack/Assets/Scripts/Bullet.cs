@@ -9,7 +9,7 @@ namespace ZombieAttack
 
         private void Awake() => bulletRigidbody = GetComponent<Rigidbody>();
 
-        private void OnTriggerEnter(Collider other)
+        private void OnCollisionEnter(Collision other)
         {
             if (other.gameObject.CompareTag("Enemy"))
             {
