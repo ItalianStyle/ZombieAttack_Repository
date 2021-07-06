@@ -1902,7 +1902,7 @@ PrefabInstance:
     - target: {fileID: 1021360834258864595, guid: b7c3a57a6079ecd4983098929340b085,
         type: 3}
       propertyPath: m_Name
-      value: EnemySpawnManager
+      value: EnemyManager
       objectReference: {fileID: 0}
     - target: {fileID: 1021360834258864606, guid: b7c3a57a6079ecd4983098929340b085,
         type: 3}
