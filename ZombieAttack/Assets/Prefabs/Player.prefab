@@ -106,7 +106,6 @@ GameObject:
   - component: {fileID: 3176618467733478391}
   - component: {fileID: 215815793}
   - component: {fileID: 215815788}
-  - component: {fileID: 504118238500417941}
   - component: {fileID: 8808336100896479450}
   - component: {fileID: 215815789}
   - component: {fileID: 3227076550243337528}
@@ -214,20 +213,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!136 &504118238500417941
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3176618467733478389}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 0.88
-  m_Height: 5.28
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8808336100896479450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,7 +226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  damagedColor: {r: 1, g: 0.9243815, b: 0, a: 1}
+  damagedColor: {r: 1, g: 1, b: 0, a: 1}
   timeOfDamagedColor: 0.1
 --- !u!114 &215815789
 MonoBehaviour:
@@ -256,7 +241,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Controller: {fileID: 0}
-  movSpeed: 1200
+  movSpeed: 10
   cam: {fileID: 0}
 --- !u!114 &3227076550243337528
 MonoBehaviour:
@@ -278,30 +263,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3176618467733478393}
     m_Modifications:
-    - target: {fileID: 6216645863695449140, guid: 8f9fc0f2c2c0f8746bfe288c40339739,
-        type: 3}
-      propertyPath: m_TagString
-      value: Muzzle
-      objectReference: {fileID: 0}
     - target: {fileID: 6216645864491329756, guid: 8f9fc0f2c2c0f8746bfe288c40339739,
         type: 3}
       propertyPath: m_Name
       value: Gun
       objectReference: {fileID: 0}
-    - target: {fileID: 6216645864491329762, guid: 8f9fc0f2c2c0f8746bfe288c40339739,
-        type: 3}
-      propertyPath: shootForce
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 6216645864491329762, guid: 8f9fc0f2c2c0f8746bfe288c40339739,
-        type: 3}
-      propertyPath: damage
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6216645864491329763, guid: 8f9fc0f2c2c0f8746bfe288c40339739,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.06
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 6216645864491329763, guid: 8f9fc0f2c2c0f8746bfe288c40339739,
         type: 3}
@@ -311,7 +281,7 @@ PrefabInstance:
     - target: {fileID: 6216645864491329763, guid: 8f9fc0f2c2c0f8746bfe288c40339739,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.44
+      value: 0.55
       objectReference: {fileID: 0}
     - target: {fileID: 6216645864491329763, guid: 8f9fc0f2c2c0f8746bfe288c40339739,
         type: 3}
