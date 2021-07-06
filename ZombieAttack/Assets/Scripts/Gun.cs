@@ -28,24 +28,15 @@ namespace ZombieAttack
             if (canShoot)
             {
                 playerTransform.GetComponent<PlayerMovement>().FaceCamera();
-                Ray ray = cam.ViewportPointToRay(new Vector3(.5f, .5f, 0));
-                RaycastHit hit;
-                Vector3 targetPoint;
-                
-                if (Physics.Raycast(ray, out hit))
-                    targetPoint = hit.point;
-                else targetPoint = ray.GetPoint(75);
-
-                Vector3 targetDir = (targetPoint - muzzleTransform.position);
-                
+                                
                 //Posiziono il bullet
                 GameObject bullet = bulletMagazine.GetPooledObject("Bullet");
                 bullet.transform.position = muzzleTransform.position;
-                bullet.transform.forward = targetDir;
+                bullet.transform.forward = muzzleTransform.forward;
                 
                 //Shooting
                 bullet.SetActive(true);
-                bullet.GetComponent<Bullet>().Throw(targetDir.normalized * shootForce, ForceMode.Impulse, damage);
+                bullet.GetComponent<Bullet>().Throw(bullet.transform.forward * shootForce, ForceMode.Impulse, damage);
 
                 //Post-shoot stuff
                 StartCoroutine("Reload", gunBar);
