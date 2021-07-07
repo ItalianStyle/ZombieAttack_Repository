@@ -9,9 +9,6 @@ namespace ZombieAttack
     {
         [SerializeField] EnemyManager enemyManager = null;
 
-        private void Update()
-        {
-            GetComponent<Text>().text = enemyManager.killedEnemies.ToString();
-        }
+        
     }
 }
