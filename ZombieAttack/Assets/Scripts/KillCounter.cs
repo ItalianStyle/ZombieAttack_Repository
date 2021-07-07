@@ -7,8 +7,5 @@ namespace ZombieAttack
 {
     public class KillCounter : MonoBehaviour
     {
-        [SerializeField] EnemyManager enemyManager = null;
-
-        
     }
 }

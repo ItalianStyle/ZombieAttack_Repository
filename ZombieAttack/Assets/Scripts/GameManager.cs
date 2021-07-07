@@ -72,6 +72,7 @@ namespace ZombieAttack
                     exitGameButton.onClick.AddListener(MainMenu);
                     //skipTutorialButton.onClick.AddListener(delegate { SetMousePointer(false); });
 
+                    EnemyManager.instance.SpawnNextWave();
                     break;
 
                 default:

@@ -10,24 +10,20 @@ namespace ZombieAttack
     {
         [SerializeField] List<Transform> spawnPoints = null;
         [SerializeField] Transform finalObjectiveTransform = null;
-        [SerializeField] float timeBetweenSpawns = 1f;
-        [SerializeField] int maxEnemies = 10;
-        [SerializeField] Wave[] waves;
+        [SerializeField] Wave[] waves = null;
         int currentWave = 0;
 
-        ObjectPooler objPooler;
+        ObjectPooler objPooler = null;
 
-        //public static EnemySpawnManager instance;
+        public static EnemyManager instance;
 
         private void Awake()
         {
-            /*if (instance is null)
-            {
+            if (instance is null)
                 instance = this;
-            }
-            else if (instance != this)
-                Destroy(this.gameObject);  
-            */
+            
+            //else if (instance != this) Destroy(gameObject);  
+
             finalObjectiveTransform = GameObject.FindGameObjectWithTag("Finish").transform;
             objPooler = GameObject.Find("Enemies").GetComponent<ObjectPooler>();
         }
@@ -41,8 +37,9 @@ namespace ZombieAttack
             SpawnNextWave(); 
         }
 
-        void SpawnNextWave()
+        public void SpawnNextWave()
         {
+            UI_Manager.instance.PlayWaveText(currentWave);
             if(currentWave > 0 && currentWave < waves.Length)
                 waves[currentWave++].SpawnEnemy(objPooler, spawnPoints, finalObjectiveTransform);
             else
