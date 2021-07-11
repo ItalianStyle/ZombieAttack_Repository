@@ -18,13 +18,13 @@ namespace ZombieAttack
         [SerializeField] CanvasGroup finishScreen = null;
         [SerializeField] CanvasGroup playerPanel = null;
         [SerializeField] CanvasGroup finalObjectiveHPBarPanel = null;
+        
         /*
-        [SerializeField] CanvasGroup playerHPBarPanel = null;
+        [SerializeField] CanvasGroup wavePanel = null;
         [SerializeField] CanvasGroup tutorialPanel = null;
         */
         [SerializeField] CanvasGroup mainMenuPanel = null;
-        /*
-        [SerializeField] CanvasGroup settingsPanel = null;
+        /*[SerializeField] CanvasGroup settingsPanel = null;
         [SerializeField] CanvasGroup creditsPanel = null;
         //[SerializeField] CanvasGroup[] enemiesHPBars = null; 
         */
@@ -33,11 +33,13 @@ namespace ZombieAttack
         
         [Header("Buttons")]
         [SerializeField] GameObject playButton = null;
+
         /*[SerializeField] Button settingsButton = null;
-        [SerializeField] Button creditsButton = null;
-        [SerializeField] Button returnButtonFromSettings = null;
-        [SerializeField] Button returnButtonFromCredits = null;
-        */[SerializeField] GameObject resumeButton = null;
+[SerializeField] Button creditsButton = null;
+[SerializeField] Button returnButtonFromSettings = null;
+[SerializeField] Button returnButtonFromCredits = null;
+*/
+        [SerializeField] GameObject resumeButton = null;
         /*
         [Header("Settings Sliders")]
         [SerializeField] Slider masterVolumeSlider = null;
@@ -332,5 +334,10 @@ namespace ZombieAttack
             cameraPlacer.SetPosition((int)menuType);
         }
         */
+
+        public void PlayWaveText(int currentWave)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

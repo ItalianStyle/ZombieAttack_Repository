@@ -10,24 +10,20 @@ namespace ZombieAttack
     {
         [SerializeField] List<Transform> spawnPoints = null;
         [SerializeField] Transform finalObjectiveTransform = null;
-        [SerializeField] float timeBetweenSpawns = 1f;
-        [SerializeField] int maxEnemies = 10;
+        [SerializeField] Wave[] waves = null;
+        int currentWave = 0;
 
-        int currentEnemies = 0;
-        public int killedEnemies = 0;
-        ObjectPooler objPooler;
+        ObjectPooler objPooler = null;
 
-        //public static EnemySpawnManager instance;
+        public static EnemyManager instance;
 
         private void Awake()
         {
-            /*if (instance is null)
-            {
+            if (instance is null)
                 instance = this;
-            }
-            else if (instance != this)
-                Destroy(this.gameObject);  
-            */
+            
+            //else if (instance != this) Destroy(gameObject);  
+
             finalObjectiveTransform = GameObject.FindGameObjectWithTag("Finish").transform;
             objPooler = GameObject.Find("Enemies").GetComponent<ObjectPooler>();
         }
@@ -37,43 +33,19 @@ namespace ZombieAttack
             for(int i = 0; i < transform.childCount; i++)
                 spawnPoints.Add(transform.GetChild(i));
             
-            currentEnemies = 0;
-            SpawnEnemy();
+            currentWave = 0;
+            SpawnNextWave(); 
         }
 
-        void SpawnEnemy()
+        public void SpawnNextWave()
         {
-            GameObject enemy = objPooler.GetPooledObject("Enemy");
-            
-            //Choose spawnpoint
-            enemy.transform.position = spawnPoints[Random.Range(0, spawnPoints.Count)].position;
-
-            enemy.GetComponent<EnemyMovement>().SetDestination(finalObjectiveTransform);
-            enemy.GetComponent<Health>().OnEnemyDead += IncreaseKillCount;
-            enemy.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            enemy.SetActive(true);
-
-            currentEnemies++;
-            if(currentEnemies < maxEnemies)
-                StartCoroutine(WaitBeforeSpawn());
-        }
-
-        private void IncreaseKillCount(Health enemyHealth)
-        {
-            killedEnemies++;
-            enemyHealth.OnEnemyDead -= IncreaseKillCount;
-            if(killedEnemies >= maxEnemies)
+            UI_Manager.instance.PlayWaveText(currentWave);
+            if(currentWave > 0 && currentWave < waves.Length)
+                waves[currentWave++].SpawnEnemy(objPooler, spawnPoints, finalObjectiveTransform);
+            else
             {
-                //Vittoria
-                GameManager.instance.SetStatusGame(GameManager.GameState.Won);
-                UI_Manager.instance.SetFinishScreen(GameManager.GameState.Won);
+                Debug.Log("Current wave fuori dal range: " + currentWave);
             }
-        }
-
-        IEnumerator WaitBeforeSpawn()
-        {
-            yield return new WaitForSeconds(timeBetweenSpawns);
-            SpawnEnemy();
         }
     }
 }
