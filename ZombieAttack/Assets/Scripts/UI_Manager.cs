@@ -355,8 +355,8 @@ namespace ZombieAttack
         //Se non si passa alcun parametro, si setta il testo per la vittoria
         public void PlayWaveText(bool isVictoryText)
         {
-            waveText.text = isVictoryText ? "Ondata " + (EnemyManager.instance.currentWave + 1).ToString() : "Ondata passata!";
-            waveTextAnimator.SetTrigger(isVictoryText ? "PlayWaveText" : "PlayWonWaveText");
+            waveText.text = isVictoryText ? "Ondata passata!" : "Ondata " + (EnemyManager.instance.currentWave + 1).ToString();
+            waveTextAnimator.SetTrigger(isVictoryText ? "PlayWonWaveText" : "PlayWaveText");
         }
 
         public void UpdateTimeText(int time) => timerText.text = time.ToString();
