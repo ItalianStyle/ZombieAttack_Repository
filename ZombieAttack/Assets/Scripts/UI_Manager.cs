@@ -17,12 +17,16 @@ namespace ZombieAttack
         [Header("Panels")]
         [SerializeField] CanvasGroup finishScreen = null;
         [SerializeField] CanvasGroup playerPanel = null;
+
         [SerializeField] CanvasGroup finalObjectiveHPBarPanel = null;
-        
+        [SerializeField] Text waveText = null;
+        [SerializeField] Animator waveTextAnimator = null;
+
+        [SerializeField] Text timerText = null;
         /*
-        [SerializeField] CanvasGroup wavePanel = null;
-        [SerializeField] CanvasGroup tutorialPanel = null;
-        */
+[SerializeField] CanvasGroup wavePanel = null;
+[SerializeField] CanvasGroup tutorialPanel = null;
+*/
         [SerializeField] CanvasGroup mainMenuPanel = null;
         /*[SerializeField] CanvasGroup settingsPanel = null;
         [SerializeField] CanvasGroup creditsPanel = null;
@@ -125,7 +129,9 @@ namespace ZombieAttack
 
                     SetCanvasGroup(finalObjectiveHPBarPanel, true);
                     SetCanvasGroup(playerPanel, true);
+                    timerText.enabled = false;
                     //SetCanvasGroup(tutorialPanel, true);
+
                     break;
 
                 default:
@@ -174,26 +180,30 @@ namespace ZombieAttack
                     
                     break;
                 
-            case 1:
-                //Trova equipaggiamento player
-                //playerEquipment = GameObject.FindGameObjectWithTag("Player").GetComponent<Equipment>();
+                case 1:
+                    //Trova equipaggiamento player
+                    //playerEquipment = GameObject.FindGameObjectWithTag("Player").GetComponent<Equipment>();
 
-                //Trova riferimento agli screen
-                finishScreen = GameObject.FindGameObjectWithTag("FinishPanel").GetComponent<CanvasGroup>();
-                titleFinishScreen = finishScreen.transform.GetChild(0).GetComponent<Text>();
+                    //Trova riferimento agli screen
+                    finishScreen = GameObject.FindGameObjectWithTag("FinishPanel").GetComponent<CanvasGroup>();
+                    titleFinishScreen = finishScreen.transform.GetChild(0).GetComponent<Text>();
 
-                //Trova HP bar del boss
-                finalObjectiveHPBarPanel = GameObject.FindGameObjectWithTag("FinalObjectivePanel").GetComponent<CanvasGroup>();
+                    //Trova HP bar del boss
+                    finalObjectiveHPBarPanel = GameObject.FindGameObjectWithTag("FinalObjectivePanel").GetComponent<CanvasGroup>();
 
-                //Trova HP bar del player
-                playerPanel = GameObject.FindGameObjectWithTag("PlayerPanel").GetComponent<CanvasGroup>();
+                    //Trova HP bar del player
+                    playerPanel = GameObject.FindGameObjectWithTag("PlayerPanel").GetComponent<CanvasGroup>();
 
-                //Trova il riferimento al tutorial
-                //tutorialPanel = GameObject.FindGameObjectWithTag("TutorialPanel").GetComponent<CanvasGroup>();
+                    waveText = playerPanel.transform.Find("WaveText").GetComponent<Text>();
+                    waveTextAnimator = waveText.GetComponent<Animator>();
+                    timerText = playerPanel.transform.Find("TimerText").GetComponent<Text>();
 
-                //Trova il riferimento ai bottoni
-                resumeButton = GameObject.FindGameObjectWithTag("ResumeButton");
-                break;
+                    //Trova il riferimento al tutorial
+                    //tutorialPanel = GameObject.FindGameObjectWithTag("TutorialPanel").GetComponent<CanvasGroup>();
+
+                    //Trova il riferimento ai bottoni
+                    resumeButton = GameObject.FindGameObjectWithTag("ResumeButton");
+                    break;
                 
                 default:
                     Debug.LogError("Indice di scena non riconosciuto");
@@ -203,36 +213,43 @@ namespace ZombieAttack
         
         public void SetFinishScreen(GameManager.GameState gameState)
         {
-            //Metti in pausa
-            Time.timeScale = 0f;
-
-            //Disabilita UI dell'equipaggiamento del giocatore
-
-            //Disabilita la UI delle barre HP
-            SetHPBar(GameManager.EntityType.Player, false);
-            SetHPBar(GameManager.EntityType.FinalObjective, false);
-
-            //Abilita l'end screen
-            //0 -> Win
-            //1 -> Lost
-            //2 -> Paused
-
-            //Attiva il testo
-            titleFinishScreen.enabled = true;
-
             if ((int)gameState < 3)
             {
-                titleFinishScreen.text = finishScreens[(int)gameState].titleText;
-                titleFinishScreen.color = finishScreens[(int)gameState].titleColor;
+                //Metti in pausa
+                Time.timeScale = 0f;
+
+                //Disabilita UI dell'equipaggiamento del giocatore
+
+                //Disabilita la UI delle barre HP
+                SetHPBar(GameManager.EntityType.Player, false);
+                SetHPBar(GameManager.EntityType.FinalObjective, false);
+
+                //Abilita l'end screen
+                //0 -> Win
+                //1 -> Lost
+                //2 -> Paused
+
+                //Attiva il testo
+                titleFinishScreen.enabled = true;
+
+            
+                    titleFinishScreen.text = finishScreens[(int)gameState].titleText;
+                    titleFinishScreen.color = finishScreens[(int)gameState].titleColor;
+            
+
+                //Attiva i bottoni dell'endscreen
+                playButton.gameObject.SetActive(gameState != GameManager.GameState.Paused);
+                resumeButton.gameObject.SetActive(gameState is GameManager.GameState.Paused);
+
+                SetCanvasGroup(finishScreen, true);
+            }
+            else if(gameState is GameManager.GameState.WaveWon)
+            {
+                //Stampa Ondata passata
+                PlayWaveText(isVictoryText: true);
             }
             else
                 Debug.LogError("Lo stato di gioco non può essere usato come indice per il titolo di endScreen (" + gameState + ")");
-
-            //Attiva i bottoni dell'endscreen
-            playButton.gameObject.SetActive(gameState != GameManager.GameState.Paused);
-            resumeButton.gameObject.SetActive(gameState is GameManager.GameState.Paused);
-
-            SetCanvasGroup(finishScreen, true);
         }
         
         public void SetCanvasGroup(CanvasGroup canvasGroup, bool canShow)
@@ -335,9 +352,15 @@ namespace ZombieAttack
         }
         */
 
-        public void PlayWaveText(int currentWave)
+        //Se non si passa alcun parametro, si setta il testo per la vittoria
+        public void PlayWaveText(bool isVictoryText)
         {
-            throw new NotImplementedException();
+            waveText.text = isVictoryText ? "Ondata " + (EnemyManager.instance.currentWave + 1).ToString() : "Ondata passata!";
+            waveTextAnimator.SetTrigger(isVictoryText ? "PlayWaveText" : "PlayWonWaveText");
         }
+
+        public void UpdateTimeText(int time) => timerText.text = time.ToString();
+
+        public void SetTimerText(bool startOrStopTimerText) => timerText.GetComponent<Animator>().SetBool("CanPlayTimerText", startOrStopTimerText);
     }
 }

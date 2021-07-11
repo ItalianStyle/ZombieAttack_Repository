@@ -13,11 +13,7 @@ namespace ZombieAttack
         {
             gameObject.SetActive(false);
             if (other.gameObject.CompareTag("Enemy"))
-            {
-                Debug.Log("Nemico colpito");
-                
-                other.transform.GetComponent<Health>().DealDamage(damage);
-            }
+                other.transform.GetComponent<Health>().DealDamage(damage);           
         }
 
         private void OnDisable()
