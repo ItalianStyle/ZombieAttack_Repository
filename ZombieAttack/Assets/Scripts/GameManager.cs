@@ -26,7 +26,7 @@ namespace ZombieAttack
         
         PauseListener pauseListener = null;
         
-        public enum GameState { Won, Lost, Paused, Resumed, BeginGameWithTutorial, notDefined }
+        public enum GameState { Won, Lost, Paused, Resumed, WaveWon, BeginGameWithTutorial, notDefined }
         public GameState currentGameState = GameState.notDefined;
        
         public bool isPaused = false;
@@ -72,7 +72,7 @@ namespace ZombieAttack
                     exitGameButton.onClick.AddListener(MainMenu);
                     //skipTutorialButton.onClick.AddListener(delegate { SetMousePointer(false); });
 
-                    EnemyManager.instance.SpawnNextWave();
+                    UI_Manager.instance.PlayWaveText(isVictoryText: false);
                     break;
 
                 default:
@@ -123,7 +123,7 @@ namespace ZombieAttack
         public void SetStatusGame(GameState newGameState)
         {
             currentGameState = newGameState;
-            if (currentGameState != GameState.Resumed)
+            if (currentGameState != GameState.Resumed && currentGameState != GameState.WaveWon)
             {
                 //Libero il mouse
                 SetMousePointer(true);
