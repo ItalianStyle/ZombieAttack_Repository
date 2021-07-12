@@ -6,6 +6,7 @@ namespace ZombieAttack
     public class PlayerMovement : MonoBehaviour
     {
         [SerializeField] CharacterController Controller;
+        [SerializeField] [Range(0.1f, 5f)] float timeToFaceCamera = .1f;
         Vector3 input;
         public float movSpeed;
 
@@ -37,8 +38,7 @@ namespace ZombieAttack
         IEnumerator SmoothFaceCamera()
         {
             float elapsed = 0f;
-            float timeToFaceCamera = 2f;
-            while(elapsed < timeToFaceCamera)
+            while(elapsed < timeToFaceCamera) //timeToFaceCamera = 2f
             {
                 transform.eulerAngles = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, cam.transform.eulerAngles.y, 0), elapsed / timeToFaceCamera).eulerAngles;
                 elapsed += Time.deltaTime;
