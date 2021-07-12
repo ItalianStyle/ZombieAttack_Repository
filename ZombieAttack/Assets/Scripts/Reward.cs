@@ -1,18 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
-public class Reward : MonoBehaviour
+namespace ZombieAttack
 {
-    // Start is called before the first frame update
-    void Start()
+    public class Reward : MonoBehaviour
     {
-        
-    }
+        [SerializeField] int money;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        void Start()
+        {
+            gameObject.GetComponent<Health>().OnEnemyDead += GiveMoneyToPlayer;
+        }
+
+        private void GiveMoneyToPlayer(Health obj)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
