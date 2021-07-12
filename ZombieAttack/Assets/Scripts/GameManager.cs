@@ -72,9 +72,11 @@ namespace ZombieAttack
                     //Prepara i bottoni dei menu
                     resumeButton.onClick.AddListener(ResumeGame);
                     exitGameButton.onClick.AddListener(MainMenu);
+
+                    playerWallet.ResetWallet();
                     //skipTutorialButton.onClick.AddListener(delegate { SetMousePointer(false); });
 
-                    UI_Manager.instance.PlayWaveText(isVictoryText: false);
+                    UI_Manager.instance.PlayWaveText(isVictoryText: false);                  
                     break;
 
                 default:
