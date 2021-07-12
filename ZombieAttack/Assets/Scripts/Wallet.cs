@@ -8,21 +8,18 @@ namespace ZombieAttack
     {
         [SerializeField] int currentMoney = 0;
 
-        public void ResetWallet()
-        {
-            currentMoney = 0;
-        }
+        public void ResetWallet() => currentMoney = 0;
 
-        public void UpdateCurrentMoney(int amount, bool isDetraction)
+        //Aggiorna il conto del giocatore, se true aggiunge i soldi, altrimenti li toglie
+        public void UpdateCurrentMoney(int amount, bool isReward)
         {
-            if (isDetraction)
+            if (isReward) currentMoney += amount;
+            else
             {
                 currentMoney -= amount;
                 if (currentMoney < 0)
                     currentMoney = 0;
             }
-            else
-                currentMoney += amount;
         }
     }
 }
