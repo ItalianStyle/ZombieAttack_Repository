@@ -30,7 +30,9 @@ namespace ZombieAttack
         public GameState currentGameState = GameState.notDefined;
        
         public bool isPaused = false;
-     
+        
+        public Wallet playerWallet;
+
         public static GameManager instance;
 
         private void OnEnable()

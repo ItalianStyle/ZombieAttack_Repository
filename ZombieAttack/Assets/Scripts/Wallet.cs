@@ -1,12 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+
 
 namespace ZombieAttack
 {
-    public class Wallet : MonoBehaviour
+    [CreateAssetMenu(fileName = "Wallet", menuName = "New Wallet")]
+    public class Wallet : ScriptableObject
     {
         [SerializeField] int currentMoney = 0;
+
+        public void ResetWallet()
+        {
+            currentMoney = 0;
+        }
 
         public void UpdateCurrentMoney(int amount, bool isDetraction)
         {
