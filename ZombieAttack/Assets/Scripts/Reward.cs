@@ -14,7 +14,7 @@ namespace ZombieAttack
 
         private void GiveMoneyToPlayer(Health obj)
         {
-            throw new NotImplementedException();
+            GameManager.instance.playerWallet.UpdateCurrentMoney(money, true);
         }
     }
 }
