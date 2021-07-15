@@ -19,15 +19,18 @@ namespace ZombieAttack
         [SerializeField] CanvasGroup playerPanel = null;
 
         [SerializeField] CanvasGroup finalObjectiveHPBarPanel = null;
+        [SerializeField] CanvasGroup mainMenuPanel = null;
+        [Space]
         [SerializeField] Text waveText = null;
         [SerializeField] Animator waveTextAnimator = null;
 
         [SerializeField] Text timerText = null;
+        [SerializeField] Text moneyText = null;
         /*
 [SerializeField] CanvasGroup wavePanel = null;
 [SerializeField] CanvasGroup tutorialPanel = null;
 */
-        [SerializeField] CanvasGroup mainMenuPanel = null;
+        
         /*[SerializeField] CanvasGroup settingsPanel = null;
         [SerializeField] CanvasGroup creditsPanel = null;
         //[SerializeField] CanvasGroup[] enemiesHPBars = null; 
@@ -198,6 +201,7 @@ namespace ZombieAttack
                     waveTextAnimator = waveText.GetComponent<Animator>();
                     timerText = playerPanel.transform.Find("TimerText").GetComponent<Text>();
 
+                    moneyText = playerPanel.transform.Find("MoneyText").GetComponent<Text>();
                     //Trova il riferimento al tutorial
                     //tutorialPanel = GameObject.FindGameObjectWithTag("TutorialPanel").GetComponent<CanvasGroup>();
 
@@ -360,7 +364,7 @@ namespace ZombieAttack
         }
 
         public void UpdateTimeText(int time) => timerText.text = time.ToString();
-
+        public void UpdateMoneyText(int money) => moneyText.text = money.ToString() + " $";
         public void SetTimerText(bool startOrStopTimerText) => timerText.GetComponent<Animator>().SetBool("CanPlayTimerText", startOrStopTimerText);
     }
 }
