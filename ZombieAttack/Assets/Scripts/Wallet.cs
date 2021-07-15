@@ -3,8 +3,7 @@
 
 namespace ZombieAttack
 {
-    [CreateAssetMenu(fileName = "Wallet", menuName = "New Wallet")]
-    public class Wallet : ScriptableObject
+    public class Wallet : MonoBehaviour
     {
         [SerializeField] int currentMoney = 0;
 
