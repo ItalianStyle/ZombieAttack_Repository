@@ -100,6 +100,7 @@ namespace ZombieAttack
                     pauseListener = FindObjectOfType<PauseListener>();
 
                     resumeButton = GameObject.FindGameObjectWithTag("ResumeButton").GetComponent<Button>();
+                    playerWallet = GetComponent<Wallet>();
                     //skipTutorialButton = GameObject.FindGameObjectWithTag("SkipButton").GetComponent<Button>();
 
                     //inputToCamera = FindObjectOfType<CinemachineFreeLook>();
