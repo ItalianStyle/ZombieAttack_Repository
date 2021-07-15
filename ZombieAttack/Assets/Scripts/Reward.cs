@@ -15,6 +15,7 @@ namespace ZombieAttack
         private void GiveMoneyToPlayer(Health obj)
         {
             GameManager.instance.playerWallet.UpdateCurrentMoney(money, true);
+            UI_Manager.instance.UpdateMoneyText(GameManager.instance.playerWallet.GetCurrentMoney());
         }
     }
 }
