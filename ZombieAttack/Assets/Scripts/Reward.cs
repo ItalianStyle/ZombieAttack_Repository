@@ -5,7 +5,7 @@ namespace ZombieAttack
 {
     public class Reward : MonoBehaviour
     {
-        [SerializeField] int money;
+        [SerializeField] int money = 0;
 
         void Start()
         {
