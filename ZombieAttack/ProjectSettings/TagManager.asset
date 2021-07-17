@@ -24,10 +24,10 @@ TagManager:
   - 
   - Bullet
   - FinalObjective
-  - 
-  - 
-  - 
-  - 
+  - Minimap
+  - Barriera_Player
+  - Enemy
+  - Player
   - 
   - 
   - 
