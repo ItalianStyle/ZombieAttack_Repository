@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6216645863695449147}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Muzzle
   m_TagString: Muzzle
   m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 6216645863897274129}
   - component: {fileID: 6216645863897274134}
   - component: {fileID: 6216645863897274135}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Canna
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 6216645864234264541}
   - component: {fileID: 6216645864234264546}
   - component: {fileID: 6216645864234264547}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Calcio
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -199,7 +199,7 @@ GameObject:
   - component: {fileID: 6216645864491329763}
   - component: {fileID: 6216645864491329762}
   - component: {fileID: 6320932107591259071}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
