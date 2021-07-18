@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6193838321784936977}
   - component: {fileID: 6193838321784936978}
   - component: {fileID: 6193838321784936979}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Casa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
