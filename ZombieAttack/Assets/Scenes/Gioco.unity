@@ -2466,8 +2466,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 569435206}
-  m_LocalRotation: {x: 0.118241295, y: -0.000000009227353, z: -0.000000009687585,
-    w: 0.99298495}
+  m_LocalRotation: {x: 0.11824125, y: 0.000000016099506, z: -0.000000012703415, w: 0.99298495}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -4307,7 +4306,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 29495
+    m_Bits: 62263
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -4326,7 +4325,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.13623604, y: -0.000000017394218, z: 0.000000002392021, w: 0.99067646}
+  m_LocalRotation: {x: 0.13623603, y: -0.000000015978529, z: 0.000000002197338, w: 0.99067646}
   m_LocalPosition: {x: 3.79, y: 2.74, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -8606,7 +8605,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1825164838}
-  m_LocalRotation: {x: 0.136236, y: -0.000000009938203, z: 0.0000000066350427, w: 0.99067646}
+  m_LocalRotation: {x: 0.13623598, y: -0.0000000068531807, z: 0.0000000062107985,
+    w: 0.99067646}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -10272,9 +10272,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2125594553}
-  m_LocalRotation: {x: -0.109109774, y: 0.000000007788365, z: -0.000000017485823,
-    w: 0.99402976}
-  m_LocalPosition: {x: 0, y: -2.5999415, z: 0.49996424}
+  m_LocalRotation: {x: 0.15423338, y: 0.000000007885701, z: -0.000000019682979, w: 0.9880345}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2025703130}
@@ -10329,7 +10328,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1025
+    m_Bits: 33793
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: 5cfb61ec6d9cfea4fb2edb55673ab079, type: 2}
   m_TargetDisplay: 0
