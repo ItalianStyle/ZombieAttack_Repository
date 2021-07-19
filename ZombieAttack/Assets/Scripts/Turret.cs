@@ -12,6 +12,7 @@ namespace ZombieAttack
         [SerializeField] float reloadTime = .1f;
         [SerializeField] float maxRange = 10f;
         [SerializeField] float rotationSpeed = 1f;
+        public int buildingCost = 1;
         private float timer;
         
         private void OnDrawGizmosSelected()
