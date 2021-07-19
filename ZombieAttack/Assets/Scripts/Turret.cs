@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace ZombieAttack
@@ -14,15 +12,15 @@ namespace ZombieAttack
         [SerializeField] float damage;
         [SerializeField] float reloadTime = .1f;
         [SerializeField] float maxRange = 10f;
+        [SerializeField] float rotationSpeed = 1f;
         
         private float timer;
-
-
+        
         private void OnDrawGizmosSelected()
         {
-            Gizmos.color = new Color(255, 255, 0, .25f);
-            
+            Gizmos.color = new Color(255, 255, 0, .25f);          
             Gizmos.DrawSphere(transform.position, maxRange);
+
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, maxRange);
         }
@@ -52,29 +50,35 @@ namespace ZombieAttack
             }
         }
 
-        private void RemoveEnemyFromList(Health enemyToRemove)
-        {
-            EnemyMovement enemy = enemyToRemove.GetComponent<EnemyMovement>();
-            if (enemiesOnSight.Contains(enemy))
-            {
-                enemiesOnSight.Remove(enemy);
-                if (enemiesOnSight.Count == 0)
-                    transform.localRotation = Quaternion.identity;
-            }
-        }
-
         private void OnTriggerStay(Collider other)
         {
             if (isActive && enemiesOnSight.Count > 0)
             {
-                transform.LookAt(enemiesOnSight[0].transform);
+                LockOnTarget(enemiesOnSight[0].transform);
                 if (timer >= reloadTime)
                 {
                     timer = 0f;
                     Shoot();
                 }
-            }
-                    
+            }                  
+        }        
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (isActive && other.TryGetComponent(out EnemyMovement enemy))
+                RemoveEnemyFromList(enemy.GetComponent<Health>());           
+        }
+
+        //how to rotate towards targets: https://www.youtube.com/watch?v=QKhn2kl9_8I&t=793s
+        private void LockOnTarget(Transform _target)
+        {
+            if(_target == null)
+                return;
+  
+            Vector3 direction = _target.position - transform.position;
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+            Vector3 rotation = Quaternion.Lerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed).eulerAngles;
+            transform.rotation = Quaternion.Euler(0f, rotation.y, 0f);
         }
 
         private void Shoot()
@@ -85,19 +89,14 @@ namespace ZombieAttack
             {
                 if (hitInfo.collider.CompareTag("Enemy"))
                     hitInfo.collider.GetComponent<Health>().DealDamage(damage);
-                else
-                    Debug.Log("Non ho colpito il nemico");
             }
-            else
-                Debug.Log("non ho colpito niente");
         }
 
-        private void OnTriggerExit(Collider other)
+        private void RemoveEnemyFromList(Health enemyToRemove)
         {
-            if (isActive && other.TryGetComponent(out EnemyMovement enemy))
-            {
-                RemoveEnemyFromList(enemy.GetComponent<Health>());
-            }
+            EnemyMovement enemy = enemyToRemove.GetComponent<EnemyMovement>();
+            if (enemiesOnSight.Contains(enemy))
+                enemiesOnSight.Remove(enemy);           
         }
     }
 }
