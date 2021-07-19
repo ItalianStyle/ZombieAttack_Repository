@@ -6,20 +6,16 @@ namespace ZombieAttack
     {
         Turret turret;
         [SerializeField] Transform pivotText = null;
-        [SerializeField] CanvasGroup activateTurretPanel = null;
-        Camera cam;
 
         private void Awake()
         {
             turret = GetComponentInChildren<Turret>();
             pivotText = transform.GetChild(0);
-            activateTurretPanel = GameObject.Find("UI/ActivateTurretPanel").GetComponent<CanvasGroup>();
-            cam = Camera.main;
         }
 
         private void Start()
         {
-            UI_Manager.instance.SetCanvasGroup(activateTurretPanel, false);
+            UI_Manager.instance.SetActivateTextPanel(false);
             turret.enabled = false;
         }
 
@@ -27,19 +23,24 @@ namespace ZombieAttack
         {
             if (other.CompareTag("Player") && !turret.enabled)
             {
+                //Check money
+                UI_Manager.instance.SetActivateText(turret.buildingCost);
+
                 //Mostra il testo
-                UI_Manager.instance.SetCanvasGroup(activateTurretPanel, true);
+                UI_Manager.instance.SetActivateTextPanel(true);
             }
-        }
+        }  
 
         private void OnTriggerStay(Collider other)
         {
             if(other.CompareTag("Player") && !turret.enabled)
             {
-                //activateTurretPanel.transform.position = cam.WorldToScreenPoint(pivotText.position);
-                if (Input.GetKey(KeyCode.E))
+                UI_Manager.instance.UpdateActivateTextPanelPosition(pivotText.position);
+                if (Input.GetKey(KeyCode.E) && GameManager.instance.playerWallet.GetCurrentMoney() > turret.buildingCost)
                 {
-                    UI_Manager.instance.SetCanvasGroup(activateTurretPanel, false);
+                    UI_Manager.instance.SetActivateTextPanel(false);
+                    GameManager.instance.playerWallet.UpdateCurrentMoney(turret.buildingCost, false);
+                    UI_Manager.instance.UpdateMoneyText(GameManager.instance.playerWallet.GetCurrentMoney());
                     turret.enabled = true;
                 }
             }
@@ -49,7 +50,7 @@ namespace ZombieAttack
         {
             if(other.CompareTag("Player"))
             {
-                UI_Manager.instance.SetCanvasGroup(activateTurretPanel, false);
+                UI_Manager.instance.SetActivateTextPanel(false);
             }
         }
     }
