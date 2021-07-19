@@ -29,9 +29,9 @@ TagManager:
   - Enemy
   - Player
   - Gun
-  - 
-  - 
-  - 
+  - Building
+  - TurretActivation
+  - Turret
   - 
   - 
   - 

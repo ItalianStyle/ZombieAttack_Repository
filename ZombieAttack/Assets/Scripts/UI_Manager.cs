@@ -17,6 +17,7 @@ namespace ZombieAttack
         [Header("Panels")]
         [SerializeField] CanvasGroup finishScreen = null;
         [SerializeField] CanvasGroup playerPanel = null;
+        [SerializeField] CanvasGroup activateTurretPanel = null;
 
         [SerializeField] CanvasGroup finalObjectiveHPBarPanel = null;
         [SerializeField] CanvasGroup mainMenuPanel = null;
@@ -26,18 +27,22 @@ namespace ZombieAttack
 
         [SerializeField] Text timerText = null;
         [SerializeField] Text moneyText = null;
+
+        Text activateTurretText = null;
+        Image keyIcon = null;
+
         /*
 [SerializeField] CanvasGroup wavePanel = null;
 [SerializeField] CanvasGroup tutorialPanel = null;
 */
-        
+
         /*[SerializeField] CanvasGroup settingsPanel = null;
         [SerializeField] CanvasGroup creditsPanel = null;
         //[SerializeField] CanvasGroup[] enemiesHPBars = null; 
         */
         [Header("End screen stats")]
         [SerializeField] FinishScreen[] finishScreens = null;
-        
+
         [Header("Buttons")]
         [SerializeField] GameObject playButton = null;
 
@@ -54,6 +59,9 @@ namespace ZombieAttack
         [SerializeField] Slider sfxVolumeSlider = null;
         */
         Text titleFinishScreen = null;
+
+
+        Camera cam;
         /*
         Equipment playerEquipment = null;
         SimpleHealthBar bossHPBar = null;
@@ -160,6 +168,7 @@ namespace ZombieAttack
         private void GetReferences(int sceneIndex)
         {
             playButton = GameObject.FindGameObjectWithTag("PlayButton");
+            cam = Camera.main;
             switch (sceneIndex)
             {
                 case 0:
@@ -191,17 +200,21 @@ namespace ZombieAttack
                     finishScreen = GameObject.FindGameObjectWithTag("FinishPanel").GetComponent<CanvasGroup>();
                     titleFinishScreen = finishScreen.transform.GetChild(0).GetComponent<Text>();
 
-                    //Trova HP bar del boss
+                    //Trova HP bar della cassaforte
                     finalObjectiveHPBarPanel = GameObject.FindGameObjectWithTag("FinalObjectivePanel").GetComponent<CanvasGroup>();
 
+                    activateTurretPanel = GameObject.Find("UI/ActivateTurretPanel").GetComponent<CanvasGroup>();
+                    activateTurretText = activateTurretPanel.transform.GetChild(0).GetComponent<Text>();
+                    keyIcon = activateTurretPanel.transform.GetChild(1).GetComponent<Image>();
+                    
                     //Trova HP bar del player
                     playerPanel = GameObject.FindGameObjectWithTag("PlayerPanel").GetComponent<CanvasGroup>();
-
                     waveText = playerPanel.transform.Find("WaveText").GetComponent<Text>();
                     waveTextAnimator = waveText.GetComponent<Animator>();
                     timerText = playerPanel.transform.Find("TimerText").GetComponent<Text>();
-
                     moneyText = playerPanel.transform.Find("MoneyText").GetComponent<Text>();
+
+                    
                     //Trova il riferimento al tutorial
                     //tutorialPanel = GameObject.FindGameObjectWithTag("TutorialPanel").GetComponent<CanvasGroup>();
 
@@ -366,5 +379,30 @@ namespace ZombieAttack
         public void UpdateTimeText(int time) => timerText.text = time.ToString();
         public void UpdateMoneyText(int money) => moneyText.text = money.ToString() + " $";
         public void SetTimerText(bool startOrStopTimerText) => timerText.GetComponent<Animator>().SetBool("CanPlayTimerText", startOrStopTimerText);
+
+        public void SetActivateText(int turretBuildCost)
+        {
+            if (GameManager.instance.playerWallet.GetCurrentMoney() > turretBuildCost)
+            {
+                activateTurretText.color = Color.white;
+                activateTurretText.text = "Attiva (" + turretBuildCost.ToString() + "$)";
+            }
+            else
+            {
+                activateTurretText.color = Color.red;
+                activateTurretText.text = "Raccogli " + turretBuildCost.ToString() + "$";
+            }
+            keyIcon.enabled = GameManager.instance.playerWallet.GetCurrentMoney() > turretBuildCost;
+        }
+
+        public void UpdateActivateTextPanelPosition(Vector3 position)
+        {
+            activateTurretPanel.transform.position = cam.WorldToScreenPoint(position);
+        }
+
+        public void SetActivateTextPanel(bool canShow)
+        {
+            SetCanvasGroup(activateTurretPanel, canShow);
+        }
     }
 }

@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 2817605358822527670}
   - component: {fileID: 2817605358822527671}
   - component: {fileID: 2817605358822527668}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: CasaPiccola
   m_TagString: Untagged
   m_Icon: {fileID: 0}
