@@ -5,15 +5,13 @@ namespace ZombieAttack
 { 
     public class Turret : MonoBehaviour
     {
-        public bool isActive = false;
-        List<EnemyMovement> enemiesOnSight;
+         List<EnemyMovement> enemiesOnSight;
 
         [Header("Stats")]
         [SerializeField] float damage;
         [SerializeField] float reloadTime = .1f;
         [SerializeField] float maxRange = 10f;
         [SerializeField] float rotationSpeed = 1f;
-        
         private float timer;
         
         private void OnDrawGizmosSelected()
@@ -25,8 +23,10 @@ namespace ZombieAttack
             Gizmos.DrawWireSphere(transform.position, maxRange);
         }
 
-        private void Start()
+        private void OnEnable()
         {
+            GetComponent<MeshRenderer>().material.color = Color.green;
+
             enemiesOnSight = new List<EnemyMovement>();
             GetComponent<SphereCollider>().radius = maxRange;
             timer = reloadTime;
@@ -37,22 +37,27 @@ namespace ZombieAttack
             timer += Time.deltaTime;
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void OnDisable()
         {
-
-            if (isActive && other.TryGetComponent(out EnemyMovement enemy))
-            {
-                if (enemy != null && !enemiesOnSight.Contains(enemy))
-                {
-                    enemy.GetComponent<Health>().OnEnemyDead += RemoveEnemyFromList;
-                    enemiesOnSight.Add(enemy);
-                }
-            }
+            GetComponent<MeshRenderer>().material.color = Color.gray;
         }
 
         private void OnTriggerStay(Collider other)
         {
-            if (isActive && enemiesOnSight.Count > 0)
+            if (!enabled) return;
+
+            if (enemiesOnSight.Count == 0)
+            {
+                if (other.TryGetComponent(out EnemyMovement enemy))
+                {
+                    if (enemy != null && !enemiesOnSight.Contains(enemy))
+                    {
+                        enemy.GetComponent<Health>().OnEnemyDead += RemoveEnemyFromList;
+                        enemiesOnSight.Add(enemy);
+                    }
+                }
+            }
+            else if (enemiesOnSight.Count > 0)
             {
                 LockOnTarget(enemiesOnSight[0].transform);
                 if (timer >= reloadTime)
@@ -65,7 +70,7 @@ namespace ZombieAttack
 
         private void OnTriggerExit(Collider other)
         {
-            if (isActive && other.TryGetComponent(out EnemyMovement enemy))
+            if (enabled && other.TryGetComponent(out EnemyMovement enemy))
                 RemoveEnemyFromList(enemy.GetComponent<Health>());           
         }
 
