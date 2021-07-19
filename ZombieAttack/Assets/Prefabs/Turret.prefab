@@ -191,6 +191,7 @@ MonoBehaviour:
   damage: 0.5
   reloadTime: 1
   maxRange: 10
+  rotationSpeed: 1
 --- !u!1 &4367301241137140839
 GameObject:
   m_ObjectHideFlags: 0
