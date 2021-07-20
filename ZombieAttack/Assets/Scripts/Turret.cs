@@ -13,6 +13,7 @@ namespace ZombieAttack
         [SerializeField] float maxRange = 10f;
         [SerializeField] float rotationSpeed = 1f;
         public int buildingCost = 1;
+        public int sellingCost = 1;
         private float timer;
         
         private void OnDrawGizmosSelected()
@@ -41,6 +42,7 @@ namespace ZombieAttack
         private void OnDisable()
         {
             GetComponent<MeshRenderer>().material.color = Color.gray;
+            enemiesOnSight.Clear();
         }
 
         private void OnTriggerStay(Collider other)
