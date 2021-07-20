@@ -380,19 +380,29 @@ namespace ZombieAttack
         public void UpdateMoneyText(int money) => moneyText.text = money.ToString() + " $";
         public void SetTimerText(bool startOrStopTimerText) => timerText.GetComponent<Animator>().SetBool("CanPlayTimerText", startOrStopTimerText);
 
-        public void SetActivateText(int turretBuildCost)
+        public void SetActivateText(Turret turret)
         {
-            if (GameManager.instance.playerWallet.GetCurrentMoney() > turretBuildCost)
+            //Se la torretta è già attiva
+            if(turret.enabled)
             {
+                keyIcon.enabled = true;
                 activateTurretText.color = Color.white;
-                activateTurretText.text = "Attiva (" + turretBuildCost.ToString() + "$)";
+                activateTurretText.text = "Disattiva (+" + turret.sellingCost.ToString() + "$)";
             }
+            //Se il giocatore non ha attivato la torretta ed ha i soldi
+            else if (GameManager.instance.playerWallet.GetCurrentMoney() > turret.buildingCost)
+            {
+                keyIcon.enabled = true;
+                activateTurretText.color = Color.white;
+                activateTurretText.text = "Attiva (-" + turret.buildingCost.ToString() + "$)";
+            }
+            //Se il giocatore non ha attivato la torretta e non ha i soldi
             else
             {
+                keyIcon.enabled = false;
                 activateTurretText.color = Color.red;
-                activateTurretText.text = "Raccogli " + turretBuildCost.ToString() + "$";
+                activateTurretText.text = "Raccogli " + turret.buildingCost.ToString() + "$";
             }
-            keyIcon.enabled = GameManager.instance.playerWallet.GetCurrentMoney() > turretBuildCost;
         }
 
         public void UpdateActivateTextPanelPosition(Vector3 position)
