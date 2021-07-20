@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using UnityEngine;
 
 namespace ZombieAttack
@@ -13,14 +14,12 @@ namespace ZombieAttack
         [SerializeField] float bulletLifetime = 1f;
         [SerializeField] float damage = 1f;
         bool canShoot = true;
-        Camera cam;
 
         private void Awake()
         {
             bulletMagazine = GetComponent<ObjectPooler>();
             muzzleTransform = transform.Find("Muzzle");
             playerTransform = transform.parent;
-            cam = Camera.main;
         }
 
         public void Shoot(SimpleHealthBar gunBar)
