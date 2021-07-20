@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -45,12 +43,7 @@ namespace ZombieAttack
                     currentMaxEnemies = waves[currentWave].maxEnemies;
                     InvokeRepeating(nameof(SpawnEnemy), 0f, waves[currentWave].timeBetweenSpawns);
                 }
-                else
-                    Debug.Log("Current wave fuori dal range: " + currentWave);
             }
-            else
-                Debug.Log("Non ci sono ondate!");
-            Debug.Log("Spawnata ondata: " + (currentWave+1));
         }
 
         public void SpawnEnemy()
