@@ -74,6 +74,7 @@ namespace ZombieAttack
                     exitGameButton.onClick.AddListener(MainMenu);
 
                     playerWallet.ResetWallet();
+                    UI_Manager.instance.UpdateMoneyText(playerWallet.GetCurrentMoney());
                     //skipTutorialButton.onClick.AddListener(delegate { SetMousePointer(false); });
 
                     UI_Manager.instance.PlayWaveText(isVictoryText: false);                  
