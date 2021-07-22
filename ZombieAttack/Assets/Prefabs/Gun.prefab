@@ -235,6 +235,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 935b5e6622c00314ea29796218f01677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gunType: 0
+  gunVisual:
+  - {fileID: 6216645864234264547}
+  - {fileID: 6216645863897274135}
   reloadTime: 0.2
   shootForce: 100
   bulletLifetime: 1
