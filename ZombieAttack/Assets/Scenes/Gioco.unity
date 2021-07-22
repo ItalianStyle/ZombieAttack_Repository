@@ -219,7 +219,7 @@ GameObject:
   - component: {fileID: 16271706}
   - component: {fileID: 16271705}
   m_Layer: 5
-  m_Name: ActivateTurretPanel
+  m_Name: ActivatePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9660,7 +9660,7 @@ GameObject:
   - component: {fileID: 1034509431}
   - component: {fileID: 1034509430}
   m_Layer: 5
-  m_Name: ActivateTurretText
+  m_Name: ActivateText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
