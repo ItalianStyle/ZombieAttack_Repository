@@ -14,8 +14,6 @@ namespace ZombieAttack
                     _bulletDamage = value / totalBullets;
                 else
                     _bulletDamage = 0.1f;
-
-                Debug.Log(BulletDamage);
             }
         }
 
