@@ -1069,6 +1069,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 262612200}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &263372109 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8953838807831206616, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b,
+    type: 3}
+  m_PrefabInstance: {fileID: 582516237932434068}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &264484159
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2124,6 +2130,7 @@ MonoBehaviour:
   m_YawDamping: 0
   m_RollDamping: 0
   m_AngularDamping: 0
+  m_HideOffsetInInspector: 0
   m_Heading:
     m_Definition: 2
     m_VelocityFilterStrength: 4
@@ -2136,10 +2143,11 @@ MonoBehaviour:
     m_LegacyVelocityFilterStrength: -1
   m_XAxis:
     Value: 0
+    m_SpeedMode: 0
     m_MaxSpeed: 450
     m_AccelTime: 0.02
     m_DecelTime: 0.02
-    m_InputAxisName: Mouse X
+    m_InputAxisName: 
     m_InputAxisValue: 0
     m_InvertInput: 0
     m_MinValue: -180
@@ -2509,7 +2517,10 @@ MonoBehaviour:
     NearClipPlane: 0.1
     FarClipPlane: 5000
     Dutch: 0
+    ModeOverride: 0
     LensShift: {x: 0, y: 0}
+    GateFit: 2
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -2525,8 +2536,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 569435206}
-  m_LocalRotation: {x: 0.11824126, y: 0.0000000013028698, z: -0.00000001094147, w: 0.99298495}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.11824126, y: -0.0000000028495675, z: 3.393164e-10, w: 0.9929849}
+  m_LocalPosition: {x: 0, y: -0.00000023841858, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 485817668}
@@ -2690,6 +2701,7 @@ MonoBehaviour:
   m_YawDamping: 0
   m_RollDamping: 0
   m_AngularDamping: 0
+  m_HideOffsetInInspector: 0
   m_Heading:
     m_Definition: 2
     m_VelocityFilterStrength: 4
@@ -2702,10 +2714,11 @@ MonoBehaviour:
     m_LegacyVelocityFilterStrength: -1
   m_XAxis:
     Value: 0
+    m_SpeedMode: 0
     m_MaxSpeed: 450
     m_AccelTime: 0.02
     m_DecelTime: 0.02
-    m_InputAxisName: Mouse X
+    m_InputAxisName: 
     m_InputAxisValue: 0
     m_InvertInput: 0
     m_MinValue: -180
@@ -4361,7 +4374,7 @@ Camera:
   far clip plane: 5000
   field of view: 40
   orthographic: 0
-  orthographic size: 5
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -4384,8 +4397,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.13623603, y: 0.00000001704596, z: -0.0000000023441291, w: 0.99067646}
-  m_LocalPosition: {x: 3.79, y: 2.74, z: -5}
+  m_LocalRotation: {x: 0.13623606, y: 0.000000028363086, z: -0.000000003897889, w: 0.9906764}
+  m_LocalPosition: {x: 5.79, y: 3.8912346, z: -7.7536726}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -8801,7 +8814,10 @@ MonoBehaviour:
     NearClipPlane: 0.1
     FarClipPlane: 5000
     Dutch: 0
+    ModeOverride: 0
     LensShift: {x: 0, y: 0}
+    GateFit: 2
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -8817,8 +8833,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1825164838}
-  m_LocalRotation: {x: 0.13623598, y: 0.000000007784519, z: 0.0000000041978514, w: 0.99067646}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.13623604, y: 0.000000028354089, z: -0.000000003899203, w: 0.99067646}
+  m_LocalPosition: {x: 0, y: -0.00000023841858, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 597055903}
@@ -9295,6 +9311,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Offset: {x: 2, y: 0.5, z: -3}
   m_ApplyAfter: 1
+  m_PreserveComposition: 0
 --- !u!114 &1942169006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9322,7 +9339,10 @@ MonoBehaviour:
     NearClipPlane: 0.1
     FarClipPlane: 5000
     Dutch: 0
+    ModeOverride: 0
     LensShift: {x: 0, y: 0}
+    GateFit: 2
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -9332,6 +9352,7 @@ MonoBehaviour:
   m_LegacyBlendHint: 0
   m_YAxis:
     Value: 0.5
+    m_SpeedMode: 0
     m_MaxSpeed: 3
     m_AccelTime: 0.02
     m_DecelTime: 0.02
@@ -9355,6 +9376,7 @@ MonoBehaviour:
     m_LegacyVelocityFilterStrength: -1
   m_XAxis:
     Value: 0
+    m_SpeedMode: 0
     m_MaxSpeed: 450
     m_AccelTime: 0.02
     m_DecelTime: 0.02
@@ -9402,7 +9424,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1942169004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.79, y: 2.74, z: -5}
+  m_LocalPosition: {x: 3.79, y: 2.6, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2125594555}
@@ -9829,6 +9851,7 @@ MonoBehaviour:
   m_YawDamping: 0
   m_RollDamping: 0
   m_AngularDamping: 0
+  m_HideOffsetInInspector: 0
   m_Heading:
     m_Definition: 2
     m_VelocityFilterStrength: 4
@@ -9841,10 +9864,11 @@ MonoBehaviour:
     m_LegacyVelocityFilterStrength: -1
   m_XAxis:
     Value: 0
+    m_SpeedMode: 0
     m_MaxSpeed: 450
     m_AccelTime: 0.02
     m_DecelTime: 0.02
-    m_InputAxisName: Mouse X
+    m_InputAxisName: 
     m_InputAxisValue: 0
     m_InvertInput: 0
     m_MinValue: -180
@@ -10467,7 +10491,10 @@ MonoBehaviour:
     NearClipPlane: 0.1
     FarClipPlane: 5000
     Dutch: 0
+    ModeOverride: 0
     LensShift: {x: 0, y: 0}
+    GateFit: 2
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -10483,8 +10510,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2125594553}
-  m_LocalRotation: {x: 0.15423334, y: 0.000000024058208, z: -0.000000022207567, w: 0.9880345}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.09779932, y: 0.000000016902417, z: 0.0000000016610073, w: 0.9952062}
+  m_LocalPosition: {x: 0, y: -2.5034158, z: 0.44780684}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2025703130}
@@ -10911,6 +10938,16 @@ PrefabInstance:
       propertyPath: m_Color.b
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 417168009066316337, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b,
+        type: 3}
+      propertyPath: muzzleTransform
+      value: 
+      objectReference: {fileID: 263372109}
+    - target: {fileID: 2658232186147438524, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b,
+        type: 3}
+      propertyPath: damage
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 3176618467733478389, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b,
         type: 3}
       propertyPath: m_Name
@@ -10924,7 +10961,7 @@ PrefabInstance:
     - target: {fileID: 3176618467733478393, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.14
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3176618467733478393, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b,
         type: 3}
@@ -10976,7 +11013,23 @@ PrefabInstance:
       propertyPath: gunBar
       value: 
       objectReference: {fileID: 1781475280}
-    m_RemovedComponents: []
+    - target: {fileID: 5628564102416767208, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b,
+        type: 3}
+      propertyPath: CollisionModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5628564102416767208, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b,
+        type: 3}
+      propertyPath: CollisionModule.type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5628564102416767208, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b,
+        type: 3}
+      propertyPath: CollisionModule.collisionMessages
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 417168009066316337, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b, type: 3}
 --- !u!1001 &1021360832567650612
 PrefabInstance:
@@ -11208,6 +11261,7 @@ MonoBehaviour:
   m_IgnoreTimeScale: 0
   m_WorldUpOverride: {fileID: 0}
   m_UpdateMethod: 2
+  m_BlendUpdateMethod: 1
   m_DefaultBlend:
     m_Style: 1
     m_Time: 2
