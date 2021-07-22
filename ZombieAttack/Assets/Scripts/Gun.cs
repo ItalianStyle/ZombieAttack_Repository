@@ -9,6 +9,7 @@ namespace ZombieAttack
         public enum GunType { Rifle, Shotgun }
         public GunType gunType;
 
+        public MeshRenderer[] gunVisual;
         Transform muzzleTransform;
         ShotgunBulletHandler shotgunBullets;
 
@@ -25,6 +26,7 @@ namespace ZombieAttack
 
         private void Awake()
         {
+            gunVisual = GetComponentsInChildren<MeshRenderer>();
             bulletMagazine = GetComponent<ObjectPooler>();
             muzzleTransform = transform.Find("Muzzle");
             shotgunBullets = muzzleTransform.GetComponentInChildren<ShotgunBulletHandler>();
@@ -59,20 +61,22 @@ namespace ZombieAttack
                         break;
 
                     case GunType.Shotgun:
-                        /*for (int i = 0; i < count; ++i)
-                            ShootRay();   
-                        */
                         shotgunBullets.Particles.Play();
                         break;
                 }
-                shotgunBullets.TryGetComponent(out ParticleSystem ps);
-                ps.Play();
 
                 //Post-shoot stuff
                 StartCoroutine("Reload", gunBar);
                 canShoot = false;
-            }
+            } 
+        }
+
+        public void SetGunState(bool isActive)
+        {
+            for (int i = 0; i < gunVisual.Length; i++)
+                gunVisual[i].enabled = isActive;
             
+            enabled = isActive;
         }
 
         IEnumerator Reload(SimpleHealthBar gunBar)
