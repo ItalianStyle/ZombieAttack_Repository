@@ -471,8 +471,8 @@ MonoBehaviour:
   frequency: 1
   rotationDirection: 1
   rotatingSpeed: 45
-  newReloadSpeed: 999
-  pivotTextTransform: {fileID: 0}
+  pivotText: {fileID: 0}
+  gunToActivate: {fileID: 0}
 --- !u!136 &87624511
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2617,7 +2617,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 569435206}
-  m_LocalRotation: {x: 0.11824125, y: -0, z: -0, w: 0.9929849}
+  m_LocalRotation: {x: 0.11824126, y: -0.0000000147966315, z: 0.0000000017619322,
+    w: 0.99298495}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -9232,7 +9233,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.13623603, y: 0.000000008526651, z: -0.0000000011715436, w: 0.99067646}
+  m_LocalRotation: {x: 0.13623603, y: 0.000000016784849, z: -0.00000000230746, w: 0.99067646}
   m_LocalPosition: {x: 5.79, y: 3.8912344, z: -7.7536726}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -13698,7 +13699,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1825164838}
-  m_LocalRotation: {x: 0.13623598, y: 0.000000008522978, z: -0.0000000011720641, w: 0.99067646}
+  m_LocalRotation: {x: 0.13623598, y: 0.000000016783513, z: -0.0000000023080378, w: 0.99067646}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -15375,8 +15376,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2125594553}
-  m_LocalRotation: {x: 0.15423332, y: 0.000000019007132, z: -0.000000002967036, w: 0.9880345}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.15799184, y: -0.000000016990276, z: 0.0000000027184683, w: 0.98744047}
+  m_LocalPosition: {x: 0, y: 0.042000055, z: 0.00015592575}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2025703130}
@@ -15814,6 +15815,11 @@ PrefabInstance:
       propertyPath: muzzleTransform
       value: 
       objectReference: {fileID: 263372109}
+    - target: {fileID: 2658232186147438524, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b,
+        type: 3}
+      propertyPath: cost
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3176618467733478389, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b,
         type: 3}
       propertyPath: m_Name
@@ -16207,8 +16213,7 @@ PrefabInstance:
         type: 3}
       propertyPath: playerWallet
       value: 
-      objectReference: {fileID: 11400000, guid: fc3505dea2686ed48baed2ec9c2372d9,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 4624592417467865227, guid: 672f25bd58e259248976c85e0d0bb732,
         type: 3}
       propertyPath: m_LocalPosition.x
