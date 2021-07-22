@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 namespace ZombieAttack
 {
@@ -6,6 +7,7 @@ namespace ZombieAttack
     [RequireComponent(typeof(Collider))]
     public class Pickup : MonoBehaviour
     {
+        public static event Action<Pickup> OnPickupTake;
         enum Direction { X, Y, Z }
         public enum PickupType { NotDefined, Shotgun}
 
@@ -22,25 +24,95 @@ namespace ZombieAttack
         [SerializeField] float rotatingSpeed = 0f;
 
         [Header("PowerUp properties")]
-        [SerializeField] float newReloadSpeed = 999f;
+        //[SerializeField] float newReloadSpeed = 999f;
+
+        [Header("References")]
+        [SerializeField] Transform pivotText;
+        [SerializeField] Gun gunToActivate;
 
         // Position Storage Variables
         Vector3 posOffset = new Vector3();
         Vector3 tempPos = new Vector3();
+
+        bool isPlayerNear = false;
         #endregion
 
         #region Unity Methods
-        // Use this for initialization
+        private void Awake()
+        {
+            pivotText = transform.GetChild(0);
+            switch(pickupType)
+            {
+                case PickupType.Shotgun:
+                    gunToActivate = GameObject.FindGameObjectWithTag("Player").transform.Find("Shotgun").GetComponent<Gun>();
+                    break;
+            }          
+        }
+
         void Start()
         {
             // Store the starting position & rotation of the object
             posOffset = transform.position;
+            UI_Manager.instance.SetActivateTextPanel(false);
+            isPlayerNear = false;
         }
 
         // Update is called once per frame
         void Update()
         {
-            // Float up/down with a Sin()
+            Float();
+
+            if (isPlayerNear)
+            {
+                UI_Manager.instance.UpdateActivateTextPanelPosition(pivotText.position);
+
+                //Mostra UI in base a quanti soldi ha il giocatore
+                UI_Manager.instance.SetActivateText(gunToActivate);
+                //Meccanica di acquisto
+                if (Input.GetKeyDown(KeyCode.E) && GameManager.instance.playerWallet.GetCurrentMoney() > gunToActivate.cost)
+                {                   
+                    GameManager.instance.playerWallet.UpdateCurrentMoney(gunToActivate.cost, false);
+                    UI_Manager.instance.UpdateMoneyText(GameManager.instance.playerWallet.GetCurrentMoney());
+
+                    UI_Manager.instance.SetActivateTextPanel(false);
+                    gameObject.SetActive(false);                   
+                }
+            }
+        }
+        private void OnDisable()
+        {
+            OnPickupTake?.Invoke(this);
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("Player"))
+            {
+                switch (pickupType)
+                {
+                    case PickupType.Shotgun:
+                        isPlayerNear = true;
+                        //Mostra il testo
+                        UI_Manager.instance.SetActivateTextPanel(true);
+                        break;
+                }
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                isPlayerNear = false;
+                UI_Manager.instance.SetActivateTextPanel(false);
+            }
+        }
+        #endregion
+
+        #region Custom Methods
+        // Float up/down with a Sin()
+        private void Float()
+        {
             tempPos = posOffset;
             tempPos.y += Mathf.Sin(Time.fixedTime * Mathf.PI * frequency) * amplitude;
 
@@ -59,20 +131,6 @@ namespace ZombieAttack
                 case Direction.Z:
                     transform.Rotate(Vector3.forward * rotatingSpeed * Time.deltaTime);
                     break;
-            }
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.gameObject.CompareTag("Player"))
-            {
-                switch (pickupType)
-                {
-                    case PickupType.Shotgun:
-
-                        break;
-                }
-                gameObject.SetActive(false);
             }
         }
         #endregion
