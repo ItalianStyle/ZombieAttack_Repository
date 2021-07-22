@@ -33,9 +33,10 @@ namespace ZombieAttack
 
         private void Start()
         {
-            canScrollMouse = true;
+            canScrollMouse = false;
             CurrentGun = 0;
             SetupGuns();
+            Pickup.OnPickupTake += SetCurrentGun;
         }
 
         private void Update()
@@ -65,6 +66,15 @@ namespace ZombieAttack
                 {
                     guns[i].SetGunState(true);
                 }
+            }
+        }
+
+        private void SetCurrentGun(Pickup pickup)
+        {
+            if (pickup.pickupType is Pickup.PickupType.Shotgun)
+            {
+                canScrollMouse = true;
+                CurrentGun = 1; // 1 == Shotgun
             }
         }
     }
