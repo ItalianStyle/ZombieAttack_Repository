@@ -2536,8 +2536,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 569435206}
-  m_LocalRotation: {x: 0.11824126, y: -0.0000000028495675, z: 3.393164e-10, w: 0.9929849}
-  m_LocalPosition: {x: 0, y: -0.00000023841858, z: 0}
+  m_LocalRotation: {x: 0.11824125, y: 4.5538756e-10, z: -5.422601e-11, w: 0.9929849}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 485817668}
@@ -4397,8 +4397,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.13623606, y: 0.000000028363086, z: -0.000000003897889, w: 0.9906764}
-  m_LocalPosition: {x: 5.79, y: 3.8912346, z: -7.7536726}
+  m_LocalRotation: {x: 0.13623601, y: -0.0000000011834015, z: 1.6271909e-10, w: 0.99067646}
+  m_LocalPosition: {x: 5.79, y: 3.8912344, z: -7.7536726}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -8833,8 +8833,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1825164838}
-  m_LocalRotation: {x: 0.13623604, y: 0.000000028354089, z: -0.000000003899203, w: 0.99067646}
-  m_LocalPosition: {x: 0, y: -0.00000023841858, z: 0}
+  m_LocalRotation: {x: 0.13623597, y: -0.0000000011833385, z: 1.627304e-10, w: 0.99067646}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 597055903}
@@ -10510,8 +10510,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2125594553}
-  m_LocalRotation: {x: -0.09779932, y: 0.000000016902417, z: 0.0000000016610073, w: 0.9952062}
-  m_LocalPosition: {x: 0, y: -2.5034158, z: 0.44780684}
+  m_LocalRotation: {x: 0.0769775, y: 0.000000020650292, z: -0.0000000015943387, w: 0.9970329}
+  m_LocalPosition: {x: 0, y: -0.83109, z: 0.050121784}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2025703130}
@@ -10926,28 +10926,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1059482168, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b, type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1059482168, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b, type: 3}
-      propertyPath: m_Color.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1059482168, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b, type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 417168009066316337, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b,
         type: 3}
       propertyPath: muzzleTransform
       value: 
       objectReference: {fileID: 263372109}
-    - target: {fileID: 2658232186147438524, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b,
-        type: 3}
-      propertyPath: damage
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 3176618467733478389, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b,
         type: 3}
       propertyPath: m_Name
@@ -11013,6 +10996,11 @@ PrefabInstance:
       propertyPath: gunBar
       value: 
       objectReference: {fileID: 1781475280}
+    - target: {fileID: 3227076550243337528, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b,
+        type: 3}
+      propertyPath: currentGun
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5628564102416767208, guid: f0fa7c9cf26efb149b4d0f0dff6ef21b,
         type: 3}
       propertyPath: CollisionModule.enabled
