@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Events;
+﻿using UnityEngine;
 
 namespace ZombieAttack
 {
@@ -27,14 +23,10 @@ namespace ZombieAttack
 
         [Header("PowerUp properties")]
         [SerializeField] float newReloadSpeed = 999f;
-        
-        [Header("References")]
-        [SerializeField] Light lightEffect = null;
 
         // Position Storage Variables
         Vector3 posOffset = new Vector3();
         Vector3 tempPos = new Vector3();
-
         #endregion
 
         #region Unity Methods
@@ -77,10 +69,9 @@ namespace ZombieAttack
                 switch (pickupType)
                 {
                     case PickupType.Shotgun:
+
                         break;
                 }
-                if (lightEffect != null)
-                    lightEffect.enabled = false;
                 gameObject.SetActive(false);
             }
         }
