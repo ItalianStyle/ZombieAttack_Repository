@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Larochiens_Adventure
+namespace ZombieAttack
 {
     // Makes objects float up & down while gently spinning.
     [RequireComponent(typeof(Collider))]
@@ -30,7 +30,6 @@ namespace Larochiens_Adventure
         
         [Header("References")]
         [SerializeField] Light lightEffect = null;
-        [SerializeField] EnemySpawnManager enemySpawnManager = null;
 
         // Position Storage Variables
         Vector3 posOffset = new Vector3();
@@ -78,24 +77,6 @@ namespace Larochiens_Adventure
                 switch (pickupType)
                 {
                     case PickupType.Sword:
-                        UI_Manager.instance.SetReloadIcon(true, PickupType.Sword);
-                        UI_Manager.instance.SetHPBar(GameManager.CharacterType.Player, true);
-                        GameManager.instance.ManageBossDoor(true);
-                        enemySpawnManager.SpawnNextWave();
-                        break;
-
-                    case PickupType.Shield:
-                        UI_Manager.instance.SetReloadIcon(true, PickupType.Shield);
-                        break;
-
-                    case PickupType.FinalSword:
-                        enemySpawnManager.SpawnNextWave();
-                        
-                        //Potenzio la ricarica del giocatore
-                        other.GetComponent<ObjectThrower>().SetReloadTime = newReloadSpeed;
-
-                        UI_Manager.instance.SetReloadIcon(false, PickupType.Sword);
-                        UI_Manager.instance.SetReloadIcon(true, PickupType.FinalSword);
                         break;
                 }
                 if (lightEffect != null)
