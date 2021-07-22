@@ -16,12 +16,12 @@ namespace ZombieAttack
         Transform playerTransform;
         ObjectPooler bulletMagazine;
         
-        [Header("Rifle variables")]
+        [Header("Stats")]
         [SerializeField] float reloadTime = .2f;
         [SerializeField] float shootForce = 10f;
         [SerializeField] float bulletLifetime = 1f;
         [SerializeField] float damage = 1f;
-
+        public int cost;
         bool canShoot = true;
 
         private void Awake()
