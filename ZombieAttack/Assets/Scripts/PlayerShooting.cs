@@ -9,7 +9,7 @@ namespace ZombieAttack
 
         private void Awake()
         {
-            currentGun = transform.Find("Gun").GetComponent<Gun>();    
+            currentGun = transform.Find("Shotgun").GetComponent<Gun>();    
         }
 
         private void Update()
