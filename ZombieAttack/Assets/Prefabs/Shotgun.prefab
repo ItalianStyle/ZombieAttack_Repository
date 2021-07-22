@@ -278,7 +278,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6216645864491329763}
   - component: {fileID: 1073099828978178399}
-  - component: {fileID: 6320932107591259071}
   m_Layer: 14
   m_Name: Shotgun
   m_TagString: Untagged
@@ -317,31 +316,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunType: 1
+  gunVisual:
+  - {fileID: 6216645864234264547}
+  - {fileID: 2084154155431198933}
+  - {fileID: 6216645863897274135}
   reloadTime: 1
   shootForce: 10
   bulletLifetime: 1
   damage: 30
-  scaleLimit: 2
-  z: 10
-  count: 30
---- !u!114 &6320932107591259071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6216645864491329756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cda1689524871c439cb5c0443dc7984, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemsToPool:
-  - objectToPool: {fileID: 3253710682505455418, guid: fa30306b4b866f143a3a5aca0b24ebd9,
-      type: 3}
-    amountToPool: 5
-    shouldExpand: 1
-  pooledObjects: []
 --- !u!1 &8692370162391590465
 GameObject:
   m_ObjectHideFlags: 0
