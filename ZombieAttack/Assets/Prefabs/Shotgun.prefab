@@ -324,6 +324,7 @@ MonoBehaviour:
   shootForce: 10
   bulletLifetime: 1
   damage: 30
+  cost: 5
 --- !u!1 &8692370162391590465
 GameObject:
   m_ObjectHideFlags: 0
