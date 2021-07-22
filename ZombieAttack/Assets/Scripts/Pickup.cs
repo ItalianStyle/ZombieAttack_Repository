@@ -11,7 +11,7 @@ namespace ZombieAttack
     public class Pickup : MonoBehaviour
     {
         enum Direction { X, Y, Z }
-        public enum PickupType { NotDefined, Sword, Shield, FinalSword }
+        public enum PickupType { NotDefined, Shotgun}
 
         #region Variables
         // User Inputs
@@ -76,7 +76,7 @@ namespace ZombieAttack
             {
                 switch (pickupType)
                 {
-                    case PickupType.Sword:
+                    case PickupType.Shotgun:
                         break;
                 }
                 if (lightEffect != null)
