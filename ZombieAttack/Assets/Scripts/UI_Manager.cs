@@ -17,7 +17,7 @@ namespace ZombieAttack
         [Header("Panels")]
         [SerializeField] CanvasGroup finishScreen = null;
         [SerializeField] CanvasGroup playerPanel = null;
-        [SerializeField] CanvasGroup activateTurretPanel = null;
+        [SerializeField] CanvasGroup activatePanel = null;
 
         [SerializeField] CanvasGroup finalObjectiveHPBarPanel = null;
         [SerializeField] CanvasGroup mainMenuPanel = null;
@@ -28,7 +28,7 @@ namespace ZombieAttack
         [SerializeField] Text timerText = null;
         [SerializeField] Text moneyText = null;
 
-        Text activateTurretText = null;
+        Text activateText = null;
         Image keyIcon = null;
 
         /*
@@ -203,9 +203,9 @@ namespace ZombieAttack
                     //Trova HP bar della cassaforte
                     finalObjectiveHPBarPanel = GameObject.FindGameObjectWithTag("FinalObjectivePanel").GetComponent<CanvasGroup>();
 
-                    activateTurretPanel = GameObject.Find("UI/ActivateTurretPanel").GetComponent<CanvasGroup>();
-                    activateTurretText = activateTurretPanel.transform.GetChild(0).GetComponent<Text>();
-                    keyIcon = activateTurretPanel.transform.GetChild(1).GetComponent<Image>();
+                    activatePanel = GameObject.Find("UI/ActivatePanel").GetComponent<CanvasGroup>();
+                    activateText = activatePanel.transform.GetChild(0).GetComponent<Text>();
+                    keyIcon = activatePanel.transform.GetChild(1).GetComponent<Image>();
                     
                     //Trova HP bar del player
                     playerPanel = GameObject.FindGameObjectWithTag("PlayerPanel").GetComponent<CanvasGroup>();
@@ -384,35 +384,42 @@ namespace ZombieAttack
         {
             //Se la torretta è già attiva
             if(turret.enabled)
-            {
-                keyIcon.enabled = true;
-                activateTurretText.color = Color.white;
-                activateTurretText.text = "Disattiva (+" + turret.sellingCost.ToString() + "$)";
-            }
+                SetActivateText(true, Color.white, "Disattiva (+" + turret.sellingCost.ToString() + "$)");
+
             //Se il giocatore non ha attivato la torretta ed ha i soldi
             else if (GameManager.instance.playerWallet.GetCurrentMoney() > turret.buildingCost)
-            {
-                keyIcon.enabled = true;
-                activateTurretText.color = Color.white;
-                activateTurretText.text = "Attiva (-" + turret.buildingCost.ToString() + "$)";
-            }
+                SetActivateText(true, Color.white, "Attiva (-" + turret.buildingCost.ToString() + "$)");
+
             //Se il giocatore non ha attivato la torretta e non ha i soldi
             else
-            {
-                keyIcon.enabled = false;
-                activateTurretText.color = Color.red;
-                activateTurretText.text = "Raccogli " + turret.buildingCost.ToString() + "$";
-            }
+                SetActivateText(false, Color.red, "Raccogli " + turret.buildingCost.ToString() + "$");           
         }
 
+        public void SetActivateText(Gun gun)
+        {
+            //Se il giocatore ha i soldi
+            if (GameManager.instance.playerWallet.GetCurrentMoney() > gun.cost)
+                SetActivateText(true, Color.white, "Compra (-" + gun.cost.ToString() + "$)");
+
+            //Se il giocatore non ha i soldi
+            else
+                SetActivateText(false, Color.red, "Raccogli " + gun.cost.ToString() + "$");                      
+        }    
+
+        private void SetActivateText(bool canActiveKeyIcon, Color textColor, string text)
+        {
+            keyIcon.enabled = canActiveKeyIcon;
+            activateText.color = textColor;
+            activateText.text = text;
+        }
         public void UpdateActivateTextPanelPosition(Vector3 position)
         {
-            activateTurretPanel.transform.position = cam.WorldToScreenPoint(position);
+            activatePanel.transform.position = cam.WorldToScreenPoint(position);
         }
 
         public void SetActivateTextPanel(bool canShow)
         {
-            SetCanvasGroup(activateTurretPanel, canShow);
+            SetCanvasGroup(activatePanel, canShow);
         }
     }
 }
