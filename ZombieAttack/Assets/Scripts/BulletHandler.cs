@@ -59,7 +59,6 @@ namespace ZombieAttack
             }
             if (other.layer == LayerMask.NameToLayer("Enemy"))
             {
-                Debug.Log("Colpito");
                 other.GetComponent<Health>().DealDamage(BulletDamage);
             }
         }
