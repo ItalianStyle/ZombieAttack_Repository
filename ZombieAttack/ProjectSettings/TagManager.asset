@@ -6,13 +6,16 @@ TagManager:
   tags:
   - Bullet
   - Muzzle
-  - Enemy
   - PlayerPanel
   - FinishPanel
   - FinalObjectivePanel
   - PlayButton
   - QuitGameButton
   - ResumeButton
+  - EnemySmall
+  - EnemyMedium
+  - EnemyBig
+  - Boss
   layers:
   - Default
   - TransparentFX
