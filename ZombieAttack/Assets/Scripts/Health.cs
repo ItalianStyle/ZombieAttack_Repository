@@ -73,7 +73,7 @@ namespace ZombieAttack
                         GameManager.instance.SetStatusGame(GameManager.GameState.Lost);
                         UI_Manager.instance.SetFinishScreen(GameManager.GameState.Lost);
                     }
-                    else if (gameObject.CompareTag("Enemy"))
+                    else if (gameObject.layer == LayerMask.NameToLayer("Enemy"))
                     {
                         //Aggiorno il counter dei morti
                         OnEnemyDead.Invoke(this);

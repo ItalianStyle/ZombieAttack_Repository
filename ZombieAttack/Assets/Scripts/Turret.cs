@@ -95,7 +95,7 @@ namespace ZombieAttack
             RaycastHit hitInfo;
             if (Physics.Raycast(ray, out hitInfo, maxRange, LayerMask.GetMask("Enemy", "Building"))) //Filtering layers to consider in raycast: https://answers.unity.com/questions/1108781/set-ray-only-when-raycast-a-specific-layer.html
             {
-                if (hitInfo.collider.CompareTag("Enemy"))
+                if (hitInfo.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
                     hitInfo.collider.GetComponent<Health>().DealDamage(damage);
             }
         }
