@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,19 +11,16 @@ namespace ZombieAttack
         [SerializeField] Transform finalObjectiveTransform = null;
         [SerializeField] Wave[] waves = null;
         public int currentWave = 0;
-        int currentEnemies = 0;
         int killedEnemies = 0;
         int currentMaxEnemies = 0;
+        int[] spawnedEnemies;
 
-        ObjectPooler objPooler = null;
-       
         public static EnemyManager instance;
 
         private void Awake()
         {
             instance = this;
             finalObjectiveTransform = GameObject.FindGameObjectWithTag("Finish").transform;
-            objPooler = GameObject.Find("Enemies").GetComponent<ObjectPooler>();
         }
 
         private void Start()
@@ -31,16 +29,17 @@ namespace ZombieAttack
                 spawnPoints.Add(transform.GetChild(i));
             
             currentWave = 0;
-            currentEnemies = 0;
+            foreach (Wave wave in waves)
+                wave.InitializeEnemyTypesIndexList();
+            spawnedEnemies = new int[waves[0].maxEnemyTypes.Length];
         }
 
         public void SpawnWave()
-        {           
+        {
             if (waves.Length > 0)
             {
                 if (currentWave >= 0 && currentWave < waves.Length)
                 { 
-                    currentMaxEnemies = waves[currentWave].maxEnemies;
                     InvokeRepeating(nameof(SpawnEnemy), 0f, waves[currentWave].timeBetweenSpawns);
                 }
             }
@@ -48,11 +47,48 @@ namespace ZombieAttack
 
         public void SpawnEnemy()
         {
-            GameObject enemy = objPooler.GetPooledObject("Enemy");
-            SetupEnemy(enemy);
-            enemy.SetActive(true);
-            currentEnemies++;
-            if (currentEnemies == currentMaxEnemies)
+            //Choose enemy type to spawn
+            int enemyTypeIndex = waves[currentWave].SelectEnemyType();
+
+            //If the list of callable type of enemies is not empty
+            if (enemyTypeIndex != -1)
+            {
+                //If spawned enemies haven't reached the maximum number allowed
+                if (spawnedEnemies[enemyTypeIndex] < waves[currentWave].maxEnemyTypes[enemyTypeIndex])
+                {
+                    GameObject enemy; 
+                    switch(enemyTypeIndex)
+                    {
+                        case 0:
+                            enemy = ObjectPooler.SharedInstance.GetPooledObject("Enemy", "EnemySmall");
+                            break;
+
+                        case 1:
+                            enemy = ObjectPooler.SharedInstance.GetPooledObject("Enemy", "EnemyMedium");
+                            break;
+
+                        case 2:
+                            enemy = ObjectPooler.SharedInstance.GetPooledObject("Enemy", "EnemyBig");
+                            break;
+
+                        default:
+                            Debug.LogWarning("Indice del tipo di nemico non riconosciuto!");
+                            enemy = null;
+                            break;
+                    }
+                    SetupEnemy(enemy);
+                    enemy.SetActive(true);
+                    //Increase enemy counting for this type
+                    spawnedEnemies[enemyTypeIndex]++;
+                }
+                //else remove the index from the list and restart the method
+                else
+                {
+                    waves[currentWave].DiscardEnemyType(enemyTypeIndex);
+                    SpawnEnemy();
+                }
+            }
+            else
             {
                 CancelInvoke(nameof(SpawnEnemy));
                 currentWave++;
