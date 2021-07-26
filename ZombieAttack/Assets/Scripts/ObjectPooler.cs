@@ -50,16 +50,23 @@ namespace ZombieAttack
         }
 
         //Ritorna il primo oggetto copia utilizzabile, eventualmente se il flag è attivo espande la rispettiva lista ed instanzia una nuova copia
-        public GameObject GetPooledObject(string tag)
+        public GameObject GetPooledObject(string layer, string tag = null)
         {
             for (int i = 0; i < pooledObjects.Count; i++)
             {
-                if (!pooledObjects[i].activeInHierarchy && pooledObjects[i].tag == tag) return pooledObjects[i];
+                bool checkPooledObject = tag == null ?
+                    !pooledObjects[i].activeInHierarchy && pooledObjects[i].layer == LayerMask.NameToLayer(layer) :
+                    !pooledObjects[i].activeInHierarchy && pooledObjects[i].layer == LayerMask.NameToLayer(layer) && pooledObjects[i].CompareTag(tag);
+                if (checkPooledObject) return pooledObjects[i];  //NameToLayer() https://www.codegrepper.com/code-examples/csharp/how+to+check+gameobject+layer
             }
 
             foreach (ObjectPoolItem item in itemsToPool)
             {
-                if (item.objectToPool.tag == tag)
+                bool checkItem = tag == null ? 
+                    item.objectToPool.layer == LayerMask.NameToLayer(layer) : 
+                    item.objectToPool.layer == LayerMask.NameToLayer(layer) && item.objectToPool.CompareTag(tag);
+
+                if (checkItem)
                 {
                     if (item.shouldExpand)
                     {
