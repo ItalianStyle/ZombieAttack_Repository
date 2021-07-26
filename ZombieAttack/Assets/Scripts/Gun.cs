@@ -11,15 +11,12 @@ namespace ZombieAttack
 
         public MeshRenderer[] gunVisual;
         Transform muzzleTransform;
-        ShotgunBulletHandler shotgunBullets;
+        BulletHandler bulletParticles;
 
         Transform playerTransform;
-        ObjectPooler bulletMagazine;
         
         [Header("Stats")]
         [SerializeField] float reloadTime = .2f;
-        [SerializeField] float shootForce = 10f;
-        [SerializeField] float bulletLifetime = 1f;
         [SerializeField] float damage = 1f;
         public int cost;
         bool canShoot = true;
@@ -27,16 +24,14 @@ namespace ZombieAttack
         private void Awake()
         {
             gunVisual = GetComponentsInChildren<MeshRenderer>();
-            bulletMagazine = GetComponent<ObjectPooler>();
             muzzleTransform = transform.Find("Muzzle");
-            shotgunBullets = muzzleTransform.GetComponentInChildren<ShotgunBulletHandler>();
+            bulletParticles = muzzleTransform.GetComponentInChildren<BulletHandler>();
             playerTransform = transform.parent;
         }
 
         private void Start()
         {
-            if (gunType is GunType.Shotgun)
-                shotgunBullets.BulletDamage = damage;
+            bulletParticles.BulletDamage = damage;
         }
 
         public void Shoot(SimpleHealthBar gunBar)
@@ -44,11 +39,11 @@ namespace ZombieAttack
             if (canShoot)
             {
                 playerTransform.GetComponent<PlayerMovement>().FaceCamera();
-                switch(gunType)
+                /*switch(gunType)
                 {
                     case GunType.Rifle:
                         //Posiziono il bullet
-                        GameObject bullet = bulletMagazine.GetPooledObject("Bullet");
+                        GameObject bullet = ObjectPooler.SharedInstance.GetPooledObject("Bullet");
                         bullet.transform.position = muzzleTransform.position;
                         bullet.transform.forward = muzzleTransform.forward;
 
@@ -61,10 +56,10 @@ namespace ZombieAttack
                         break;
 
                     case GunType.Shotgun:
-                        shotgunBullets.Particles.Play();
+                        bulletParticles.Particles.Play();
                         break;
-                }
-
+                }*/
+                bulletParticles.Particles.Play();
                 //Post-shoot stuff
                 StartCoroutine("Reload", gunBar);
                 canShoot = false;
@@ -89,12 +84,6 @@ namespace ZombieAttack
                 yield return null;
             }
             canShoot = true;
-        }
-
-        IEnumerator CountBulletLifetime(GameObject bullet)
-        {
-            yield return new WaitForSeconds(bulletLifetime);
-            bullet.SetActive(false);
         }
     }
 }
