@@ -191,6 +191,7 @@ namespace ZombieAttack
         {
             //Attiva il movimento
             player.GetComponent<PlayerMovement>().enabled = canEnable;
+            player.GetComponent<StaminaSystem>().enabled = canEnable;
             //se è la situazione iniziale dove il giocatore non ha ancora raccolto l'arma, non attivare il lanciatore di spade
             //GetComponent<PlayerShooting>().enabled = player.GetComponent<Equipment>().currentWeaponType is Equipment.WeaponType.None ? false : canEnable;
             player.GetComponent<PlayerShooting>().enabled = canEnable;
