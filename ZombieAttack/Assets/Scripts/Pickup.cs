@@ -35,6 +35,7 @@ namespace ZombieAttack
         Vector3 tempPos = new Vector3();
 
         bool isPlayerNear = false;
+        bool isPickedUp = false;
         #endregion
 
         #region Unity Methods
@@ -69,19 +70,21 @@ namespace ZombieAttack
                 //Mostra UI in base a quanti soldi ha il giocatore
                 UI_Manager.instance.SetActivateText(gunToActivate);
                 //Meccanica di acquisto
-                if (Input.GetKeyDown(KeyCode.E) && GameManager.instance.playerWallet.GetCurrentMoney() > gunToActivate.cost)
+                if (Input.GetKeyDown(KeyCode.E) && GameManager.instance.playerWallet.GetCurrentMoney() >= gunToActivate.cost)
                 {                   
                     GameManager.instance.playerWallet.UpdateCurrentMoney(gunToActivate.cost, false);
                     UI_Manager.instance.UpdateMoneyText(GameManager.instance.playerWallet.GetCurrentMoney());
 
                     UI_Manager.instance.SetActivateTextPanel(false);
+                    isPickedUp = true;
                     gameObject.SetActive(false);                   
                 }
             }
         }
         private void OnDisable()
         {
-            OnPickupTake?.Invoke(this);
+            if (isPickedUp) OnPickupTake?.Invoke(this);
+            isPickedUp = false;          
         }
 
         private void OnTriggerEnter(Collider other)
