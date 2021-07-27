@@ -41,7 +41,8 @@ namespace ZombieAttack
             if (waves.Length > 0)
             {
                 if (currentWave >= 0 && currentWave < waves.Length)
-                { 
+                {
+                    spawnedEnemies = new int[waves[currentWave].maxEnemyTypes.Length];
                     InvokeRepeating(nameof(SpawnEnemy), 0f, waves[currentWave].timeBetweenSpawns);
                 }
             }
@@ -107,9 +108,11 @@ namespace ZombieAttack
         {
             killedEnemies++;
             enemyHealth.OnEnemyDead -= IncreaseKillCount;
+            //If wave is finished
             if (killedEnemies >= CurrentWaveMaxEnemies)
             {
-                if (currentWave >= waves.Length)
+                killedEnemies = 0;
+                if (currentWave >= waves.Length -1)
                 {
                     currentWave = 0;
                     //Vittoria del gioco
