@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 namespace ZombieAttack
 {
@@ -11,11 +12,26 @@ namespace ZombieAttack
         [SerializeField] float sprintSpeed;
         public float movSpeed;
 
-        [SerializeField] Camera cam;
+        Camera cam;
+        StaminaSystem playerStamina;
+        bool canRun = true;
+
         private void Awake()
         {
             Controller = GetComponent<CharacterController>();
             cam = Camera.main;
+            playerStamina = GetComponent<StaminaSystem>();
+        }
+        private void OnEnable()
+        {
+            StaminaSystem.OnStaminaEmpty += () => canRun = false;
+            StaminaSystem.OnStaminaFull += () => canRun = true;
+        }
+
+        private void OnDisable()
+        {
+            StaminaSystem.OnStaminaEmpty -= () => canRun = false;
+            StaminaSystem.OnStaminaFull -= () => canRun = true;
         }
 
         private void Update()
@@ -30,8 +46,29 @@ namespace ZombieAttack
             }
 
             //Sprint mechanic -> https://www.youtube.com/watch?v=JUTFiyBjlnc&ab_channel=SingleSaplingGames
-            movSpeed = Input.GetKey(KeyCode.LeftShift)? sprintSpeed : walkSpeed;
-           
+            //Stamina mechanic -> https://www.youtube.com/watch?v=x9zOct1AMxo&ab_channel=StuartSpence
+
+
+            if (canRun)
+            {
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    //Start decrease stamina
+                    playerStamina.isPlayerRunning = true;
+                    movSpeed = sprintSpeed;
+                }
+                else if (Input.GetKeyUp(KeyCode.LeftShift))
+                {
+                    //Start increase stamina
+                    canRun = false;
+                    playerStamina.isPlayerRunning = false;
+                    movSpeed = walkSpeed;
+                }
+                else
+                    movSpeed = walkSpeed;
+            }
+            else
+                movSpeed = walkSpeed;
             Controller.SimpleMove(moveDir.normalized * movSpeed);
         }
 
