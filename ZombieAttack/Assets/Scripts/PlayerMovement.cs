@@ -7,6 +7,8 @@ namespace ZombieAttack
     {
         [SerializeField] CharacterController Controller;
         Vector3 input;
+        [SerializeField] float walkSpeed;
+        [SerializeField] float sprintSpeed;
         public float movSpeed;
 
         [SerializeField] Camera cam;
@@ -20,13 +22,17 @@ namespace ZombieAttack
         {
             input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
             Vector3 moveDir = Quaternion.Euler(0, cam.transform.eulerAngles.y, 0) * input;
-            Controller.SimpleMove(moveDir.normalized * movSpeed);
-
+            
             if (input.magnitude > 0)
             {
                 Quaternion target = Quaternion.LookRotation(moveDir);
                 transform.rotation = Quaternion.Slerp(transform.rotation, target, .1f);
             }
+
+            //Sprint mechanic -> https://www.youtube.com/watch?v=JUTFiyBjlnc&ab_channel=SingleSaplingGames
+            movSpeed = Input.GetKey(KeyCode.LeftShift)? sprintSpeed : walkSpeed;
+           
+            Controller.SimpleMove(moveDir.normalized * movSpeed);
         }
 
         public void FaceCamera()
