@@ -9,7 +9,7 @@ namespace ZombieAttack
         public enum GunType { Rifle, Shotgun }
         public GunType gunType;
 
-        public MeshRenderer[] gunVisual;
+        [SerializeField] MeshRenderer[] gunVisual;
         Transform muzzleTransform;
         BulletHandler bulletParticles;
 
@@ -39,26 +39,6 @@ namespace ZombieAttack
             if (canShoot)
             {
                 playerTransform.GetComponent<PlayerMovement>().FaceCamera();
-                /*switch(gunType)
-                {
-                    case GunType.Rifle:
-                        //Posiziono il bullet
-                        GameObject bullet = ObjectPooler.SharedInstance.GetPooledObject("Bullet");
-                        bullet.transform.position = muzzleTransform.position;
-                        bullet.transform.forward = muzzleTransform.forward;
-
-                        //Shooting
-                        bullet.SetActive(true);
-                        bullet.GetComponent<Bullet>().Throw(bullet.transform.forward * shootForce, ForceMode.Impulse, damage);
-                        
-                        StartCoroutine("CountBulletLifetime", bullet);
-
-                        break;
-
-                    case GunType.Shotgun:
-                        bulletParticles.Particles.Play();
-                        break;
-                }*/
                 bulletParticles.Particles.Play();
                 //Post-shoot stuff
                 StartCoroutine("Reload", gunBar);
@@ -68,10 +48,13 @@ namespace ZombieAttack
 
         public void SetGunState(bool isActive)
         {
-            for (int i = 0; i < gunVisual.Length; i++)
-                gunVisual[i].enabled = isActive;
-            
-            enabled = isActive;
+            if (gunVisual.Length > 0)
+            {
+                for (int i = 0; i < gunVisual.Length; i++)
+                    gunVisual[i].enabled = isActive;
+               
+                enabled = isActive;
+            }
         }
 
         IEnumerator Reload(SimpleHealthBar gunBar)
