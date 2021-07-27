@@ -10,22 +10,19 @@ namespace ZombieAttack
         [SerializeField] int _currentGun;
         [SerializeField] bool canScrollMouse = false;
         [SerializeField] SimpleHealthBar gunBar = null;
-         int CurrentGun
+         int CurrentGunIndex
         {
             get => _currentGun;
             set
             {
-                guns[_currentGun].SetGunState(false);
-
                 _currentGun = value;                              
                 if (_currentGun < 0)
                     _currentGun = guns.Length - 1;
                 else if (_currentGun >= guns.Length)
                     _currentGun = 0;
-
-                guns[_currentGun].SetGunState(true);
             }
         }
+
         private void Awake()
         {
             guns = GetComponentsInChildren<Gun>();
@@ -34,7 +31,7 @@ namespace ZombieAttack
         private void Start()
         {
             canScrollMouse = false;
-            CurrentGun = 0;
+            SetCurrentGun(0);
             SetupGuns();
             Pickup.OnPickupTake += SetCurrentGun;
         }
@@ -42,15 +39,15 @@ namespace ZombieAttack
         private void Update()
         {
             if (Input.GetMouseButton(0))
-                guns[CurrentGun].Shoot(gunBar);
+                guns[CurrentGunIndex].Shoot(gunBar);
             
             if (canScrollMouse)
             {
-                if (Input.GetAxis("Mouse ScrollWheel") > 0)
-                    CurrentGun++;
-                
-                if(Input.GetAxis("Mouse ScrollWheel") < 0)
-                    CurrentGun--;
+                if (Input.GetAxis("Mouse ScrollWheel") > 0) 
+                    SetCurrentGun(CurrentGunIndex + 1);
+               
+                if (Input.GetAxis("Mouse ScrollWheel") < 0)
+                    SetCurrentGun(CurrentGunIndex - 1);                
             }
         }
 
@@ -58,14 +55,11 @@ namespace ZombieAttack
         {
             for(int i = 0; i < guns.Length; i++)
             {
-                if (i != CurrentGun)
-                {
+                if (i != CurrentGunIndex)
                     guns[i].SetGunState(false);
-                }
+                
                 else
-                {
                     guns[i].SetGunState(true);
-                }
             }
         }
 
@@ -74,7 +68,19 @@ namespace ZombieAttack
             if (pickup.pickupType is Pickup.PickupType.Shotgun)
             {
                 canScrollMouse = true;
-                CurrentGun = 1; // 1 == Shotgun
+                SetCurrentGun(1); // 1 == Shotgun
+            }
+        }
+
+        //Changes current gun of player by giving new gun index
+        private void SetCurrentGun(int newCurrentGunIndex)
+        {
+            //Debug.Log("CurrentGunIndex: " + CurrentGunIndex + "\nnewCurrentGunIndex: " + newCurrentGunIndex);
+            if (CurrentGunIndex != newCurrentGunIndex)
+            {
+                guns[CurrentGunIndex].SetGunState(false);
+                CurrentGunIndex = newCurrentGunIndex;
+                guns[CurrentGunIndex].SetGunState(true);
             }
         }
     }
