@@ -7,7 +7,7 @@ namespace ZombieAttack
     public class Wave : ScriptableObject
     {
         //Lista che contiene gli indici del tipo di nemico da spawnare 
-        List<int> numbersToChooseFrom = new List<int>(new int[] { 0, 1, 2 });
+        [SerializeField] List<int> numbersToChooseFrom = new List<int>(new int[] { 0, 1, 2 });
         //Array che contiene il numero massimo di nemici permessi per ogni tipo di nemico
         public int[] maxEnemyTypes = new int[3];
         public float timeBetweenSpawns = 1f;
@@ -25,6 +25,7 @@ namespace ZombieAttack
          
         public void InitializeEnemyTypesIndexList()
         {
+            numbersToChooseFrom.Clear();
             for (int i = 0; i < maxEnemyTypes.Length; i++)
                 numbersToChooseFrom.Add(i);
         }
