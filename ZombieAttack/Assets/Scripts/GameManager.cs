@@ -39,15 +39,14 @@ namespace ZombieAttack
         {
             //Verifica se esiste un'altra istanza del GameManager nella scena
             if (instance != null && instance != this)
-                Destroy(gameObject);
+                DestroyImmediate(gameObject);
             else
+            {
                 instance = this;
-
-            DontDestroyOnLoad(this);
-
-            SceneManager.sceneLoaded += OnSceneLoaded;
+                DontDestroyOnLoad(this);
+                SceneManager.sceneLoaded += OnSceneLoaded;
+            }
         }
-
         
         private void OnSceneLoaded(Scene scene, LoadSceneMode arg1)
         {
