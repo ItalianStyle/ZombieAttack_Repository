@@ -324,7 +324,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Controller: {fileID: 0}
-  movSpeed: 10
+  walkSpeed: 10
+  sprintSpeed: 20
+  movSpeed: 0
   cam: {fileID: 0}
 --- !u!114 &3227076550243337528
 MonoBehaviour:
