@@ -5,13 +5,12 @@ namespace ZombieAttack
 {
     public class BulletHandler : MonoBehaviour
     {
-        Gun.GunType bulletType;
+        readonly Gun.GunType bulletType;
         float _bulletDamage;
         int totalBullets;
         ParticleSystem bulletsParticleSystem;
         List<ParticleCollisionEvent> collisionEvents = new List<ParticleCollisionEvent>();
 
-        [Min(0.01f)] float rateOfFire;
         public float BulletDamage 
         { 
             private get => _bulletDamage; 
@@ -41,15 +40,12 @@ namespace ZombieAttack
         {
             switch (bulletType)
             {
-                case Gun.GunType.Rifle:
-
-                    break;
-
                 case Gun.GunType.Shotgun:
                     totalBullets = (int)Particles.emission.GetBurst(0).count.constant;
                     break;
             }
         }
+
         private void OnParticleCollision(GameObject other)  //how to shoot with particle system https://www.youtube.com/watch?v=lkq8iLOr3sw&t=13s
         {
             int events = bulletsParticleSystem.GetCollisionEvents(other, collisionEvents);
