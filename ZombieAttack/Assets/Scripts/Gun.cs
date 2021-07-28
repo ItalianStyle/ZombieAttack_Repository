@@ -41,7 +41,7 @@ namespace ZombieAttack
                 playerTransform.GetComponent<PlayerMovement>().FaceCamera();
                 bulletParticles.Particles.Play();
                 //Post-shoot stuff
-                StartCoroutine("Reload", gunBar);
+                StartCoroutine(nameof(Reload), gunBar);
                 canShoot = false;
             } 
         }
