@@ -1,90 +1,54 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using System;
 
 namespace ZombieAttack
 {
-    // Makes objects float up & down while gently spinning.
     [RequireComponent(typeof(Collider))]
     public class Pickup : MonoBehaviour
     {
-        public static event Action<Pickup> OnPickupTake;
-        enum Direction { X, Y, Z }
-        public enum PickupType { NotDefined, Shotgun}
+        public event Action OnPickupTake = delegate { };
+        public event Action OnPlayerNear = delegate { };
+        public event Action OnPlayerFar = delegate { };
 
-        #region Variables
+        public enum PickupType { NotDefined, Shotgun, Health}
+
         // User Inputs
         public PickupType pickupType = PickupType.NotDefined;
 
-        [Header("Floating stats")]
-        [SerializeField] float amplitude = 0.5f;
-        [SerializeField] float frequency = 1f;
-
-        [Header("Rotation stats")]
-        [SerializeField] Direction rotationDirection = Direction.Y;
-        [SerializeField] float rotatingSpeed = 0f;
-
-        [Header("PowerUp properties")]
-        //[SerializeField] float newReloadSpeed = 999f;
-
+        [Header("PowerUp properties and stats")]
+        public float timeToRespawn;
+        [SerializeField] [Min(0.1f)] float healAmount;
+       
         [Header("References")]
-        [SerializeField] Transform pivotText;
-        [SerializeField] Gun gunToActivate;
+        public Gun gunToActivate;
+        [SerializeField] WorldSpaceCanvas pickupTimerCanvas;
 
-        // Position Storage Variables
-        Vector3 posOffset = new Vector3();
-        Vector3 tempPos = new Vector3();
+        bool canProcessInput = false;
 
-        bool isPlayerNear = false;
-        bool isPickedUp = false;
-        #endregion
-
-        #region Unity Methods
         private void Awake()
         {
-            pivotText = transform.GetChild(0);
             switch(pickupType)
             {
                 case PickupType.Shotgun:
                     gunToActivate = GameObject.FindGameObjectWithTag("Player").transform.Find("Shotgun").GetComponent<Gun>();
                     break;
+
+                case PickupType.Health:
+                    pickupTimerCanvas = GetComponentInChildren<WorldSpaceCanvas>();
+                    break;
             }          
         }
-
-        void Start()
-        {
-            // Store the starting position & rotation of the object
-            posOffset = transform.position;
-            UI_Manager.instance.SetActivateTextPanel(false);
-            isPlayerNear = false;
+        private void OnEnable()
+        {            
+            pickupTimerCanvas.OnTimerFinished -= () => SetPickup(true);
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-            Float();
-
-            if (isPlayerNear)
-            {
-                UI_Manager.instance.UpdateActivateTextPanelPosition(pivotText.position);
-
-                //Mostra UI in base a quanti soldi ha il giocatore
-                UI_Manager.instance.SetActivateText(gunToActivate);
-                //Meccanica di acquisto
-                if (Input.GetKeyDown(KeyCode.E) && GameManager.instance.playerWallet.GetCurrentMoney() >= gunToActivate.cost)
-                {                   
-                    GameManager.instance.playerWallet.UpdateCurrentMoney(gunToActivate.cost, false);
-                    UI_Manager.instance.UpdateMoneyText(GameManager.instance.playerWallet.GetCurrentMoney());
-
-                    UI_Manager.instance.SetActivateTextPanel(false);
-                    isPickedUp = true;
-                    gameObject.SetActive(false);                   
-                }
-            }
-        }
         private void OnDisable()
         {
-            if (isPickedUp) OnPickupTake?.Invoke(this);
-            isPickedUp = false;          
+            OnPickupTake.Invoke();
+            if(pickupType is PickupType.Health)
+                pickupTimerCanvas.OnTimerFinished += () => SetPickup(true);  //Re-enable the pickup when timer is finished
         }
 
         private void OnTriggerEnter(Collider other)
@@ -94,10 +58,32 @@ namespace ZombieAttack
                 switch (pickupType)
                 {
                     case PickupType.Shotgun:
-                        isPlayerNear = true;
-                        //Mostra il testo
-                        UI_Manager.instance.SetActivateTextPanel(true);
+                        OnPlayerNear.Invoke();
+                        canProcessInput = true;
                         break;
+
+                    case PickupType.Health:
+                        if (other.TryGetComponent(out Health playerHealth) && playerHealth.CanHeal)
+                        {
+                            playerHealth.Heal(healAmount);
+                            SetPickup(false);
+                        }
+                        break;
+                }               
+            }
+        }
+
+        private void Update()
+        {
+            if (pickupType is PickupType.Shotgun)
+            {
+                //Meccanica di acquisto
+                if (canProcessInput && Input.GetKeyDown(KeyCode.E) && Wallet.instance.HasEnoughMoneyFor(gunToActivate.cost))
+                {
+                    Wallet.instance.UpdateCurrentMoney(gunToActivate.cost, false);
+                    UI_Manager.instance.UpdateMoneyText();
+
+                    SetPickup(false);
                 }
             }
         }
@@ -106,36 +92,34 @@ namespace ZombieAttack
         {
             if (other.CompareTag("Player"))
             {
-                isPlayerNear = false;
-                UI_Manager.instance.SetActivateTextPanel(false);
+                OnPlayerFar.Invoke();
+                canProcessInput = false;
             }
         }
-        #endregion
 
-        #region Custom Methods
-        // Float up/down with a Sin()
-        private void Float()
+        void SetPickup(bool canActive)
         {
-            tempPos = posOffset;
-            tempPos.y += Mathf.Sin(Time.fixedTime * Mathf.PI * frequency) * amplitude;
-
-            transform.position = tempPos;
-
-            switch (rotationDirection)
+            GetComponent<FloatingMovement>().enabled = canActive;
+            switch(pickupType)
             {
-                case Direction.X:
-                    transform.Rotate(Vector3.right * rotatingSpeed * Time.deltaTime);
+                case PickupType.Health:
+                    if (canActive)
+                        GetComponentInChildren<ParticleSystem>().Play();
+                    else
+                        GetComponentInChildren<ParticleSystem>().Stop();
+                    GetComponent<Collider>().enabled = canActive;
+
+                    Color temp = GetComponent<MeshRenderer>().material.color;
+                    temp.a = canActive ? 1f : .4f;
+                    GetComponent<MeshRenderer>().material.color = temp;
+
+                    enabled = canActive;
                     break;
 
-                case Direction.Y:
-                    transform.Rotate(Vector3.up * rotatingSpeed * Time.deltaTime);
-                    break;
-
-                case Direction.Z:
-                    transform.Rotate(Vector3.forward * rotatingSpeed * Time.deltaTime);
+                case PickupType.Shotgun:
+                    gameObject.SetActive(canActive);
                     break;
             }
         }
-        #endregion
     }
 }

@@ -30,8 +30,6 @@ namespace ZombieAttack
         public GameState currentGameState = GameState.notDefined;
        
         public bool isPaused = false;
-        
-        public Wallet playerWallet;
 
         public static GameManager instance;
 
@@ -72,8 +70,8 @@ namespace ZombieAttack
                     resumeButton.onClick.AddListener(ResumeGame);
                     exitGameButton.onClick.AddListener(MainMenu);
 
-                    playerWallet.ResetWallet();
-                    UI_Manager.instance.UpdateMoneyText(playerWallet.GetCurrentMoney());
+                    Wallet.InitializeWalletInstance();
+                    UI_Manager.instance.UpdateMoneyText();
                     //skipTutorialButton.onClick.AddListener(delegate { SetMousePointer(false); });
 
                     UI_Manager.instance.PlayWaveText(isVictoryText: false);                  
@@ -100,7 +98,6 @@ namespace ZombieAttack
                     pauseListener = FindObjectOfType<PauseListener>();
 
                     resumeButton = GameObject.FindGameObjectWithTag("ResumeButton").GetComponent<Button>();
-                    playerWallet = GetComponent<Wallet>();
                     //skipTutorialButton = GameObject.FindGameObjectWithTag("SkipButton").GetComponent<Button>();
 
                     //inputToCamera = FindObjectOfType<CinemachineFreeLook>();

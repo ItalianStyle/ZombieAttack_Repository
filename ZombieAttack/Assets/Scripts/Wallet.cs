@@ -3,11 +3,22 @@
 
 namespace ZombieAttack
 {
-    public class Wallet : MonoBehaviour
+    public class Wallet
     {
-        [SerializeField] int currentMoney = 0;
+        public static Wallet instance;
+
+        int currentMoney = 0;
+
+        public static void InitializeWalletInstance(int startValue = 0)
+        {
+            if(instance is null)          
+                instance = new Wallet();
+            instance.currentMoney = startValue;
+        }
 
         public int GetCurrentMoney() => currentMoney;
+             
+        public bool HasEnoughMoneyFor(int cost) => currentMoney >= cost;
 
         public void ResetWallet() => currentMoney = 0;
 

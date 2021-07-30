@@ -17,7 +17,6 @@ namespace ZombieAttack
         [Header("Panels")]
         [SerializeField] CanvasGroup finishScreen = null;
         [SerializeField] CanvasGroup playerPanel = null;
-        [SerializeField] CanvasGroup activatePanel = null;
 
         [SerializeField] CanvasGroup finalObjectiveHPBarPanel = null;
         [SerializeField] CanvasGroup mainMenuPanel = null;
@@ -25,11 +24,9 @@ namespace ZombieAttack
         [SerializeField] Text waveText = null;
         [SerializeField] Animator waveTextAnimator = null;
 
+        [SerializeField] Text pickupTimerText;
         [SerializeField] Text timerText = null;
         [SerializeField] Text moneyText = null;
-
-        Text activateText = null;
-        Image keyIcon = null;
 
         /*
 [SerializeField] CanvasGroup wavePanel = null;
@@ -96,7 +93,7 @@ namespace ZombieAttack
 
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
-        
+
         private void OnSceneLoaded(Scene scene, LoadSceneMode arg1)
         {
             StartGameUI(scene.buildIndex);
@@ -141,6 +138,8 @@ namespace ZombieAttack
                     SetCanvasGroup(finalObjectiveHPBarPanel, true);
                     SetCanvasGroup(playerPanel, true);
                     timerText.enabled = false;
+
+                    UpdateMoneyText();
                     //SetCanvasGroup(tutorialPanel, true);
 
                     break;
@@ -189,9 +188,9 @@ namespace ZombieAttack
                     */
 
                     //Trova il riferimento ai bottoni
-                    
+
                     break;
-                
+
                 case 1:
                     //Trova equipaggiamento player
                     //playerEquipment = GameObject.FindGameObjectWithTag("Player").GetComponent<Equipment>();
@@ -203,31 +202,29 @@ namespace ZombieAttack
                     //Trova HP bar della cassaforte
                     finalObjectiveHPBarPanel = GameObject.FindGameObjectWithTag("FinalObjectivePanel").GetComponent<CanvasGroup>();
 
-                    activatePanel = GameObject.Find("UI/ActivatePanel").GetComponent<CanvasGroup>();
-                    activateText = activatePanel.transform.GetChild(0).GetComponent<Text>();
-                    keyIcon = activatePanel.transform.GetChild(1).GetComponent<Image>();
-                    
                     //Trova HP bar del player
                     playerPanel = GameObject.FindGameObjectWithTag("PlayerPanel").GetComponent<CanvasGroup>();
+
+                    //pickupTimerPanel = playerPanel.transform.Find("PickupTimer").GetComponent<CanvasGroup>();
                     waveText = playerPanel.transform.Find("WaveText").GetComponent<Text>();
                     waveTextAnimator = waveText.GetComponent<Animator>();
                     timerText = playerPanel.transform.Find("TimerText").GetComponent<Text>();
                     moneyText = playerPanel.transform.Find("MoneyText").GetComponent<Text>();
 
-                    
+
                     //Trova il riferimento al tutorial
                     //tutorialPanel = GameObject.FindGameObjectWithTag("TutorialPanel").GetComponent<CanvasGroup>();
 
                     //Trova il riferimento ai bottoni
                     resumeButton = GameObject.FindGameObjectWithTag("ResumeButton");
                     break;
-                
+
                 default:
                     Debug.LogError("Indice di scena non riconosciuto");
                     break;
             }
         }
-        
+
         public void SetFinishScreen(GameManager.GameState gameState)
         {
             if ((int)gameState < 3)
@@ -249,10 +246,10 @@ namespace ZombieAttack
                 //Attiva il testo
                 titleFinishScreen.enabled = true;
 
-            
-                    titleFinishScreen.text = finishScreens[(int)gameState].titleText;
-                    titleFinishScreen.color = finishScreens[(int)gameState].titleColor;
-            
+
+                titleFinishScreen.text = finishScreens[(int)gameState].titleText;
+                titleFinishScreen.color = finishScreens[(int)gameState].titleColor;
+
 
                 //Attiva i bottoni dell'endscreen
                 playButton.gameObject.SetActive(gameState != GameManager.GameState.Paused);
@@ -260,7 +257,7 @@ namespace ZombieAttack
 
                 SetCanvasGroup(finishScreen, true);
             }
-            else if(gameState is GameManager.GameState.WaveWon)
+            else if (gameState is GameManager.GameState.WaveWon)
             {
                 //Stampa Ondata passata
                 PlayWaveText(isVictoryText: true);
@@ -268,8 +265,8 @@ namespace ZombieAttack
             else
                 Debug.LogError("Lo stato di gioco non può essere usato come indice per il titolo di endScreen (" + gameState + ")");
         }
-        
-        public void SetCanvasGroup(CanvasGroup canvasGroup, bool canShow)
+
+        public static void SetCanvasGroup(CanvasGroup canvasGroup, bool canShow)
         {
             canvasGroup.alpha = canShow ? 1f : 0f;
             canvasGroup.interactable = canShow;
@@ -334,7 +331,7 @@ namespace ZombieAttack
                     break;
             }
         }
-        
+
         public void SetHUD(bool canShow)
         {
             /*
@@ -377,49 +374,12 @@ namespace ZombieAttack
         }
 
         public void UpdateTimeText(int time) => timerText.text = time.ToString();
-        public void UpdateMoneyText(int money) => moneyText.text = money.ToString() + " $";
+        public void UpdateMoneyText()
+        {
+            if (Wallet.instance is null)
+                Wallet.InitializeWalletInstance();                   
+            moneyText.text = Wallet.instance.GetCurrentMoney().ToString() + " $";
+        }
         public void SetTimerText(bool startOrStopTimerText) => timerText.GetComponent<Animator>().SetBool("CanPlayTimerText", startOrStopTimerText);
-
-        public void SetActivateText(Turret turret)
-        {
-            //Se la torretta è già attiva
-            if(turret.enabled)
-                SetActivateText(true, Color.white, "Disattiva (+" + turret.sellingCost.ToString() + "$)");
-
-            //Se il giocatore non ha attivato la torretta ed ha i soldi
-            else if (GameManager.instance.playerWallet.GetCurrentMoney() > turret.buildingCost)
-                SetActivateText(true, Color.white, "Attiva (-" + turret.buildingCost.ToString() + "$)");
-
-            //Se il giocatore non ha attivato la torretta e non ha i soldi
-            else
-                SetActivateText(false, Color.red, "Raccogli " + turret.buildingCost.ToString() + "$");           
-        }
-
-        public void SetActivateText(Gun gun)
-        {
-            //Se il giocatore ha i soldi
-            if (GameManager.instance.playerWallet.GetCurrentMoney() > gun.cost)
-                SetActivateText(true, Color.white, "Compra (-" + gun.cost.ToString() + "$)");
-
-            //Se il giocatore non ha i soldi
-            else
-                SetActivateText(false, Color.red, "Raccogli " + gun.cost.ToString() + "$");                      
-        }    
-
-        private void SetActivateText(bool canActiveKeyIcon, Color textColor, string text)
-        {
-            keyIcon.enabled = canActiveKeyIcon;
-            activateText.color = textColor;
-            activateText.text = text;
-        }
-        public void UpdateActivateTextPanelPosition(Vector3 position)
-        {
-            activatePanel.transform.position = cam.WorldToScreenPoint(position);
-        }
-
-        public void SetActivateTextPanel(bool canShow)
-        {
-            SetCanvasGroup(activatePanel, canShow);
-        }
     }
 }

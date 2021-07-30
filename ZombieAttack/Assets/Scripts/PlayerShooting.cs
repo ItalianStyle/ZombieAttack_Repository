@@ -10,6 +10,8 @@ namespace ZombieAttack
         [SerializeField] int _currentGun;
         [SerializeField] bool canScrollMouse = false;
         [SerializeField] SimpleHealthBar gunBar = null;
+
+        Pickup pickup;
          int CurrentGunIndex
         {
             get => _currentGun;
@@ -33,7 +35,6 @@ namespace ZombieAttack
             canScrollMouse = false;
             SetCurrentGun(0);
             SetupGuns();
-            Pickup.OnPickupTake += SetCurrentGun;
         }
 
         private void Update()
@@ -51,6 +52,15 @@ namespace ZombieAttack
             }
         }
 
+        private void OnTriggerEnter(Collider other)
+        {
+            pickup = other.GetComponent<Pickup>();
+            if (pickup && pickup.pickupType is Pickup.PickupType.Shotgun)
+            {
+                pickup.OnPickupTake += SetCurrentGun;
+            }
+        }
+
         void SetupGuns()
         {
             for(int i = 0; i < guns.Length; i++)
@@ -63,13 +73,11 @@ namespace ZombieAttack
             }
         }
 
-        private void SetCurrentGun(Pickup pickup)
+        private void SetCurrentGun()
         {
-            if (pickup.pickupType is Pickup.PickupType.Shotgun)
-            {
-                canScrollMouse = true;
-                SetCurrentGun(1); // 1 == Shotgun
-            }
+            canScrollMouse = true;
+            SetCurrentGun(1); // 1 == Shotgun
+            pickup.OnPickupTake -= SetCurrentGun;
         }
 
         //Changes current gun of player by giving new gun index
