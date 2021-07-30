@@ -1,11 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ZombieAttack
 { 
     public class Turret : MonoBehaviour
     {
-         List<EnemyMovement> enemiesOnSight;
+        public event Action<Turret> OnTurretEnabled = delegate { };
+        public event Action<Turret> OnTurretDisabled = delegate { };
+
+        List<EnemyMovement> enemiesOnSight;
 
         [Header("Stats")]
         [SerializeField] float damage;
@@ -15,7 +19,9 @@ namespace ZombieAttack
         public int buildingCost = 1;
         public int sellingCost = 1;
         private float timer;
-        
+
+        MeshRenderer turretMeshRenderer;
+
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = new Color(255, 255, 0, .25f);          
@@ -25,13 +31,20 @@ namespace ZombieAttack
             Gizmos.DrawWireSphere(transform.position, maxRange);
         }
 
+        private void Awake()
+        {
+            turretMeshRenderer = GetComponent<MeshRenderer>();
+        }
+
         private void OnEnable()
         {
-            GetComponent<MeshRenderer>().material.color = Color.green;
+            turretMeshRenderer.material.color = Color.green;
 
             enemiesOnSight = new List<EnemyMovement>();
             GetComponent<SphereCollider>().radius = maxRange;
             timer = reloadTime;
+
+            OnTurretEnabled.Invoke(this);
         }
 
         private void Update()
@@ -41,8 +54,10 @@ namespace ZombieAttack
 
         private void OnDisable()
         {
-            GetComponent<MeshRenderer>().material.color = Color.gray;
+            turretMeshRenderer.material.color = Color.gray;
             enemiesOnSight.Clear();
+
+            OnTurretDisabled.Invoke(this);
         }
 
         private void OnTriggerStay(Collider other)
