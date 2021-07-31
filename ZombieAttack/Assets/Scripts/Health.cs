@@ -34,7 +34,8 @@ namespace ZombieAttack
             }
         }
         public bool CanHeal { get => CurrentHealth < maxHealth; }
-        
+        public bool IsAlive { get => CurrentHealth > 0; }
+
         public event Action<float, float> OnHealthPctChanged = delegate { }; //delegate is to avoid null checks
         public event Action<Health> OnEnemyDead = delegate { };
         
@@ -56,33 +57,33 @@ namespace ZombieAttack
         {
             float temp = CurrentHealth;
             CurrentHealth += amount;
-            StartCoroutine(nameof(ColorDamaged), temp > CurrentHealth ? damagedColor : healedColor);
-                
+
             if (CurrentHealth == 0f)
             {
                 gameObject.SetActive(false);
 
                 if (gameObject.CompareTag("Finish"))  //Check if it's FinalObjective
                 {
-                    Debug.Log("GAME OVER");  //Game Over
+                    //Game Over by FinalObjective's death
                     GameManager.instance.SetStatusGame(GameManager.GameState.Lost);
                     UI_Manager.instance.SetFinishScreen(GameManager.GameState.Lost);
                 }
                 else if (gameObject.CompareTag("Player"))
                 {
-                    Debug.Log("Sei morto");
+                    //Game Over by Player's death
                     GameManager.instance.SetStatusGame(GameManager.GameState.Lost);
                     UI_Manager.instance.SetFinishScreen(GameManager.GameState.Lost);
                 }
                 else if (gameObject.layer == LayerMask.NameToLayer("Enemy"))
                 {
-                    //Aggiorno il counter dei morti
+                    //Updating kill counter
                     OnEnemyDead.Invoke(this);
                     //Play sound
                     //Earn money
                 }
-            }             
-            
+            }
+            else if (gameObject.activeInHierarchy)
+                StartCoroutine(nameof(ColorDamaged), temp > CurrentHealth ? damagedColor : healedColor);           
         }
 
         IEnumerator ColorDamaged(Color damageColor)
