@@ -17,7 +17,7 @@ namespace ZombieAttack
         
         [Header("Stats")]
         [SerializeField] float reloadTime = .2f;
-        [SerializeField] float damage = 1f;
+        public float damage = 1f;
         public int cost;
         bool canShoot = true;
 
