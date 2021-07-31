@@ -5,7 +5,7 @@ namespace ZombieAttack
 {
     public class BulletHandler : MonoBehaviour
     {
-        readonly Gun.GunType bulletType;
+        Gun.GunType bulletType;
         float _bulletDamage;
         int totalBullets;
         ParticleSystem bulletsParticleSystem;
@@ -37,25 +37,41 @@ namespace ZombieAttack
         }
 
         private void Start()
-        {
-            switch (bulletType)
+        {           
+            switch (transform.parent.parent.name)
             {
-                case Gun.GunType.Shotgun:
+                case "Shotgun":
+                    bulletType = Gun.GunType.Shotgun;
                     totalBullets = (int)Particles.emission.GetBurst(0).count.constant;
                     break;
+
+                case "Gun":
+                    bulletType = Gun.GunType.Rifle;
+                    break;
+
+                default:
+                    Debug.LogError("Nome del nonno del particle system non riconosciuto");
+                    break;
             }
+            BulletDamage = GetComponentInParent<Gun>().damage;
         }
 
         private void OnParticleCollision(GameObject other)  //how to shoot with particle system https://www.youtube.com/watch?v=lkq8iLOr3sw&t=13s
-        {
+        {          
             int events = bulletsParticleSystem.GetCollisionEvents(other, collisionEvents);
             for(int i = 0; i < events; i++)
             {
-                //Spark particles
-            }
-            if (other.layer == LayerMask.NameToLayer("Enemy"))
-            {
-                other.GetComponent<Health>().DealDamage(BulletDamage);
+                //TODO: Spark particles
+                if (other.layer == LayerMask.NameToLayer("Enemy"))
+                {
+                    if (other.TryGetComponent(out Health enemyHealth))
+                    {
+                        if (enemyHealth.IsAlive)
+                            enemyHealth.DealDamage(BulletDamage);
+                        else
+                            break;
+                    }
+                }  
             }
         }
     }
