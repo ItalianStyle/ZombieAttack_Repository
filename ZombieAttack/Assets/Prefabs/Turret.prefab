@@ -187,7 +187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8a3343e4d5d7544d97c7434058b544c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0.5
+  damage: 1.5
   reloadTime: 1
   maxRange: 10
   rotationSpeed: 1
@@ -267,6 +267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de5874b884c707c4f890e8dbd478bb8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _turret: {fileID: 0}
 --- !u!1 &7796647766949205602
 GameObject:
   m_ObjectHideFlags: 0

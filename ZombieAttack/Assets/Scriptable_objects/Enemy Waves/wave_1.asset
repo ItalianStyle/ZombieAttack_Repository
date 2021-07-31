@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: wave_1
   m_EditorClassIdentifier: 
   numbersToChooseFrom: 
-  maxEnemyTypes: 010000000000000000000000
+  maxEnemyTypes: 050000000200000001000000
   timeBetweenSpawns: 2
