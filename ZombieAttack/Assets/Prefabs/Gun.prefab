@@ -256,7 +256,7 @@ GameObject:
   - component: {fileID: 8601590145317300028}
   m_Layer: 14
   m_Name: BulletsEffect
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
