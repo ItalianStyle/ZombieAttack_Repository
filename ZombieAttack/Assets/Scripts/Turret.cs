@@ -12,15 +12,15 @@ namespace ZombieAttack
         List<EnemyMovement> enemiesOnSight;
 
         [Header("Stats")]
-        [SerializeField] float damage;
-        [SerializeField] float reloadTime = .1f;
+        public float damage;
         [SerializeField] float maxRange = 10f;
         [SerializeField] float rotationSpeed = 1f;
         public int buildingCost = 1;
         public int sellingCost = 1;
-        private float timer;
 
         MeshRenderer turretMeshRenderer;
+        SphereCollider rangeCollider;
+        Animator gunAnimator;
 
         private void OnDrawGizmosSelected()
         {
@@ -34,6 +34,8 @@ namespace ZombieAttack
         private void Awake()
         {
             turretMeshRenderer = GetComponent<MeshRenderer>();
+            rangeCollider = GetComponent<SphereCollider>();
+            gunAnimator = GetComponent<Animator>();
         }
 
         private void OnEnable()
@@ -41,23 +43,24 @@ namespace ZombieAttack
             turretMeshRenderer.material.color = Color.green;
 
             enemiesOnSight = new List<EnemyMovement>();
-            GetComponent<SphereCollider>().radius = maxRange;
-            timer = reloadTime;
+            rangeCollider.radius = maxRange;
 
             OnTurretEnabled.Invoke(this);
-        }
-
-        private void Update()
-        {
-            timer += Time.deltaTime;
         }
 
         private void OnDisable()
         {
             turretMeshRenderer.material.color = Color.gray;
             enemiesOnSight.Clear();
+            gunAnimator.SetBool("canActiveTurret", false);
 
             OnTurretDisabled.Invoke(this);
+        }
+
+        private void Update()
+        {
+            if (enemiesOnSight.Count == 0)
+                CanShoot(false);
         }
 
         private void OnTriggerStay(Collider other)
@@ -74,22 +77,23 @@ namespace ZombieAttack
                         enemiesOnSight.Add(enemy);
                     }
                 }
+                else
+                    CanShoot(false);
             }
             else if (enemiesOnSight.Count > 0)
             {
                 LockOnTarget(enemiesOnSight[0].transform);
-                if (timer >= reloadTime)
-                {
-                    timer = 0f;
-                    Shoot();
-                }
+                CanShoot(true);
             }                  
-        }        
+        }
 
         private void OnTriggerExit(Collider other)
         {
             if (enabled && other.TryGetComponent(out EnemyMovement enemy))
-                RemoveEnemyFromList(enemy.GetComponent<Health>());           
+            {
+                RemoveEnemyFromList(enemy.GetComponent<Health>());
+                CanShoot(false);
+            }
         }
 
         //how to rotate towards targets: https://www.youtube.com/watch?v=QKhn2kl9_8I&t=793s
@@ -104,15 +108,9 @@ namespace ZombieAttack
             transform.rotation = Quaternion.Euler(0f, rotation.y, 0f);
         }
 
-        private void Shoot()
+        private void CanShoot(bool canShoot)
         {
-            Ray ray = new Ray(transform.position, enemiesOnSight[0].transform.position - transform.position);
-            RaycastHit hitInfo;
-            if (Physics.Raycast(ray, out hitInfo, maxRange, LayerMask.GetMask("Enemy", "Building"))) //Filtering layers to consider in raycast: https://answers.unity.com/questions/1108781/set-ray-only-when-raycast-a-specific-layer.html
-            {
-                if (hitInfo.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
-                    hitInfo.collider.GetComponent<Health>().DealDamage(damage);
-            }
+            gunAnimator.SetBool("canActiveTurret", canShoot);
         }
 
         private void RemoveEnemyFromList(Health enemyToRemove)
