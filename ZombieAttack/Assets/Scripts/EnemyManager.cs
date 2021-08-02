@@ -9,6 +9,7 @@ namespace ZombieAttack
     {
         [SerializeField] List<Transform> spawnPoints = null;
         [SerializeField] Transform finalObjectiveTransform = null;
+        Transform playerTransform;
         [SerializeField] Wave[] waves = null;
         public int currentWave = 0;
         int killedEnemies = 0;       
@@ -34,6 +35,7 @@ namespace ZombieAttack
             foreach (Wave wave in waves)
                 wave.InitializeEnemyTypesIndexList();
             spawnedEnemies = new int[waves[0].maxEnemyTypes.Length];
+            playerTransform = GameManager.instance.player.transform;
         }
 
         public void SpawnWave()
@@ -100,7 +102,7 @@ namespace ZombieAttack
             enemy.GetComponent<Rigidbody>().velocity = Vector3.zero;
             //Choose spawnpoint
             enemy.transform.position = spawnPoints[Random.Range(0, spawnPoints.Count)].position;
-            enemy.GetComponent<EnemyMovement>().SetDestination(finalObjectiveTransform);          
+            enemy.GetComponent<EnemyMovement>().SetDestination(enemy.CompareTag("EnemyMedium")? playerTransform : finalObjectiveTransform);          
             enemy.GetComponent<Health>().OnEnemyDead += IncreaseKillCount;
         }
 
