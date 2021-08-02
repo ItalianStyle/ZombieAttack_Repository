@@ -10,7 +10,9 @@ namespace ZombieAttack
         Vector3 input;
         [SerializeField] float walkSpeed;
         [SerializeField] float sprintSpeed;
-        public float movSpeed;
+      
+        [HideInInspector]
+        public float movSpeed; //This variable is automatically set to walkSpeed or sprintSpeed
 
         Camera cam;
         StaminaSystem playerStamina;
