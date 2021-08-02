@@ -8,7 +8,6 @@ namespace ZombieAttack
     {
         public enum Bullet_Type { NotDefined, Rifle, Shotgun, Turret }
         
-        //Gun.GunType bulletType;
         float _bulletDamage;
         int totalBullets;
 
@@ -34,8 +33,7 @@ namespace ZombieAttack
                     }
                 }
                 else if (turret = GetComponentInParent<Turret>())
-                    return Bullet_Type.Turret;
-                    
+                    return Bullet_Type.Turret;                  
                 else
                     Debug.LogError("Tipo di proiettile non definito!");
 
@@ -64,16 +62,10 @@ namespace ZombieAttack
 
         public ParticleSystem Particles { get => bulletsPS; }
 
-        private void Awake()
-        {
-            bulletsPS = GetComponent<ParticleSystem>();
-        }
-
-        private void Start()
-        {
-            SetupBullet();
-        }
-
+        private void Awake() => bulletsPS = GetComponent<ParticleSystem>();
+        
+        private void Start() => SetupBullet();
+        
         private void OnParticleCollision(GameObject other)  //how to shoot with particle system https://www.youtube.com/watch?v=lkq8iLOr3sw&t=13s
         {
             int events = bulletsPS.GetCollisionEvents(other, collisionEvents);
