@@ -21,15 +21,10 @@ namespace ZombieAttack
             }
         }
 
-        private void Awake()
-        {
-            _turret = GetComponentInChildren<Turret>();
-        }
-
-        private void Start()
-        {
-            Turret.enabled = false;
-        }
+        private void Awake() => _turret = GetComponentInChildren<Turret>();
+        
+        private void Start() => Turret.enabled = false;
+        
 
         private void OnTriggerEnter(Collider other)
         {
@@ -39,7 +34,6 @@ namespace ZombieAttack
                 canProcessInput = true;
             }
         }
-
 
         private void Update()
         {
