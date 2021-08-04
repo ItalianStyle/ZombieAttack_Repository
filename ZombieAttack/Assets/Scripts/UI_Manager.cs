@@ -24,6 +24,8 @@ namespace ZombieAttack
         [SerializeField] Text waveText = null;
         [SerializeField] Animator waveTextAnimator = null;
 
+        [SerializeField] Animator poisonIconAnimator = null;
+
         [SerializeField] Text pickupTimerText;
         [SerializeField] Text timerText = null;
         [SerializeField] Text moneyText = null;
@@ -208,6 +210,9 @@ namespace ZombieAttack
                     //pickupTimerPanel = playerPanel.transform.Find("PickupTimer").GetComponent<CanvasGroup>();
                     waveText = playerPanel.transform.Find("WaveText").GetComponent<Text>();
                     waveTextAnimator = waveText.GetComponent<Animator>();
+
+                    poisonIconAnimator = playerPanel.transform.Find("PoisoningSymbol").GetComponent<Animator>();
+
                     timerText = playerPanel.transform.Find("TimerText").GetComponent<Text>();
                     moneyText = playerPanel.transform.Find("MoneyText").GetComponent<Text>();
 
@@ -381,5 +386,10 @@ namespace ZombieAttack
             moneyText.text = Wallet.instance.GetCurrentMoney().ToString() + " $";
         }
         public void SetTimerText(bool startOrStopTimerText) => timerText.GetComponent<Animator>().SetBool("CanPlayTimerText", startOrStopTimerText);
+
+        public void SetPoisoningIcon(bool canActive)
+        {
+            poisonIconAnimator.SetBool("PoisonIsActive", canActive);
+        }
     }
 }
