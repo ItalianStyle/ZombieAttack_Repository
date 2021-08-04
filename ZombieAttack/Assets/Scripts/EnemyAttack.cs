@@ -39,9 +39,8 @@ namespace ZombieAttack
                 {
                     playerHealth.DealDamage(collisionDamage);
                     if(canCausePoisoning)
-                    {
                         playerHealth.TryToDealPoisoningDamage();
-                    }
+                    
                     StartCoroutine(nameof(WaitForDealDamage), true);
                 }
             }
