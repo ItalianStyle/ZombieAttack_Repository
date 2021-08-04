@@ -16,7 +16,9 @@ namespace ZombieAttack
 
         [Tooltip("How much time should the enemy wait before dealing damage again to FinalObjective.")]
         [SerializeField] float timeToDealMeleeDmg = .1f;
-        
+
+        [SerializeField] bool canCausePoisoning;
+
         bool canDamagePlayer = true;
         bool canDamageObjective = true;
 
@@ -24,18 +26,21 @@ namespace ZombieAttack
         {
             if (canDamageObjective)
             {               
-                if (other.gameObject.CompareTag("Finish"))
+                if (other.gameObject.CompareTag("Finish") && other.TryGetComponent(out Health finalObjectiveHealth))
                 {
-                    other.transform.GetComponent<Health>().DealDamage(meleeDamage);
+                    finalObjectiveHealth.DealDamage(meleeDamage);
                     StartCoroutine(nameof(WaitForDealDamage), false);
                 }
             }
 
             if (canDamagePlayer)
             {
-                if (other.gameObject.CompareTag("Player"))
+                if (other.gameObject.CompareTag("Player") && other.TryGetComponent(out Health playerHealth))
                 {
-                    other.transform.GetComponent<Health>().DealDamage(collisionDamage);
+                    playerHealth.DealDamage(collisionDamage);
+                    if(canCausePoisoning)
+                        playerHealth.TryToDealPoisoningDamage();
+                    
                     StartCoroutine(nameof(WaitForDealDamage), true);
                 }
             }

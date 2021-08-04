@@ -279,6 +279,7 @@ MonoBehaviour:
   meleeDamage: 1
   timeToDealCollisionDmg: 1
   timeToDealMeleeDmg: 2
+  canCausePoisoning: 1
 --- !u!114 &1033488405613686450
 MonoBehaviour:
   m_ObjectHideFlags: 0

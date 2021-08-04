@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace ZombieAttack
 {
@@ -96,5 +97,14 @@ namespace ZombieAttack
         public void DealDamage(float damage) => ModifyHealth(-damage);
 
         public void Heal(float amount) => ModifyHealth(amount);
+
+        public void TryToDealPoisoningDamage()
+        {
+            if (TryGetComponent(out PoisoningEffect poisoningEffect) && !poisoningEffect.IsPoisoned)
+            {
+                if (Random.Range(0f, 1f) <= poisoningEffect.activationProbability)
+                    poisoningEffect.IsPoisoned = true;
+            }
+        }
     }
 }

@@ -16,24 +16,47 @@ namespace ZombieAttack
 
         Camera cam;
         StaminaSystem playerStamina;
-        bool canRun = true;
+        PoisoningEffect playerPoisoningStatus;
+        bool _canRun = true;
+
+        bool CanRun
+        {
+            get => _canRun && !playerPoisoningStatus.IsPoisoned;
+
+            set
+            {
+                //Se la stamina non è piena ma è finito l'effetto dell'avvelenamento non permettere al giocatore di correre
+                if (!_canRun && value is true)
+                    _canRun = false;
+                else 
+                    _canRun = value;                   
+            }
+        }
 
         private void Awake()
         {
             Controller = GetComponent<CharacterController>();
             cam = Camera.main;
             playerStamina = GetComponent<StaminaSystem>();
+            playerPoisoningStatus = GetComponent<PoisoningEffect>();
         }
+
         private void OnEnable()
         {
-            StaminaSystem.OnStaminaEmpty += () => canRun = false;
-            StaminaSystem.OnStaminaFull += () => canRun = true;
+            StaminaSystem.OnStaminaEmpty += () => CanRun = false;
+            StaminaSystem.OnStaminaFull += () => CanRun = true;
+
+            PoisoningEffect.OnPoisoningEffectStarted += (duration) => CanRun = false;
+            PoisoningEffect.OnPoisoningEffectFinished += () => CanRun = true;
         }
 
         private void OnDisable()
         {
-            StaminaSystem.OnStaminaEmpty -= () => canRun = false;
-            StaminaSystem.OnStaminaFull -= () => canRun = true;
+            StaminaSystem.OnStaminaEmpty -= () => CanRun = false;
+            StaminaSystem.OnStaminaFull -= () => CanRun = true;
+
+            PoisoningEffect.OnPoisoningEffectStarted -= (duration) => CanRun = false;
+            PoisoningEffect.OnPoisoningEffectFinished -= () => CanRun = true;
         }
 
         private void Update()
@@ -49,9 +72,7 @@ namespace ZombieAttack
 
             //Sprint mechanic -> https://www.youtube.com/watch?v=JUTFiyBjlnc&ab_channel=SingleSaplingGames
             //Stamina mechanic -> https://www.youtube.com/watch?v=x9zOct1AMxo&ab_channel=StuartSpence
-
-
-            if (canRun)
+            if (CanRun)
             {
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
@@ -62,7 +83,7 @@ namespace ZombieAttack
                 else if (Input.GetKeyUp(KeyCode.LeftShift))
                 {
                     //Start increase stamina
-                    canRun = false;
+                    CanRun = false;
                     playerStamina.isPlayerRunning = false;
                     movSpeed = walkSpeed;
                 }
