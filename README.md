@@ -11,4 +11,6 @@ Grass Texture: https://www.freepik.com/photos/backgroundBackground photo created
 
 Sand Texture: https://www.deviantart.com/hhh316/art/Seamless-desert-sand-texture-183159331 by hhh316 "Seamless desert sand texture"
 
+Poisoning icon: http://clipart-library.com/free/poison-symbol-png.html
+
 License https://creativecommons.org/licenses/by/3.0/
