@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace ZombieAttack
@@ -16,27 +16,34 @@ namespace ZombieAttack
         [SerializeField] float intervalOfDamage;
 
         [SerializeField] float poisonDamage;
+        [SerializeField] bool _isPoisoned;
 
         Health playerHealth;
 
-        private void Awake()
+        public static event Action<float> OnPoisoningEffectStarted = delegate { };
+        public static event Action OnPoisoningEffectFinished = delegate { };
+        public bool IsPoisoned
         {
-            playerHealth = GetComponent<Health>();
-            enabled = false;
+            get => _isPoisoned;
+
+            set
+            {
+                _isPoisoned = value;
+                if (_isPoisoned)
+                {
+                    StartCoroutine(nameof(DealPoisonDamage));
+                    OnPoisoningEffectStarted.Invoke(effectDuration);
+                }
+                else
+                {
+                    StopCoroutine(nameof(DealPoisonDamage));
+                    OnPoisoningEffectFinished.Invoke();
+                }
+            }
         }
 
-        private void OnEnable()
-        {
-            UI_Manager.instance.SetPoisoningIcon(true);
-            StartCoroutine(nameof(DealPoisonDamage));
-        }
-
-        void OnDisable()
-        {
-            StopCoroutine(nameof(DealPoisonDamage));
-            UI_Manager.instance.SetPoisoningIcon(false);
-        }
-
+        private void Awake() => playerHealth = GetComponent<Health>();
+        
         IEnumerator DealPoisonDamage()
         {
             float durationElapsed = 0f;
@@ -52,7 +59,7 @@ namespace ZombieAttack
                 }
                 yield return null;
             }
-            enabled = false;
+            IsPoisoned = false;
         }
     }
 }
