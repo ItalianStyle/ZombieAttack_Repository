@@ -100,10 +100,10 @@ namespace ZombieAttack
 
         public void TryToDealPoisoningDamage()
         {
-            if (TryGetComponent(out PoisoningEffect poisoningEffect) && !poisoningEffect.enabled)
+            if (TryGetComponent(out PoisoningEffect poisoningEffect) && !poisoningEffect.IsPoisoned)
             {
                 if (Random.Range(0f, 1f) <= poisoningEffect.activationProbability)
-                    poisoningEffect.enabled = true;
+                    poisoningEffect.IsPoisoned = true;
             }
         }
     }
