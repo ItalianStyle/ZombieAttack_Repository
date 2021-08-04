@@ -191,6 +191,7 @@ GameObject:
   - component: {fileID: 215815789}
   - component: {fileID: 3227076550243337528}
   - component: {fileID: 9040780493593083897}
+  - component: {fileID: 3905729872734965768}
   m_Layer: 13
   m_Name: Player
   m_TagString: Player
@@ -311,6 +312,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   damagedColor: {r: 1, g: 1, b: 0, a: 1}
+  healedColor: {r: 0, g: 1, b: 0, a: 1}
   timeOfDamagedColor: 0.1
 --- !u!114 &215815789
 MonoBehaviour:
@@ -363,6 +365,22 @@ MonoBehaviour:
   recoverStaminaFactor: 0.5
   staminaBar: {fileID: 0}
   isPlayerRunning: 0
+--- !u!114 &3905729872734965768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3176618467733478389}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0797b982a07189478eeb75b6de14c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activationProbability: 1
+  effectDuration: 5
+  intervalOfDamage: 0.5
+  poisonDamage: 1
 --- !u!1001 &3028559204862732003
 PrefabInstance:
   m_ObjectHideFlags: 0
