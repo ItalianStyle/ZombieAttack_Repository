@@ -8,12 +8,10 @@ namespace ZombieAttack
     {
         [SerializeField] int timeToStartWave = 1;
 
-        //Called in the end of WaveText_appearing animation
-        public void StartEnemyWave()
-        {
-            EnemyManager.instance.SpawnWave();
-        }
+        //Called at the end of WaveText_appearing animation
+        public void StartEnemyWave() => EnemyManager.instance.SpawnWave();
 
+        //Called at the end of WaveText_Won_appearing animation
         public void StartTimer()
         {
             UI_Manager.instance.SetTimerText(true);
