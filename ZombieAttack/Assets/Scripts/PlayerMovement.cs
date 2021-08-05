@@ -17,21 +17,9 @@ namespace ZombieAttack
         Camera cam;
         StaminaSystem playerStamina;
         PoisoningEffect playerPoisoningStatus;
-        bool _canRun = true;
+        bool _isStaminaEnoughToRun = true;
 
-        bool CanRun
-        {
-            get => _canRun && !playerPoisoningStatus.IsPoisoned;
-
-            set
-            {
-                //Se la stamina non è piena ma è finito l'effetto dell'avvelenamento non permettere al giocatore di correre
-                if (!_canRun && value is true)
-                    _canRun = false;
-                else 
-                    _canRun = value;                   
-            }
-        }
+        bool CanRun => _isStaminaEnoughToRun && !playerPoisoningStatus.IsPoisoned;
 
         private void Awake()
         {
@@ -43,20 +31,14 @@ namespace ZombieAttack
 
         private void OnEnable()
         {
-            StaminaSystem.OnStaminaEmpty += () => CanRun = false;
-            StaminaSystem.OnStaminaFull += () => CanRun = true;
-
-            PoisoningEffect.OnPoisoningEffectStarted += (duration) => CanRun = false;
-            PoisoningEffect.OnPoisoningEffectFinished += () => CanRun = true;
+            StaminaSystem.OnStaminaEmpty += () => _isStaminaEnoughToRun = false;    //Caso estremo in cui il giocatore esaurisce la stamina
+            StaminaSystem.OnStaminaFull += () => _isStaminaEnoughToRun = true;
         }
 
         private void OnDisable()
         {
-            StaminaSystem.OnStaminaEmpty -= () => CanRun = false;
-            StaminaSystem.OnStaminaFull -= () => CanRun = true;
-
-            PoisoningEffect.OnPoisoningEffectStarted -= (duration) => CanRun = false;
-            PoisoningEffect.OnPoisoningEffectFinished -= () => CanRun = true;
+            StaminaSystem.OnStaminaEmpty -= () => _isStaminaEnoughToRun = false;
+            StaminaSystem.OnStaminaFull -= () => _isStaminaEnoughToRun = true;
         }
 
         private void Update()
@@ -83,7 +65,7 @@ namespace ZombieAttack
                 else if (Input.GetKeyUp(KeyCode.LeftShift))
                 {
                     //Start increase stamina
-                    CanRun = false;
+                    _isStaminaEnoughToRun = false;
                     playerStamina.isPlayerRunning = false;
                     movSpeed = walkSpeed;
                 }
@@ -95,10 +77,7 @@ namespace ZombieAttack
             Controller.SimpleMove(moveDir.normalized * movSpeed);
         }
 
-        public void FaceCamera()
-        {
-            StartCoroutine("SmoothFaceCamera");
-        }
+        public void FaceCamera() => StartCoroutine(nameof(SmoothFaceCamera));
 
         IEnumerator SmoothFaceCamera()
         {
