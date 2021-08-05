@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class StaminaSystem : MonoBehaviour
 {
-    public static event Action OnStaminaFull;
-    public static event Action OnStaminaEmpty;
+    public static event Action OnStaminaFull = delegate { };
+    public static event Action OnStaminaEmpty = delegate { };
     [SerializeField] [Min(.1f)] float maxStamina = 5f;
     [SerializeField] [Min(.1f)] float usedStaminaFactor = 1f;
     [SerializeField] [Min(.1f)] float recoverStaminaFactor = .5f;
@@ -25,31 +25,25 @@ public class StaminaSystem : MonoBehaviour
             if (_currentStamina < 0)
             {
                 _currentStamina = 0;
-                OnStaminaEmpty?.Invoke();
+                OnStaminaEmpty.Invoke();
             }
             else if (_currentStamina > maxStamina)
             {
                 _currentStamina = maxStamina;
-                OnStaminaFull?.Invoke();
+                OnStaminaFull.Invoke();
             }
             staminaBar.UpdateBar(_currentStamina, maxStamina);
         }
     }
-    private void Start()
-    {
-        CurrentStamina = maxStamina;
-    }
+    private void Start() => CurrentStamina = maxStamina;
 
     private void OnEnable()
     {       
         isPlayerRunning = false;
-        OnStaminaEmpty += ()=> isPlayerRunning = false;
+        OnStaminaEmpty += () => isPlayerRunning = false;
     }
 
-    private void OnDisable()
-    {
-        OnStaminaEmpty -= () => isPlayerRunning = false;
-    }
+    private void OnDisable() => OnStaminaEmpty -= () => isPlayerRunning = false;
 
     private void Update()
     {
