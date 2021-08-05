@@ -11,6 +11,9 @@ namespace ZombieAttack
         //Array che contiene il numero massimo di nemici permessi per ogni tipo di nemico
         public int[] maxEnemyTypes = new int[3];
         public float timeBetweenSpawns = 1f;
+
+        //Seconds before ending the wave
+        public float maxTime = 180f;
         public int MaxEnemies
         {
             get
