@@ -17,6 +17,7 @@ namespace ZombieAttack
         [Tooltip("How much time should the enemy wait before dealing damage again to FinalObjective.")]
         [SerializeField] float timeToDealMeleeDmg = .1f;
 
+        [Tooltip("Can this enemy cause Poisoning Effect to the player?")]
         [SerializeField] bool canCausePoisoning;
 
         bool canDamagePlayer = true;
