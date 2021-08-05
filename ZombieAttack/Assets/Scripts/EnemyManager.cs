@@ -8,16 +8,13 @@ namespace ZombieAttack
     public class EnemyManager : MonoBehaviour
     {
         [SerializeField] List<Transform> spawnPoints = null;
-        [SerializeField] Transform finalObjectiveTransform = null;
+        Transform finalObjectiveTransform = null;
         Transform playerTransform;
         [SerializeField] Wave[] waves = null;
         public int currentWave = 0;
         int killedEnemies = 0;       
         int[] spawnedEnemies;
-        int CurrentWaveMaxEnemies
-        {
-            get => waves[currentWave].MaxEnemies;
-        }
+
         public static EnemyManager instance;
 
         private void Awake()
@@ -44,6 +41,7 @@ namespace ZombieAttack
             {
                 if (currentWave >= 0 && currentWave < waves.Length)
                 {
+                    //Start timer
                     spawnedEnemies = new int[waves[currentWave].maxEnemyTypes.Length];
                     InvokeRepeating(nameof(SpawnEnemy), 0f, waves[currentWave].timeBetweenSpawns);
                 }
@@ -111,7 +109,7 @@ namespace ZombieAttack
             killedEnemies++;
             enemyHealth.OnEnemyDead -= IncreaseKillCount;
             //If wave is finished
-            if (killedEnemies >= CurrentWaveMaxEnemies)
+            if (killedEnemies >= waves[currentWave].MaxEnemies)
             {
                 killedEnemies = 0;
                 if (currentWave >= waves.Length -1)
