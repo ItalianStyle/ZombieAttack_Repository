@@ -12,8 +12,6 @@ namespace ZombieAttack
         public int[] maxEnemyTypes = new int[3];
         public float timeBetweenSpawns = 1f;
 
-        //Seconds before ending the wave
-        public float maxTime = 180f;
         public int MaxEnemies
         {
             get
