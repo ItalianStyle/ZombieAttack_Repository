@@ -58,14 +58,9 @@ namespace ZombieAttack
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode arg1)
         {
-            StartGameUI(scene.buildIndex);
-        }
+            GetReferences(scene.buildIndex);
 
-        public void StartGameUI(int sceneIndex)
-        {
-            GetReferences(sceneIndex);
-
-            switch (sceneIndex)
+            switch (scene.buildIndex)
             {
                 case 0:
                     //Setto la UI
@@ -104,7 +99,7 @@ namespace ZombieAttack
                     UpdateMoneyText();
                     //SetCanvasGroup(tutorialPanel, true);
 
-                    PoisoningEffect.OnPoisoningEffectStarted += (duration) => SetPoisoningIcon_animation(true); 
+                    PoisoningEffect.OnPoisoningEffectStarted += (duration) => SetPoisoningIcon_animation(true);
                     PoisoningEffect.OnPoisoningEffectFinished += () => SetPoisoningIcon_animation(false);
 
                     break;
