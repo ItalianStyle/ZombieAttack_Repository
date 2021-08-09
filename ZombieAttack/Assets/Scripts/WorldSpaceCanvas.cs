@@ -40,22 +40,18 @@ namespace ZombieAttack
             switch (worldSpaceCanvasMode)
             {
                 case CanvasMode.Pickup:
-                    switch (pickup.pickupType)
-                    {
-                        case Pickup.PickupType.Health:
-                            
-                            pickup.OnPickupTake -= EnableTimer;
-                            break;
-                        case Pickup.PickupType.Shotgun:
-                            pickup.OnPickupTake += () => enabled = false;
-                            pickup.OnPlayerFar += () => enabled = false;
-                            pickup.OnPlayerNear -= () =>
-                            {
-                                SetupPickupText();
-                                enabled = true;
-                            };
+                    if (pickup.pickupType is Pickup.PickupType.Health || pickup.pickupType is Pickup.PickupType.Stamina)
+                        pickup.OnPickupTake -= () => EnableTimer();
 
-                            break;
+                    else if (pickup.pickupType is Pickup.PickupType.Shotgun)
+                    {
+                        pickup.OnPickupTake -= () => enabled = false;
+                        pickup.OnPlayerFar += () => enabled = false;
+                        pickup.OnPlayerNear -= () =>
+                        {
+                            SetupPickupText();
+                            enabled = true;
+                        };
                     }
                     break;
 
@@ -86,22 +82,20 @@ namespace ZombieAttack
             switch (worldSpaceCanvasMode)
             {
                 case CanvasMode.Pickup:
-                    switch (pickup.pickupType)
+                    if (pickup.pickupType is Pickup.PickupType.Health || pickup.pickupType is Pickup.PickupType.Stamina)
                     {
-                        case Pickup.PickupType.Health:
-                            pickup.OnPickupTake += EnableTimer;
-                            OnTimerFinished.Invoke();
-                            break;
-
-                        case Pickup.PickupType.Shotgun:
-                            pickup.OnPickupTake -= () => enabled = false;
-                            pickup.OnPlayerFar -= () => enabled = false;
-                            pickup.OnPlayerNear += () =>
-                            { 
-                                SetupPickupText(); 
-                                enabled = true;
-                            };
-                            break;
+                        pickup.OnPickupTake += () => EnableTimer();
+                        OnTimerFinished.Invoke();
+                    }
+                    else if(pickup.pickupType is Pickup.PickupType.Shotgun)
+                    {
+                        pickup.OnPickupTake += () => enabled = false;
+                        pickup.OnPlayerFar -= () => enabled = false;
+                        pickup.OnPlayerNear += () =>
+                        { 
+                            SetupPickupText(); 
+                            enabled = true;
+                        };
                     }
                     break;
 
@@ -150,7 +144,7 @@ namespace ZombieAttack
         }
         private void EnableTimer()
         {
-            if (pickup.pickupType is Pickup.PickupType.Health)
+            if (pickup.pickupType is Pickup.PickupType.Health || pickup.pickupType is Pickup.PickupType.Stamina)
             {
                 enabled = true;
                 StartCoroutine(nameof(WaitForRespawning), pickup.timeToRespawn);
