@@ -275,7 +275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 985e66758b76410488ea3b086656796d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionDamage: 20
+  collisionDamage: 10
   meleeDamage: 1
   timeToDealCollisionDmg: 1
   timeToDealMeleeDmg: 2
