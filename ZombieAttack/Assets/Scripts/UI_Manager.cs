@@ -10,15 +10,17 @@ namespace ZombieAttack
     public class UI_Manager : MonoBehaviour
     {
         [Header("Panels")]
-        [SerializeField] CanvasGroup finishScreen = null;
+        [SerializeField] CanvasGroup finishPanel = null;
         [SerializeField] CanvasGroup playerPanel = null;
+        [SerializeField] CanvasGroup restartPanel = null;
 
         [SerializeField] CanvasGroup finalObjectiveHPBarPanel = null;
         [SerializeField] CanvasGroup mainMenuPanel = null;
         [Space]
-        [SerializeField] Text waveText = null;
-        [SerializeField] Animator waveTextAnimator = null;
+        
         [SerializeField] Animator poisonIconAnimator = null;
+        [SerializeField] Animator waveTextAnimator = null;
+        [SerializeField] Text waveText = null;
 
         [SerializeField] Text pickupTimerText;
         [SerializeField] Text timerText = null;
@@ -30,6 +32,7 @@ namespace ZombieAttack
         [Header("Buttons")]
         [SerializeField] GameObject playButton = null;        
         [SerializeField] GameObject resumeButton = null;
+        [SerializeField] GameObject restartWaveButton = null;
         
         Text titleFinishScreen = null;
 
@@ -52,62 +55,22 @@ namespace ZombieAttack
 
         private void OnDisable()
         {
-            PoisoningEffect.OnPoisoningEffectStarted += (duration) => SetPoisoningIcon_animation(true);
-            PoisoningEffect.OnPoisoningEffectFinished += () => SetPoisoningIcon_animation(false);
-        }
+            PauseListener.OnPauseKeyPressed -= () => SetFinishScreen(GameManager.GameState.Paused);
 
-        private void OnSceneLoaded(Scene scene, LoadSceneMode arg1)
-        {
-            GetReferences(scene.buildIndex);
+            Wallet.OnCurrentMoneyChanged -= UpdateMoneyText;
 
-            switch (scene.buildIndex)
-            {
-                case 0:
-                    //Setto la UI
-                    SetCanvasGroup(mainMenuPanel, true);
-                    /*SetCanvasGroup(settingsPanel, false);
-                    SetCanvasGroup(creditsPanel, false);
+            WaveBeginnerFlag.OnStartEnemyWave -= (timeToEndWave) => SetTimerTextAnimation(timeToEndWave, isWaveTimer: true);
+            WaveBeginnerFlag.OnStartingPrepationTimer -= (timeToStartWave) => SetTimerTextAnimation(timeToStartWave, isWaveTimer: false);
 
-                    //Aggiungo la funzionalità ai bottoni
-                    settingsButton.onClick.AddListener(delegate { SetCamera(MenuType.Settings); });
-                    settingsButton.onClick.AddListener(delegate { UpdateVolumeSettings(); });
-                    creditsButton.onClick.AddListener(delegate { SetCamera(MenuType.Credits); });
-                    creditsButton.onClick.AddListener(delegate { SetScrollingCredits(true); });
+            PoisoningEffect.OnPoisoningEffectStarted -= (duration) => SetPoisoningIcon_animation(true);
+            PoisoningEffect.OnPoisoningEffectFinished -= () => SetPoisoningIcon_animation(false);
 
-                    returnButtonFromSettings.onClick.AddListener(delegate { SetCamera(MenuType.MainMenu); });
-                    returnButtonFromCredits.onClick.AddListener( delegate { SetCamera(MenuType.MainMenu); });
-                    returnButtonFromCredits.onClick.AddListener(delegate { SetScrollingCredits(false); });
+            Timer.OnWaveTimerFinished -= () => SetFinishScreen(GameManager.GameState.Lost);
 
-                    
-                    //Setto gli slider per i volumi nelle opzioni
-                    masterVolumeSlider.onValueChanged.AddListener(delegate { MyAudioManager.instance.SetVolume(masterVolumeSlider.value, MyAudioManager.VolumeType.Master); });
-                    backgroundVolumeSlider.onValueChanged.AddListener(delegate { MyAudioManager.instance.SetVolume(backgroundVolumeSlider.value, MyAudioManager.VolumeType.Background); });
-                    sfxVolumeSlider.onValueChanged.AddListener(delegate { MyAudioManager.instance.SetVolume(sfxVolumeSlider.value, MyAudioManager.VolumeType.SFX); });
-                    */
+            EnemyManager.OnWaveKilled -= () => SetFinishScreen(GameManager.GameState.WaveWon);
+            EnemyManager.OnAllWavesKilled -= () => SetFinishScreen(GameManager.GameState.Won);
 
-                    //SetCanvasGroup(tutorialPanel, true);
-                    break;
-
-                case 1:
-                    SetCanvasGroup(finishScreen, false);
-                    titleFinishScreen.enabled = false;
-
-                    SetCanvasGroup(finalObjectiveHPBarPanel, true);
-                    SetCanvasGroup(playerPanel, true);
-                    timerText.enabled = false;
-
-                    UpdateMoneyText();
-                    //SetCanvasGroup(tutorialPanel, true);
-
-                    PoisoningEffect.OnPoisoningEffectStarted += (duration) => SetPoisoningIcon_animation(true);
-                    PoisoningEffect.OnPoisoningEffectFinished += () => SetPoisoningIcon_animation(false);
-
-                    break;
-
-                default:
-                    Debug.LogError("Indice di scena non riconosciuto");
-                    break;
-            }
+            Health.OnPlayerDead -= () => SetFinishScreen(GameManager.GameState.Lost);
         }
 
         //Trova i riferimenti alla UI in ogni scena
@@ -143,8 +106,9 @@ namespace ZombieAttack
                     //playerEquipment = GameObject.FindGameObjectWithTag("Player").GetComponent<Equipment>();
 
                     //Trova riferimento agli screen
-                    finishScreen = GameObject.FindGameObjectWithTag("FinishPanel").GetComponent<CanvasGroup>();
-                    titleFinishScreen = finishScreen.transform.GetChild(0).GetComponent<Text>();
+                    restartPanel = GameObject.FindGameObjectWithTag("RestartPanel").GetComponent<CanvasGroup>();
+                    finishPanel = GameObject.FindGameObjectWithTag("FinishPanel").GetComponent<CanvasGroup>();
+                    titleFinishScreen = finishPanel.transform.GetChild(0).GetComponent<Text>();
 
                     //Trova HP bar della cassaforte
                     finalObjectiveHPBarPanel = GameObject.FindGameObjectWithTag("FinalObjectivePanel").GetComponent<CanvasGroup>();
@@ -166,6 +130,7 @@ namespace ZombieAttack
 
                     //Trova il riferimento ai bottoni
                     resumeButton = GameObject.FindGameObjectWithTag("ResumeButton");
+                    restartWaveButton = GameObject.FindGameObjectWithTag("RestartWaveButton");
                     break;
 
                 default:
@@ -174,54 +139,90 @@ namespace ZombieAttack
             }
         }
 
-        public void SetFinishScreen(GameManager.GameState gameState)
+        private void OnSceneLoaded(Scene scene, LoadSceneMode arg1)
         {
-            if ((int)gameState < 3)
+            GetReferences(scene.buildIndex);
+
+            switch (scene.buildIndex)
             {
-                //Metti in pausa
-                Time.timeScale = 0f;
+                case 0:
+                    //Setto la UI
+                    SetCanvasGroup(mainMenuPanel, true);
+                    /*SetCanvasGroup(settingsPanel, false);
+                    SetCanvasGroup(creditsPanel, false);
 
-                //Disabilita UI dell'equipaggiamento del giocatore
+                    //Aggiungo la funzionalità ai bottoni
+                    settingsButton.onClick.AddListener(delegate { SetCamera(MenuType.Settings); });
+                    settingsButton.onClick.AddListener(delegate { UpdateVolumeSettings(); });
+                    creditsButton.onClick.AddListener(delegate { SetCamera(MenuType.Credits); });
+                    creditsButton.onClick.AddListener(delegate { SetScrollingCredits(true); });
 
-                //Disabilita la UI delle barre HP
-                SetHPBar(GameManager.EntityType.Player, false);
-                SetHPBar(GameManager.EntityType.FinalObjective, false);
+                    returnButtonFromSettings.onClick.AddListener(delegate { SetCamera(MenuType.MainMenu); });
+                    returnButtonFromCredits.onClick.AddListener( delegate { SetCamera(MenuType.MainMenu); });
+                    returnButtonFromCredits.onClick.AddListener(delegate { SetScrollingCredits(false); });
 
-                //Abilita l'end screen
-                //0 -> Win
-                //1 -> Lost
-                //2 -> Paused
+                    
+                    //Setto gli slider per i volumi nelle opzioni
+                    masterVolumeSlider.onValueChanged.AddListener(delegate { MyAudioManager.instance.SetVolume(masterVolumeSlider.value, MyAudioManager.VolumeType.Master); });
+                    backgroundVolumeSlider.onValueChanged.AddListener(delegate { MyAudioManager.instance.SetVolume(backgroundVolumeSlider.value, MyAudioManager.VolumeType.Background); });
+                    sfxVolumeSlider.onValueChanged.AddListener(delegate { MyAudioManager.instance.SetVolume(sfxVolumeSlider.value, MyAudioManager.VolumeType.SFX); });
+                    */
 
-                //Attiva il testo
-                titleFinishScreen.enabled = true;
+                    //SetCanvasGroup(tutorialPanel, true);
+                    break;
 
+                case 1:
+                    ResetUI();
 
-                titleFinishScreen.text = finishScreens[(int)gameState].titleText;
-                titleFinishScreen.color = finishScreens[(int)gameState].titleColor;
+                    UpdateMoneyText();
+                    //SetCanvasGroup(tutorialPanel, true);
+                    GameManager.GameRestarted += (waveIndex) => ResetUI();
+                    GameManager.GameResumed += () =>
+                    {                      
+                        SetHUD(true);
+                        PlayWaveTextAnimation(isVictoryText: false);
+                    };
 
+                    PauseListener.OnPauseKeyPressed += () => SetFinishScreen(GameManager.GameState.Paused);
 
-                //Attiva i bottoni dell'endscreen
-                playButton.gameObject.SetActive(gameState != GameManager.GameState.Paused);
-                resumeButton.gameObject.SetActive(gameState is GameManager.GameState.Paused);
+                    Wallet.OnCurrentMoneyChanged += UpdateMoneyText;
 
-                SetCanvasGroup(finishScreen, true);
+                    WaveBeginnerFlag.OnStartEnemyWave += (timeToEndWave) => SetTimerTextAnimation(timeToEndWave, isWaveTimer: true);
+                    WaveBeginnerFlag.OnStartingPrepationTimer += (timeToStartWave) => SetTimerTextAnimation(timeToStartWave, isWaveTimer: false);
+
+                    PoisoningEffect.OnPoisoningEffectStarted += (duration) => SetPoisoningIcon_animation(true);
+                    PoisoningEffect.OnPoisoningEffectFinished += () => SetPoisoningIcon_animation(false);
+
+                    Timer.OnWaveTimerFinished += () => SetFinishScreen(GameManager.GameState.Lost);
+
+                    EnemyManager.OnWaveKilled += () => SetFinishScreen(GameManager.GameState.WaveWon);
+                    EnemyManager.OnAllWavesKilled += () => SetFinishScreen(GameManager.GameState.Won);
+
+                    Health.OnPlayerDead += () => SetFinishScreen(GameManager.GameState.Lost);
+                    Health.OnObjectiveDestroyed += () => SetFinishScreen(GameManager.GameState.Lost);
+                    break;
+
+                default:
+                    Debug.LogError("Indice di scena non riconosciuto");
+                    break;
             }
-            else if (gameState is GameManager.GameState.WaveWon)
-            {
-                //Stampa Ondata passata
-                PlayWaveText(isVictoryText: true);
-            }
-            else
-                Debug.LogError("Lo stato di gioco non può essere usato come indice per il titolo di endScreen (" + gameState + ")");
         }
 
-        public static void SetCanvasGroup(CanvasGroup canvasGroup, bool canShow)
-        {
-            canvasGroup.alpha = canShow ? 1f : 0f;
-            canvasGroup.interactable = canShow;
-            canvasGroup.blocksRaycasts = canShow;
+        private void ResetUI()
+        {  
+            SetHUD(true);    
+            timerText.enabled = false;
         }
-        
+
+        public void SetHUD(bool canShow)
+        {
+            SetCanvasGroup(restartPanel, !canShow);
+            SetCanvasGroup(finishPanel, !canShow);
+
+            SetHPBar(GameManager.EntityType.Player, canShow);
+            SetHPBar(GameManager.EntityType.FinalObjective, canShow);
+        }
+
         public void SetHPBar(GameManager.EntityType characterType, bool canActive)
         {
             //Controlla quale barra degli HP deve essere attivata
@@ -242,40 +243,58 @@ namespace ZombieAttack
             }
         }
 
-        public void SetHUD(bool canShow)
+        public void SetFinishScreen(GameManager.GameState gameState)
         {
-            /*
-            //Se il player ha una spada
-            if (playerEquipment.currentWeaponType != Equipment.WeaponType.None)
-                SetHPBar(GameManager.EntityType.Player, canShow);
+            if ((int)gameState < 3)
+            {
+                //Metti in pausa
+                Time.timeScale = 0f;
 
-            //Se il boss è presente, riattiva la sua barra HP
-            if (GameManager.instance.isBossActive)
-                SetHPBar(GameManager.EntityType.FinalObjective, true);
+                //Disabilita la UI delle barre HP
+                SetHPBar(GameManager.EntityType.Player, false);
+                SetHPBar(GameManager.EntityType.FinalObjective, false);
 
-            //Verifica che equipaggiamento ha il giocatore
-            if (playerEquipment.currentWeaponType is Equipment.WeaponType.Sword)
-                SetReloadIcon(canShow, Pickup.PickupType.Sword);
+                //Abilita l'end screen
+                //0 -> Win
+                //1 -> Lost
+                //2 -> Paused
+                titleFinishScreen.text = finishScreens[(int)gameState].titleText;
+                titleFinishScreen.color = finishScreens[(int)gameState].titleColor;
 
-            else if (playerEquipment.currentWeaponType is Equipment.WeaponType.FinalSword)
-                SetReloadIcon(canShow, Pickup.PickupType.FinalSword);
+                
+                //Attiva i bottoni dell'endscreen
+                //playButton == Ricomincia
+                //resumeButton == Riprendi
+                //restartWaveButton == Ricomincia da questa ondata    
+                resumeButton.SetActive(gameState is GameManager.GameState.Paused);
+                playButton.SetActive(true);
 
-            if (playerEquipment.HasShield)
-                SetReloadIcon(canShow, Pickup.PickupType.Shield);
-            */
-            SetCanvasGroup(finishScreen, !canShow);
-            SetHPBar(GameManager.EntityType.Player, canShow);
-            SetHPBar(GameManager.EntityType.FinalObjective, canShow);
+                int waveTextNumber = EnemyManager.instance.CurrentWave + 1;
+                restartWaveButton.GetComponentInChildren<Text>().text = "Da questa ondata (" + waveTextNumber.ToString() + "°)";
+                //Activate "restart from wave X" if its not the first wave and if we didn't finish the game
+                restartWaveButton.SetActive(
+                    gameState != GameManager.GameState.Won &&
+                    !EnemyManager.instance.IsFirstWave); 
+
+                SetCanvasGroup(finishPanel, true);
+            }
+            else if (gameState is GameManager.GameState.WaveWon)
+                //Stampa "Ondata passata"
+                PlayWaveTextAnimation(isVictoryText: true);
+            
+            else
+                Debug.LogError("Lo stato di gioco non può essere usato come indice per il titolo di endScreen (" + gameState + ")");
         }
-
+        
         //Se non si passa alcun parametro, si setta il testo per la vittoria
-        public void PlayWaveText(bool isVictoryText)
+        public void PlayWaveTextAnimation(bool isVictoryText)
         {
-            waveText.text = isVictoryText ? "Ondata passata!" : "Ondata " + (EnemyManager.instance.currentWave + 1).ToString();
+            waveText.text = isVictoryText ? "Ondata passata!" : "Ondata " + (EnemyManager.instance.CurrentWave + 1).ToString();
             waveTextAnimator.SetTrigger(isVictoryText ? "PlayWonWaveText" : "PlayWaveText");
         }
 
         public void UpdateTimeText(int time) => timerText.text = time.ToString();
+
         public void UpdateMoneyText()
         {
             if (Wallet.instance is null)
@@ -283,13 +302,30 @@ namespace ZombieAttack
             moneyText.text = Wallet.instance.GetCurrentMoney().ToString() + " $";
         }
 
-        public void SetTimerText(bool startOrStopTimerText) => timerText.GetComponent<Animator>().SetBool("CanPlayTimerText", startOrStopTimerText);
+        public void SetTimerTextAnimation(int maxTime, bool isWaveTimer)
+        {
+            if (timerText.TryGetComponent(out Animator timerAnimator))
+            {
+                timerAnimator.SetFloat("Time", maxTime);
+                timerAnimator.SetTrigger("CanPlayTimer");
+                timerAnimator.SetBool("IsWaveTimer", isWaveTimer);
+            }
+        }
+
+        public void SetTimerText(string text) => timerText.text = text;
 
         private void SetPoisoningIcon_animation(bool canActive)
         {
             poisonIconAnimator.SetBool("CanActivePoisoningIconBackground", canActive); //Background
             poisonIconAnimator.transform.GetChild(0).GetComponent<Animator>().SetBool("CanActiveTimeBar", canActive); //Timebar
             poisonIconAnimator.transform.GetChild(0).GetChild(0).GetComponent<Animator>().SetBool("PoisonIsActive", canActive); //PoisonIcon
+        }
+
+        public static void SetCanvasGroup(CanvasGroup canvasGroup, bool canShow)
+        {
+            canvasGroup.alpha = canShow ? 1f : 0f;
+            canvasGroup.interactable = canShow;
+            canvasGroup.blocksRaycasts = canShow;
         }
         /*
         public enum MenuType { MainMenu, Settings, Credits }
