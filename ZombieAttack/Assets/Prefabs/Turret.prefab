@@ -220,8 +220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8a3343e4d5d7544d97c7434058b544c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0.1
-  reloadTime: 0.1
+  damage: 1
   maxRange: 10
   rotationSpeed: 10
   buildingCost: 1
