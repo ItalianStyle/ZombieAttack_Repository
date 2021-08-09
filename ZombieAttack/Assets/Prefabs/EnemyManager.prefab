@@ -248,7 +248,7 @@ GameObject:
   - component: {fileID: 1021360834258864606}
   - component: {fileID: 1021360834258864605}
   m_Layer: 0
-  m_Name: EnemySpawnManager
+  m_Name: EnemyManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -285,9 +285,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPoints: []
-  finalObjectiveTransform: {fileID: 0}
-  timeBetweenSpawns: 1
-  maxEnemies: 20
+  waves:
+  - {fileID: 11400000, guid: 153cb66c8ffc454499d9056523b209c6, type: 2}
+  - {fileID: 11400000, guid: 655fcc92fbb8f0f4d86bd218a45e5971, type: 2}
+  - {fileID: 11400000, guid: 33d452825e2f19f4e8dc20136b28a6f1, type: 2}
 --- !u!1 &1021360834409077331
 GameObject:
   m_ObjectHideFlags: 0
