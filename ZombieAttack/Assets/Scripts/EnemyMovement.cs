@@ -9,10 +9,7 @@ namespace ZombieAttack
 
         [SerializeField] Transform destination = null;
 
-        private void Awake()
-        {
-            enemyAgent = GetComponent<NavMeshAgent>();
-        }
+        private void Awake() => enemyAgent = GetComponent<NavMeshAgent>();
 
         private void Update()
         {
@@ -22,23 +19,16 @@ namespace ZombieAttack
 
         private void OnTriggerEnter(Collider other)
         {
-            if(other.gameObject.CompareTag("Finish"))
-            {
-                enemyAgent.isStopped = true;
-            }
+            if (other.gameObject.CompareTag("Finish") && !gameObject.CompareTag("EnemyMedium"))
+                enemyAgent.isStopped = true;           
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.gameObject.CompareTag("Finish"))
-            {               
-                enemyAgent.isStopped = false;
-            }
+            if (other.gameObject.CompareTag("Finish"))            
+                enemyAgent.isStopped = false;        
         }
 
-        public void SetDestination(Transform destinationTransform)
-        {
-            destination = destinationTransform;
-        }
+        public void SetDestination(Transform destinationTransform) => destination = destinationTransform;
     }
 }
