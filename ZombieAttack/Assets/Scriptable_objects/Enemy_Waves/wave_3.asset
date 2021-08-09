@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 039b2bbf0dc244b448ee11e42a11b0d2, type: 3}
   m_Name: wave_3
   m_EditorClassIdentifier: 
-  numbersToChooseFrom: 00000000
-  maxEnemyTypes: 01000000
+  numbersToChooseFrom: 000000000100000002000000
+  maxEnemyTypes: 010000000100000001000000
   timeBetweenSpawns: 1
