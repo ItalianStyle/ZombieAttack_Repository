@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using UnityEngine;
 
 namespace ZombieAttack
@@ -6,30 +6,21 @@ namespace ZombieAttack
     //Questa classe è usata dal waveText per cominciare l'ondata di nemici dopo la scritta
     public class WaveBeginnerFlag : MonoBehaviour
     {
+        public static event Action<int> OnStartEnemyWave = delegate { };
+        public static event Action<int> OnStartingPrepationTimer = delegate { };
+
         [SerializeField] int timeToStartWave = 1;
+        [SerializeField] int timeToEndWave = 7;
 
-        //Called at the end of WaveText_appearing animation
-        public void StartEnemyWave() => EnemyManager.instance.SpawnWave();
-
-        //Called at the end of WaveText_Won_appearing animation
-        public void StartTimer()
+        //Called at the end of WaveText_appearing ("Ondata X") animation
+        //Start counting down the timer to finish the wave and start spawning next wave
+        public void StartEnemyWave()
         {
-            UI_Manager.instance.SetTimerText(true);
-            StartCoroutine(WaitForNextWave());
+            GameManager.PrintExecutionLocation(this);
+            OnStartEnemyWave.Invoke(timeToEndWave);
         }
 
-        IEnumerator WaitForNextWave()
-        {
-            for(int timer = timeToStartWave; timer > 0;)
-            {
-                UI_Manager.instance.UpdateTimeText(timer);
-                yield return new WaitForSeconds(1);
-                timer--;
-            }
-            //Tolgo il timer
-            UI_Manager.instance.SetTimerText(false);
-            //Faccio partire l'animazione del testo di presentazione ondata
-            UI_Manager.instance.PlayWaveText(isVictoryText: false);
-        }
+        //Called at the end of WaveText_Won_appearing ("Ondata passata!") animation
+        public void StartPreparationTimer() => OnStartingPrepationTimer.Invoke(timeToStartWave);
     }
 }

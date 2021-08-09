@@ -11,6 +11,7 @@ namespace ZombieAttack
         //Array che contiene il numero massimo di nemici permessi per ogni tipo di nemico
         public int[] maxEnemyTypes = new int[3];
         public float timeBetweenSpawns = 1f;
+
         public int MaxEnemies
         {
             get
@@ -29,6 +30,7 @@ namespace ZombieAttack
             for (int i = 0; i < maxEnemyTypes.Length; i++)
                 numbersToChooseFrom.Add(i);
         }
+
         public int SelectEnemyType()
         {
             return numbersToChooseFrom.Count > 0? numbersToChooseFrom[Random.Range(0, numbersToChooseFrom.Count)] : -1;           
@@ -39,7 +41,7 @@ namespace ZombieAttack
             if (numbersToChooseFrom.Contains(enemyTypeIndexToRemove))
                 numbersToChooseFrom.Remove(enemyTypeIndexToRemove);
             else
-                Debug.Log("La lista degli indici dei tipi di nemici non contiene " + enemyTypeIndexToRemove);
+                Debug.LogError("La lista degli indici dei tipi di nemici non contiene " + enemyTypeIndexToRemove);
         }
     }
 }
