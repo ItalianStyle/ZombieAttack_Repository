@@ -16,6 +16,8 @@ TagManager:
   - EnemyMedium
   - EnemyBig
   - Boss
+  - RestartWaveButton
+  - RestartPanel
   layers:
   - Default
   - TransparentFX
@@ -35,7 +37,7 @@ TagManager:
   - Building
   - TurretActivation
   - Turret
-  - 
+  - Ground
   - 
   - 
   - 
