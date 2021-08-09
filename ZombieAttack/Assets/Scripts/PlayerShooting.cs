@@ -32,9 +32,8 @@ namespace ZombieAttack
 
         private void Start()
         {
-            canScrollMouse = false;
-            SetCurrentGun(0);
-            SetupGuns();
+            InitializeGuns();
+            GameManager.GameRestarted += (waveIndex) => InitializeGuns();
         }
 
         private void Update()
@@ -54,11 +53,26 @@ namespace ZombieAttack
 
         private void OnTriggerEnter(Collider other)
         {
-            pickup = other.GetComponent<Pickup>();
-            if (pickup && pickup.pickupType is Pickup.PickupType.Shotgun)
+            if (other.TryGetComponent(out Pickup pickup) && pickup.pickupType is Pickup.PickupType.Shotgun)
             {
-                pickup.OnPickupTake += SetCurrentGun;
+                pickup.OnPickupTake += () =>
+                {
+                    if (pickup.pickupType is Pickup.PickupType.Shotgun)
+                        SetCurrentGun();
+                };
             }
+        }
+
+        private void OnDestroy()
+        {
+            GameManager.GameRestarted -= (waveIndex) => InitializeGuns();
+        }
+
+        void InitializeGuns()
+        {
+            canScrollMouse = false;
+            SetCurrentGun(0);
+            SetupGuns();
         }
 
         void SetupGuns()
@@ -77,13 +91,16 @@ namespace ZombieAttack
         {
             canScrollMouse = true;
             SetCurrentGun(1); // 1 == Shotgun
-            pickup.OnPickupTake -= SetCurrentGun;
+            pickup.OnPickupTake -= () =>
+            {
+                if (pickup.pickupType is Pickup.PickupType.Shotgun)
+                    SetCurrentGun();
+            };
         }
 
         //Changes current gun of player by giving new gun index
         private void SetCurrentGun(int newCurrentGunIndex)
         {
-            //Debug.Log("CurrentGunIndex: " + CurrentGunIndex + "\nnewCurrentGunIndex: " + newCurrentGunIndex);
             if (CurrentGunIndex != newCurrentGunIndex)
             {
                 guns[CurrentGunIndex].SetGunState(false);
