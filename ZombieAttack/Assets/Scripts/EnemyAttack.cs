@@ -23,6 +23,8 @@ namespace ZombieAttack
         bool canDamagePlayer = true;
         bool canDamageObjective = true;
 
+        private void OnEnable() => canDamageObjective = !gameObject.CompareTag("EnemyMedium");
+
         private void OnTriggerStay(Collider other)
         {
             if (canDamageObjective)
