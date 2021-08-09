@@ -1,20 +1,26 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace ZombieAttack
 {
     public class PauseListener : MonoBehaviour
     {
-        [SerializeField] bool pauseState = false;
+        public static event Action OnPauseKeyPressed = delegate { };
+
+        //Im in playing the game state, don't listen to GameResumed event anymore
+        private void OnEnable() => GameManager.GameResumed -= () => enabled = true;
 
         // Update is called once per frame
         void Update()
         {
             if (Input.GetKeyDown(KeyCode.P))
             {
-                pauseState = !pauseState;
-                GameManager.instance.SetStatusGame(GameManager.GameState.Paused);
-                UI_Manager.instance.SetFinishScreen(GameManager.GameState.Paused);
+                OnPauseKeyPressed.Invoke();
+                enabled = false;
             }
-        }       
+        }
+
+        //Im in pause state, return to listen pause key when game is resumed
+        private void OnDisable() => GameManager.GameResumed += () => enabled = true;
     }
 }
