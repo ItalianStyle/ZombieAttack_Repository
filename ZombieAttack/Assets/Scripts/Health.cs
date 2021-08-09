@@ -39,7 +39,9 @@ namespace ZombieAttack
 
         public event Action<float, float> OnHealthPctChanged = delegate { }; //delegate is to avoid null checks
         public event Action<Health> OnEnemyDead = delegate { };
-        
+        public static event Action OnPlayerDead = delegate { };
+        public static event Action OnObjectiveDestroyed = delegate { };
+
         private void Awake()
         {
             currentMaterial = GetComponent<Renderer>().material;
@@ -64,24 +66,14 @@ namespace ZombieAttack
                 gameObject.SetActive(false);
 
                 if (gameObject.CompareTag("Finish"))  //Check if it's FinalObjective
-                {
-                    //Game Over by FinalObjective's death
-                    GameManager.instance.SetStatusGame(GameManager.GameState.Lost);
-                    UI_Manager.instance.SetFinishScreen(GameManager.GameState.Lost);
-                }
+                    OnObjectiveDestroyed.Invoke();  //Game Over by FinalObjective's death
+
                 else if (gameObject.CompareTag("Player"))
-                {
-                    //Game Over by Player's death
-                    GameManager.instance.SetStatusGame(GameManager.GameState.Lost);
-                    UI_Manager.instance.SetFinishScreen(GameManager.GameState.Lost);
-                }
+                    OnPlayerDead.Invoke();  //Game Over by Player's death
+
                 else if (gameObject.layer == LayerMask.NameToLayer("Enemy"))
-                {
-                    //Updating kill counter
-                    OnEnemyDead.Invoke(this);
-                    //Play sound
-                    //Earn money
-                }
+                    OnEnemyDead.Invoke(this);   //Updating kill counter
+                    //Play sound               
             }
             else if (gameObject.activeInHierarchy)
                 StartCoroutine(nameof(ColorDamaged), temp > CurrentHealth ? damagedColor : healedColor);           
