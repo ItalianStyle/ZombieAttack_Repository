@@ -4,14 +4,14 @@ using System;
 
 namespace ZombieAttack
 {
-    [RequireComponent(typeof(Collider))]
+    [RequireComponent(typeof(Collider), typeof(Renderer))]
     public class Pickup : MonoBehaviour
     {
         public event Action OnPickupTake = delegate { };
         public event Action OnPlayerNear = delegate { };
         public event Action OnPlayerFar = delegate { };
 
-        public enum PickupType { NotDefined, Shotgun, Health}
+        public enum PickupType { NotDefined, Shotgun, Health, Stamina}
 
         // User Inputs
         public PickupType pickupType = PickupType.NotDefined;
@@ -19,56 +19,58 @@ namespace ZombieAttack
         [Header("PowerUp properties and stats")]
         public float timeToRespawn;
         [SerializeField] [Min(0.1f)] float healAmount;
+        [SerializeField] [Min(.1f)] float staminaRecoverAmount;
        
         [Header("References")]
         public Gun gunToActivate;
         [SerializeField] WorldSpaceCanvas pickupTimerCanvas;
+        [SerializeField] Renderer meshRenderer = null;
 
         bool canProcessInput = false;
 
         private void Awake()
         {
-            switch(pickupType)
-            {
-                case PickupType.Shotgun:
-                    gunToActivate = GameObject.FindGameObjectWithTag("Player").transform.Find("Shotgun").GetComponent<Gun>();
-                    break;
-
-                case PickupType.Health:
-                    pickupTimerCanvas = GetComponentInChildren<WorldSpaceCanvas>();
-                    break;
-            }          
+            if (pickupType is PickupType.Shotgun)
+                gunToActivate = GameObject.FindGameObjectWithTag("Player").transform.Find("Shotgun").GetComponent<Gun>();
+           
+            else if(pickupType is PickupType.Health || pickupType is PickupType.Stamina)
+                pickupTimerCanvas = GetComponentInChildren<WorldSpaceCanvas>();          
         }
+
         private void OnEnable()
         {            
             pickupTimerCanvas.OnTimerFinished -= () => SetPickup(true);
+            EnemyManager.OnAllWavesKilled += ResetPickup;
+            GameManager.GameRestarted -= (waveIndex) => ResetPickup();
         }
 
         private void OnDisable()
         {
-            OnPickupTake.Invoke();
-            if(pickupType is PickupType.Health)
+            if (pickupType is PickupType.Shotgun)
+                GameManager.GameRestarted += (waveIndex) => ResetPickup();
+
+            else if (pickupType is PickupType.Health || pickupType is PickupType.Stamina)
                 pickupTimerCanvas.OnTimerFinished += () => SetPickup(true);  //Re-enable the pickup when timer is finished
-        }
+        }              
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag("Player"))
             {
-                switch (pickupType)
+                if (pickupType is PickupType.Shotgun)
                 {
-                    case PickupType.Shotgun:
-                        OnPlayerNear.Invoke();
-                        canProcessInput = true;
-                        break;
-
-                    case PickupType.Health:
-                        if (other.TryGetComponent(out Health playerHealth) && playerHealth.CanHeal)
-                        {
-                            playerHealth.Heal(healAmount);
-                            SetPickup(false);
-                        }
-                        break;
+                    OnPlayerNear.Invoke();
+                    canProcessInput = true;
+                }
+                else if (pickupType is PickupType.Health && other.TryGetComponent(out Health playerHealth) && playerHealth.CanHeal)
+                {
+                    playerHealth.Heal(healAmount);
+                    SetPickup(false);
+                }
+                else if (pickupType is PickupType.Stamina && other.TryGetComponent(out StaminaSystem playerStamina) && playerStamina.canRecoverStamina)
+                {
+                    playerStamina.Recover(staminaRecoverAmount);
+                    SetPickup(false);
                 }               
             }
         }
@@ -81,8 +83,6 @@ namespace ZombieAttack
                 if (canProcessInput && Input.GetKeyDown(KeyCode.E) && Wallet.instance.HasEnoughMoneyFor(gunToActivate.cost))
                 {
                     Wallet.instance.UpdateCurrentMoney(gunToActivate.cost, false);
-                    UI_Manager.instance.UpdateMoneyText();
-
                     SetPickup(false);
                 }
             }
@@ -97,29 +97,37 @@ namespace ZombieAttack
             }
         }
 
-        void SetPickup(bool canActive)
+        private void ResetPickup()
         {
-            GetComponent<FloatingMovement>().enabled = canActive;
-            switch(pickupType)
+            SetPickup(true);
+        }
+
+        void SetPickup(bool isActive)
+        {
+            GetComponent<FloatingMovement>().enabled = isActive;
+
+            if (pickupType is PickupType.Shotgun)
+                gameObject.SetActive(isActive);
+
+            else if(pickupType is PickupType.Health || pickupType is PickupType.Stamina)
             {
-                case PickupType.Health:
-                    if (canActive)
-                        GetComponentInChildren<ParticleSystem>().Play();
-                    else
-                        GetComponentInChildren<ParticleSystem>().Stop();
-                    GetComponent<Collider>().enabled = canActive;
+                if (isActive)
+                    GetComponentInChildren<ParticleSystem>().Play();
+                else
+                    GetComponentInChildren<ParticleSystem>().Stop();
+                GetComponent<Collider>().enabled = isActive;
 
-                    Color temp = GetComponent<MeshRenderer>().material.color;
-                    temp.a = canActive ? 1f : .4f;
-                    GetComponent<MeshRenderer>().material.color = temp;
+                //Set pickup trasparency according to its state
+                Color temp = meshRenderer.material.color;
+                temp.a = isActive ? 1f : .4f;
+                meshRenderer.material.color = temp;
 
-                    enabled = canActive;
-                    break;
-
-                case PickupType.Shotgun:
-                    gameObject.SetActive(canActive);
-                    break;
+                enabled = isActive;
             }
+
+            //Show up the world canvas for timer
+            if(!isActive)
+                OnPickupTake.Invoke();
         }
     }
 }
