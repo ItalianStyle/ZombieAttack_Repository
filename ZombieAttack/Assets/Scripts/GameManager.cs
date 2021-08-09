@@ -15,16 +15,18 @@ namespace ZombieAttack
      
         public static event Action GamePaused;
         public static event Action GameResumed;
+        public static event Action<int> GameRestarted; //int waveIndex
 
         [Header("Button References")]
         [SerializeField] Button playButton = null;
+        [SerializeField] Button restartWaveButton = null;
         [SerializeField] Button resumeButton = null;
         [SerializeField] Button exitGameButton = null;
         //[SerializeField] Button skipTutorialButton = null;
      
         public GameObject player = null;
-        
-        PauseListener pauseListener = null;
+        Vector3 startPlayerPosition;
+        Quaternion startPlayerRotation;
         
         public enum GameState { Won, Lost, Paused, Resumed, WaveWon, BeginGameWithTutorial, notDefined }
         public GameState currentGameState = GameState.notDefined;
@@ -45,7 +47,17 @@ namespace ZombieAttack
                 SceneManager.sceneLoaded += OnSceneLoaded;
             }
         }
-        
+
+        private void OnDisable()
+        {
+            PauseListener.OnPauseKeyPressed -= () => SetStatusGame(GameState.Paused);
+            Timer.OnWaveTimerFinished -= () => SetStatusGame(GameState.Lost);
+            EnemyManager.OnWaveKilled -= () => SetStatusGame(GameState.WaveWon);
+            EnemyManager.OnAllWavesKilled -= () => SetStatusGame(GameState.Won);
+            Health.OnPlayerDead -= () => SetStatusGame(GameState.Lost);
+            Health.OnObjectiveDestroyed -= () => SetStatusGame(GameState.Lost);
+        }
+
         private void OnSceneLoaded(Scene scene, LoadSceneMode arg1)
         {
             //Togli la eventuale pausa da un tentativo precendente del giocatore
@@ -56,25 +68,40 @@ namespace ZombieAttack
             //Prendi tutte le reference della scena attuale
             GetReferences(scene.buildIndex);
 
-            playButton.onClick.AddListener(LoadGame);
             switch (scene.buildIndex)
             {
                 case 0:
+                    playButton.onClick.AddListener(LoadGame);
                     exitGameButton.onClick.AddListener(QuitGame);
                     break;
 
                 case 1:
+                    //Save player position at the begin of the game
+                    startPlayerPosition = player.transform.position;
+                    startPlayerRotation = player.transform.rotation;
+
                     //SetStatusGame(GameState.BeginGameWithTutorial);
                     SetStatusGame(GameState.Resumed);
+                    
                     //Prepara i bottoni dei menu
+                    playButton.onClick.AddListener(() => RestartGameFrom(0));
+                    restartWaveButton.onClick.AddListener(() => RestartGameFrom(EnemyManager.instance.CurrentWave));
                     resumeButton.onClick.AddListener(ResumeGame);
                     exitGameButton.onClick.AddListener(MainMenu);
 
-                    Wallet.InitializeWalletInstance();
-                    UI_Manager.instance.UpdateMoneyText();
                     //skipTutorialButton.onClick.AddListener(delegate { SetMousePointer(false); });
+                    
+                    Wallet.InitializeWalletInstance();
 
-                    UI_Manager.instance.PlayWaveText(isVictoryText: false);                  
+                    PauseListener.OnPauseKeyPressed += () => SetStatusGame(GameState.Paused);
+
+                    Timer.OnWaveTimerFinished += () => SetStatusGame(GameState.Lost);
+
+                    EnemyManager.OnWaveKilled += () => SetStatusGame(GameState.WaveWon);
+                    EnemyManager.OnAllWavesKilled += () => SetStatusGame(GameState.Won);
+
+                    Health.OnPlayerDead += () => SetStatusGame(GameState.Lost);
+                    Health.OnObjectiveDestroyed += () => SetStatusGame(GameState.Lost);
                     break;
 
                 default:
@@ -82,7 +109,7 @@ namespace ZombieAttack
                     break;
             }
         }
-        
+
         //Prendi tutti i riferimenti in base alla scena corrente
         private void GetReferences(int sceneIndex)
         {
@@ -95,9 +122,9 @@ namespace ZombieAttack
 
                 case 1:
                     player = GameObject.FindGameObjectWithTag("Player");
-                    pauseListener = FindObjectOfType<PauseListener>();
 
                     resumeButton = GameObject.FindGameObjectWithTag("ResumeButton").GetComponent<Button>();
+                    restartWaveButton = GameObject.FindGameObjectWithTag("RestartWaveButton").GetComponent<Button>();
                     //skipTutorialButton = GameObject.FindGameObjectWithTag("SkipButton").GetComponent<Button>();
 
                     //inputToCamera = FindObjectOfType<CinemachineFreeLook>();
@@ -108,7 +135,20 @@ namespace ZombieAttack
                     break;
             }
         }
-        
+
+        private void RestartGameFrom(int waveIndex)
+        {
+            Time.timeScale = 1f;
+
+            //Reset player position
+            CanEnablePlayer(false);
+            player.transform.SetPositionAndRotation(startPlayerPosition, startPlayerRotation);
+            CanEnablePlayer(true);
+            
+            GameRestarted?.Invoke(waveIndex);
+            SetStatusGame(GameState.Resumed);
+        }
+
         public void LoadGame() => SceneManager.LoadScene("Gioco");
 
         public void ResumeGame()
@@ -118,79 +158,51 @@ namespace ZombieAttack
             SetStatusGame(GameState.Resumed);
         }
 
-        public void MainMenu() => SceneManager.LoadScene(0);
+        public void MainMenu()
+        {
+            Destroy(EnemyManager.instance);
+            SceneManager.LoadScene(0);
+        }
 
         public void QuitGame() => Application.Quit();
         
         public void SetStatusGame(GameState newGameState)
         {
             currentGameState = newGameState;
-            if (currentGameState != GameState.Resumed && currentGameState != GameState.WaveWon)
+            //SetCamera(currentGameState is GameState.Resumed);
+            PrepareForOffGameWindow(currentGameState != GameState.Resumed && currentGameState != GameState.WaveWon);
+
+            switch(currentGameState)
             {
-                //Libero il mouse
-                SetMousePointer(true);
-
-                //Disabilito il giocatore
-                CanEnablePlayer(false);
-            }
-            
-            else if (currentGameState is GameState.Paused)
-                //Informo che il gioco è in pausa
-                GamePaused?.Invoke();
-
-            else
-            {
-                //Blocco il mouse
-                SetMousePointer(false);
-
-                //Abilito il giocatore
-                CanEnablePlayer(true);
-            }
-            
-
-            switch (currentGameState)
-            {
-                case GameState.Won:
-
-                    //Disattivo il trigger per la pausa
-                    pauseListener.enabled = false;
-                    break;
-
-                case GameState.Lost:
-                case GameState.BeginGameWithTutorial:
                 case GameState.Paused:
-                    //Disattivo il trigger per la pausa
-                    pauseListener.enabled = false;
-
-                    //Disattivo l'input della telecamera
-                    //SetCamera(false);
-
+                    //Informo che il gioco è in pausa
+                    GamePaused?.Invoke();
                     break;
 
                 case GameState.Resumed:
-                    //Attivo il trigger per la pausa
-                    pauseListener.enabled = true;
-
-                    //Riattivo l'HUD del gioco
-                    UI_Manager.instance.SetHUD(true);
-
-                    //Attivo l'input della telecamera
-                    //SetCamera(true);
-
                     //Informo che il gioco è ripreso
                     GameResumed?.Invoke();
                     break;
             }
         }
 
-        //Attiva il il movimento del giocatore e il lanciatore di spade a seconda della situazione
+        //If we are leaving the match (pause, endscreen), free the mouse and disable the player, viceversa otherwise
+        private void PrepareForOffGameWindow(bool canShowMenu)
+        {
+            //Libero / Blocco il mouse
+            SetMousePointer(canShowMenu);
+
+            //Disabilito / Abilito il giocatore
+            CanEnablePlayer(!canShowMenu);
+        }
+
+        //Enable/Disable the player in game
         public void CanEnablePlayer(bool canEnable)
         {
             //Attiva il movimento
+            player.GetComponent<CharacterController>().enabled = canEnable;
             player.GetComponent<PlayerMovement>().enabled = canEnable;
             player.GetComponent<StaminaSystem>().enabled = canEnable;
-            //se è la situazione iniziale dove il giocatore non ha ancora raccolto l'arma, non attivare il lanciatore di spade
-            //GetComponent<PlayerShooting>().enabled = player.GetComponent<Equipment>().currentWeaponType is Equipment.WeaponType.None ? false : canEnable;
             player.GetComponent<PlayerShooting>().enabled = canEnable;
         }
 
@@ -198,7 +210,28 @@ namespace ZombieAttack
         private static void SetMousePointer(bool canUnlockMouse)
         {
             Cursor.lockState = canUnlockMouse ? CursorLockMode.None : CursorLockMode.Locked;
-            Cursor.visible = canUnlockMouse ? true : false;
+            Cursor.visible = canUnlockMouse;
+        }
+
+        public static void PrintExecutionLocation(object useThisKeyword, string language = "it")
+        {
+
+            string message;
+            string id = " (ID: " + useThisKeyword.GetHashCode() + ")";
+            //Define language to print message
+            switch (language)
+            {
+                case "en":
+                    message = new StackTrace(1).GetFrame(0).GetMethod().Name + "() of " + useThisKeyword.GetType().FullName + id;
+                    break;
+                case "it":
+                    message = new StackTrace(1).GetFrame(0).GetMethod().Name + "() di " + useThisKeyword.GetType().FullName + id;
+                    break;
+                default:
+                    message = "Language not known";
+                    break;
+            }
+            Debug.Log(message);
         }
         /*
 
