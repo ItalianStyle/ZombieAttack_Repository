@@ -12,6 +12,7 @@ namespace ZombieAttack
         [SerializeField] SimpleHealthBar gunBar = null;
 
         Pickup pickup;
+
          int CurrentGunIndex
         {
             get => _currentGun;
@@ -25,15 +26,12 @@ namespace ZombieAttack
             }
         }
 
-        private void Awake()
-        {
-            guns = GetComponentsInChildren<Gun>();
-        }
+        private void Awake() => guns = GetComponentsInChildren<Gun>();
 
         private void Start()
         {
             InitializeGuns();
-            GameManager.GameRestarted += (waveIndex) => InitializeGuns();
+            GameManager.GameRestarted += (_) => InitializeGuns();
         }
 
         private void Update()
@@ -63,10 +61,7 @@ namespace ZombieAttack
             }
         }
 
-        private void OnDestroy()
-        {
-            GameManager.GameRestarted -= (waveIndex) => InitializeGuns();
-        }
+        private void OnDestroy() => GameManager.GameRestarted -= (_) => InitializeGuns();
 
         void InitializeGuns()
         {
@@ -78,13 +73,7 @@ namespace ZombieAttack
         void SetupGuns()
         {
             for(int i = 0; i < guns.Length; i++)
-            {
-                if (i != CurrentGunIndex)
-                    guns[i].SetGunState(false);
-                
-                else
-                    guns[i].SetGunState(true);
-            }
+                guns[i].SetGunState(i == CurrentGunIndex);
         }
 
         private void SetCurrentGun()
