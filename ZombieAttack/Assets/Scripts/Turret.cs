@@ -15,8 +15,17 @@ namespace ZombieAttack
         public float damage;
         [SerializeField] float maxRange = 10f;
         [SerializeField] float rotationSpeed = 1f;
-        public int buildingCost = 1;
-        public int sellingCost = 1;
+        public int BuildingCost 
+        {
+            get => 1;
+            private set => _ = value;
+        }
+
+        public int SellingCost
+        {
+            get => 1;
+            private set => _ = value;
+        }
 
         MeshRenderer turretMeshRenderer;
         SphereCollider rangeCollider;
@@ -73,8 +82,8 @@ namespace ZombieAttack
                 {
                     if (enemy != null && !enemiesOnSight.Contains(enemy))
                     {
-                        enemy.GetComponent<Health>().OnEnemyDead += RemoveEnemyFromList;
                         enemiesOnSight.Add(enemy);
+                        enemy.GetComponent<Health>().OnEnemyDead += RemoveEnemyFromList;                      
                     }
                 }
                 else
@@ -83,8 +92,9 @@ namespace ZombieAttack
             else if (enemiesOnSight.Count > 0)
             {
                 LockOnTarget(enemiesOnSight[0].transform);
-                CanShoot(true);
-            }                  
+                Ray ray = new Ray(transform.position, enemiesOnSight[0].transform.position - transform.position);
+                CanShoot(Physics.Raycast(ray, out RaycastHit info, maxRange, LayerMask.GetMask("Enemy", "Building", "FinalObjective")) && info.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"));
+            }
         }
 
         private void OnTriggerExit(Collider other)
