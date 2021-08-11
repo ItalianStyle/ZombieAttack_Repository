@@ -21,8 +21,9 @@ namespace ZombieAttack
         public IEnumerator CheckObstacles()
         {
             while (isActive)
-            { 
-                if (Physics.Raycast(transform.position, playerTransform.position - transform.position, out RaycastHit info, 100, LayerMask.GetMask("Building", "FinalObjective", "Player"), QueryTriggerInteraction.Ignore))
+            {
+                Vector3 camToPlayerDirection = playerTransform.position - transform.position;
+                if (Physics.Raycast(transform.position, camToPlayerDirection.normalized, out RaycastHit info, camToPlayerDirection.magnitude, LayerMask.GetMask("Building", "FinalObjective", "Player"), QueryTriggerInteraction.Ignore))
                 {
                     Transform previousObstacle = obstacle;
                     MeshRenderer previousObstacleRenderer = obstacleRenderer;
