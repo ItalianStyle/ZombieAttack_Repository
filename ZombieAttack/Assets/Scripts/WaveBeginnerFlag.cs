@@ -16,7 +16,7 @@ namespace ZombieAttack
         //Start counting down the timer to finish the wave and start spawning next wave
         public void StartEnemyWave()
         {
-            GameManager.PrintExecutionLocation(this);
+            //GameManager.PrintExecutionLocation(this);
             OnStartEnemyWave.Invoke(timeToEndWave);
         }
 
