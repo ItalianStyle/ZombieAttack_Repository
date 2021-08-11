@@ -176,7 +176,7 @@ namespace ZombieAttack
 
                     UpdateMoneyText();
                     //SetCanvasGroup(tutorialPanel, true);
-                    GameManager.GameRestarted += (waveIndex) => ResetUI();
+                    GameManager.GameRestarted += (_) => ResetUI();
                     GameManager.GameResumed += () =>
                     {                      
                         SetHUD(true);
