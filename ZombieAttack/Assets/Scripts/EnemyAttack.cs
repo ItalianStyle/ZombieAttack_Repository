@@ -41,7 +41,7 @@ namespace ZombieAttack
                 if (other.gameObject.CompareTag("Player") && other.TryGetComponent(out Health playerHealth))
                 {
                     playerHealth.DealDamage(collisionDamage);
-                    if(canCausePoisoning)
+                    if(playerHealth.IsAlive && canCausePoisoning)
                         playerHealth.TryToDealPoisoningDamage();
                     
                     StartCoroutine(nameof(WaitForDealDamage), true);
