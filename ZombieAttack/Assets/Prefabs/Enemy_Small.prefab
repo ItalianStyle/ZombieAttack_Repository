@@ -275,10 +275,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 985e66758b76410488ea3b086656796d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionDamage: 10
+  collisionDamage: 100
   meleeDamage: 1
   timeToDealCollisionDmg: 1
   timeToDealMeleeDmg: 2
+  canCausePoisoning: 0
 --- !u!114 &1033488405613686450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,7 +292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e5ba4d285414bc448023a0fc31881cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  money: 10
+  money: 100
 --- !u!1 &7574764763013924653
 GameObject:
   m_ObjectHideFlags: 0
