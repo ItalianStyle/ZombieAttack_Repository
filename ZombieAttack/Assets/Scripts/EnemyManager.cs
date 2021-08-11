@@ -80,9 +80,9 @@ namespace ZombieAttack
                     UI_Manager.instance.PlayWaveTextAnimation(false);
                 };
 
-                WaveBeginnerFlag.OnStartEnemyWave += (timeToEndWave) => SpawnWave();
+                WaveBeginnerFlag.OnStartEnemyWave += (_) => SpawnWave();
 
-                GameManager.GameRestarted += (waveIndex) => RestartFromWave(waveIndex);
+                GameManager.GameRestarted += RestartFromWave;
             }
         }
 
@@ -104,7 +104,7 @@ namespace ZombieAttack
 
         private void RestartFromWave(int waveIndex)
         {
-            GameManager.PrintExecutionLocation(this);
+            //GameManager.PrintExecutionLocation(this);
             foreach (GameObject enemy in activeEnemies)
                 enemy.SetActive(false);
 
@@ -118,13 +118,11 @@ namespace ZombieAttack
             
             //Start the wave
             UI_Manager.instance.PlayWaveTextAnimation(isVictoryText: false);
-
-
         }
 
         public void SpawnWave()
         {
-            GameManager.PrintExecutionLocation(this);
+            //GameManager.PrintExecutionLocation(this);
             if (waves.Length > 0)
             {              
                 spawnedEnemies = new int[waves[CurrentWave].maxEnemyTypes.Length];
@@ -134,7 +132,7 @@ namespace ZombieAttack
 
         void SpawnEnemy()
         {
-            GameManager.PrintExecutionLocation(this);
+            //GameManager.PrintExecutionLocation(this);
             //Choose enemy type to spawn
             int enemyTypeIndex = waves[CurrentWave].SelectEnemyType();
 
@@ -165,9 +163,9 @@ namespace ZombieAttack
                             break;
                     }
                     SetupEnemy(enemy);
-                    Debug.Log("Nemico è attivo");
+                    //Debug.Log("Nemico è attivo");
                     enemy.SetActive(true);
-                    Debug.Log("Aggiungo il nemico alla lista dei nemici attivi");
+                    //Debug.Log("Aggiungo il nemico alla lista dei nemici attivi");
                     activeEnemies.Add(enemy);
                     //Increase enemy counting for this type
                     spawnedEnemies[enemyTypeIndex]++;
@@ -181,7 +179,7 @@ namespace ZombieAttack
             }
             else
             {
-                Debug.LogWarning("List of callable type of enemies is empty");
+                //Debug.LogWarning("List of callable type of enemies is empty");
                 CancelInvoke(nameof(SpawnEnemy));
             }              
         }
@@ -197,7 +195,7 @@ namespace ZombieAttack
 
         private void IncreaseKillCount(Health enemyHealth)
         {
-            GameManager.PrintExecutionLocation(this);
+            //GameManager.PrintExecutionLocation(this);
             if (activeEnemies.Contains(enemyHealth.gameObject))
             {
                 activeEnemies.Remove(enemyHealth.gameObject);
@@ -210,7 +208,6 @@ namespace ZombieAttack
                     killedEnemies = 0;
                     if (IsLastWave)
                     {
-                        CurrentWave = 0;
                         //Vittoria del gioco
                         OnAllWavesKilled.Invoke();
                     }
