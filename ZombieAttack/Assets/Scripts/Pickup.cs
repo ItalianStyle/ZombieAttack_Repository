@@ -41,13 +41,13 @@ namespace ZombieAttack
         {            
             pickupTimerCanvas.OnTimerFinished -= () => SetPickup(true);
             EnemyManager.OnAllWavesKilled += ResetPickup;
-            GameManager.GameRestarted -= (waveIndex) => ResetPickup();
+            GameManager.GameRestarted -= (_) => ResetPickup();
         }
 
         private void OnDisable()
         {
             if (pickupType is PickupType.Shotgun)
-                GameManager.GameRestarted += (waveIndex) => ResetPickup();
+                GameManager.GameRestarted += (_) => ResetPickup();
 
             else if (pickupType is PickupType.Health || pickupType is PickupType.Stamina)
                 pickupTimerCanvas.OnTimerFinished += () => SetPickup(true);  //Re-enable the pickup when timer is finished
