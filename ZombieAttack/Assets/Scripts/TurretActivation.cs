@@ -9,7 +9,13 @@ namespace ZombieAttack
         public event Action OnPlayerOutOfRange = delegate { };
 
         [SerializeField] Turret _turret;
+        [Header("Icon colors")]
+        [Tooltip("Color of turret icon when is activated")]
+        [SerializeField] Color activatedIconColor = Color.green;
+        [Tooltip("Color of turret icon when is deactivated")]
+        [SerializeField] Color deactivatedIconColor = Color.red;
         bool canProcessInput = false;
+        SpriteRenderer iconRenderer = null;
 
         public Turret Turret
         {
@@ -21,9 +27,13 @@ namespace ZombieAttack
             }
         }
 
-        private void Awake() => _turret = GetComponentInChildren<Turret>();
+        private void Awake()
+        {
+            _turret = GetComponentInChildren<Turret>();
+            iconRenderer = GetComponentInChildren<SpriteRenderer>();
+        }
         
-        private void Start() => Turret.enabled = false;
+        private void Start() => CanEnableTurret(false);
         
 
         private void OnTriggerEnter(Collider other)
@@ -42,18 +52,22 @@ namespace ZombieAttack
                 //Meccanica di vendita
                 if (Turret.enabled)
                 {
-                    Wallet.instance.UpdateCurrentMoney(Turret.sellingCost, true);
-                    UI_Manager.instance.UpdateMoneyText();
-                    Turret.enabled = false;
+                    Wallet.instance.UpdateCurrentMoney(Turret.SellingCost, true);
+                    CanEnableTurret(false);
                 }
                 //Meccanica di acquisto
-                else if (Wallet.instance.HasEnoughMoneyFor(Turret.buildingCost))
+                else if (Wallet.instance.HasEnoughMoneyFor(Turret.BuildingCost))
                 {
-                    Wallet.instance.UpdateCurrentMoney(Turret.buildingCost, false);
-                    UI_Manager.instance.UpdateMoneyText();
-                    Turret.enabled = true;
+                    Wallet.instance.UpdateCurrentMoney(Turret.BuildingCost, false);
+                    CanEnableTurret(true);
                 }
             }
+        }
+
+        public void CanEnableTurret(bool canEnable)
+        {
+            Turret.enabled = canEnable;
+            iconRenderer.color = Turret.enabled ? activatedIconColor : deactivatedIconColor;
         }
 
         private void OnTriggerExit(Collider other)
