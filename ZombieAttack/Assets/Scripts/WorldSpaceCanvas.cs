@@ -123,15 +123,15 @@ namespace ZombieAttack
         {
             //Se la torretta è già attiva
             if (turret.enabled)
-                SetText(true, Color.white, "Disattiva (+" + turret.sellingCost.ToString() + "$)");
+                SetText(true, Color.white, "Disattiva (+" + turret.SellingCost.ToString() + "$)");
 
             //Se il giocatore non ha attivato la torretta ed ha i soldi
-            else if (Wallet.instance.HasEnoughMoneyFor(turret.buildingCost))
-                SetText(true, Color.white, "Attiva (-" + turret.buildingCost.ToString() + "$)");
+            else if (Wallet.instance.HasEnoughMoneyFor(turret.BuildingCost))
+                SetText(true, Color.white, "Attiva (-" + turret.BuildingCost.ToString() + "$)");
 
             //Se il giocatore non ha attivato la torretta e non ha i soldi
             else
-                SetText(false, Color.red, "Raccogli " + turret.buildingCost.ToString() + "$");
+                SetText(false, Color.red, "Raccogli " + turret.BuildingCost.ToString() + "$");
 
             enabled = true;
         }
