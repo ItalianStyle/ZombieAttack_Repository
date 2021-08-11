@@ -28,7 +28,7 @@ namespace ZombieAttack
         Vector3 startPlayerPosition;
         Quaternion startPlayerRotation;
         
-        public enum GameState { Won, Lost, Paused, Resumed, WaveWon, BeginGameWithTutorial, notDefined }
+        public enum GameState { Won, Lost, Paused, Resumed, WaveWon, Restarted, notDefined }
         public GameState currentGameState = GameState.notDefined;
        
         public bool isPaused = false;
@@ -139,14 +139,17 @@ namespace ZombieAttack
         private void RestartGameFrom(int waveIndex)
         {
             Time.timeScale = 1f;
+            //Reactivate player when he loses the round
+            if(!player.activeInHierarchy)
+                player.SetActive(true);
 
             //Reset player position
             CanEnablePlayer(false);
             player.transform.SetPositionAndRotation(startPlayerPosition, startPlayerRotation);
             CanEnablePlayer(true);
             
-            GameRestarted?.Invoke(waveIndex);
-            SetStatusGame(GameState.Resumed);
+            
+            SetStatusGame(GameState.Restarted, waveIndex);
         }
 
         public void LoadGame() => SceneManager.LoadScene("Gioco");
@@ -165,12 +168,13 @@ namespace ZombieAttack
         }
 
         public void QuitGame() => Application.Quit();
-        
-        public void SetStatusGame(GameState newGameState)
+
+        //Wave index is used when Restarting the game
+        public void SetStatusGame(GameState newGameState, int waveIndex = -1)
         {
             currentGameState = newGameState;
             //SetCamera(currentGameState is GameState.Resumed);
-            PrepareForOffGameWindow(currentGameState != GameState.Resumed && currentGameState != GameState.WaveWon);
+            PrepareForOffGameWindow(currentGameState != GameState.Resumed && currentGameState != GameState.Restarted && currentGameState != GameState.WaveWon);
 
             switch(currentGameState)
             {
@@ -182,6 +186,13 @@ namespace ZombieAttack
                 case GameState.Resumed:
                     //Informo che il gioco è ripreso
                     GameResumed?.Invoke();
+                    break;
+
+                case GameState.Restarted:
+                    if (waveIndex < 0)
+                        Debug.LogError("Ti sei dimenticato di dare come parametro anche l'indice di ondata da cui ricominciare");
+                    else
+                        GameRestarted?.Invoke(waveIndex);
                     break;
             }
         }
@@ -202,6 +213,7 @@ namespace ZombieAttack
             //Attiva il movimento
             player.GetComponent<CharacterController>().enabled = canEnable;
             player.GetComponent<PlayerMovement>().enabled = canEnable;
+
             player.GetComponent<StaminaSystem>().enabled = canEnable;
             player.GetComponent<PlayerShooting>().enabled = canEnable;
         }
