@@ -6,18 +6,22 @@ namespace ZombieAttack
 {
     public class TurretManager : MonoBehaviour
     {
-        Turret[] turrets;
+        TurretActivation[] turretActivations;
         int checkpointActiveTurrets = 0;
-        bool canSellTurrets = true;
+        bool CanSellTurrets
+        {
+            get;
+            set;
+        }
 
         public int ActiveTurrets
         {
             get
             {
                 int _activeTurrets = 0;
-                foreach(Turret turret in turrets)
+                foreach(TurretActivation turretActivation in turretActivations)
                 {
-                    if (turret.enabled)
+                    if (turretActivation.Turret.enabled)
                         _activeTurrets++;
                 }
                 return _activeTurrets;
@@ -26,41 +30,37 @@ namespace ZombieAttack
 
         private void OnEnable() => SceneManager.sceneLoaded += OnSceneLoaded;
 
-        private void OnSceneLoaded(Scene scene, LoadSceneMode arg1)
+        private void OnSceneLoaded(Scene scene, LoadSceneMode _)
         {
             if(scene.name is "Gioco")
             {
-                turrets = FindObjectsOfType<Turret>();
-                GameManager.GameRestarted += (waveIndex) =>
-                {
-                    if(canSellTurrets)
-                        SellTurrets();
-                };
-                EnemyManager.OnAllWavesKilled += () => ResetTurretList();
-                WaveBeginnerFlag.OnStartEnemyWave += (timeToEndWave) => SaveActiveTurrets();
+                turretActivations = FindObjectsOfType<TurretActivation>();
+
+                GameManager.GameRestarted += (waveIndex) => DisableTurrets(CanSellTurrets);
+                EnemyManager.OnAllWavesKilled += () => CanSellTurrets = false;
+                //Save all current active turrets when starting the wave
+                WaveBeginnerFlag.OnStartEnemyWave += (waveIndex) => checkpointActiveTurrets = ActiveTurrets; 
             }
         }
 
-        private void SaveActiveTurrets() => checkpointActiveTurrets = ActiveTurrets;
-
-        void ResetTurretList()
-        {
-            foreach (Turret turret in turrets)
-                turret.enabled = false;
-        }
-
         //Sell all turrets saved in checkpointActiveTurrets
-        private void SellTurrets()
+        private void DisableTurrets(bool canSellTurret)
         {
-            for (int i = 0, turretsSold = 0 ; i < turrets.Length && turretsSold <= checkpointActiveTurrets; i++)
+            int turretsSold = 0;
+            for (int i = 0; i < turretActivations.Length; i++)
             {
-                if (turrets[i].enabled)
+                if (turretActivations[i].Turret.enabled)
                 {
-                    Wallet.instance.UpdateCurrentMoney(turrets[i].sellingCost, true);
-                    UI_Manager.instance.UpdateMoneyText();
-                    turrets[i].enabled = false;
-                    turretsSold++;
-                    Debug.Log("Torretta disattivata, guadagnato " + turrets[i].sellingCost + "$");
+                    turretActivations[i].Turret.enabled = false;
+                    string log = turretActivations[i].name + " disattivata";
+
+                    if (canSellTurret && turretsSold <= checkpointActiveTurrets)
+                    {
+                        Wallet.instance.UpdateCurrentMoney(turretActivations[i].Turret.SellingCost, true);
+                        turretsSold++;
+                        log += ", guadagnato " + turretActivations[i].Turret.SellingCost + "$";
+                    }
+                    Debug.Log(log);
                 }
             }
             checkpointActiveTurrets = 0;
