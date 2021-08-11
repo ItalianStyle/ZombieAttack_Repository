@@ -5,6 +5,7 @@ using Random = UnityEngine.Random;
 
 namespace ZombieAttack
 {
+    [RequireComponent(typeof(Renderer))]
     public class Health : MonoBehaviour
     {
         [SerializeField] float maxHealth = 100;
@@ -13,8 +14,10 @@ namespace ZombieAttack
         [SerializeField] Color healedColor = Color.green;
         [SerializeField] float timeOfDamagedColor = .1f;
 
+        SpriteRenderer iconRenderer;
         Material currentMaterial;
-        Color normalColor;
+        Color normalIconColor;
+        Color normalMaterialColor;
         float _currentHealth;
 
         float CurrentHealth
@@ -23,19 +26,16 @@ namespace ZombieAttack
 
             set
             {
-                _currentHealth = value;
                 //Check for min and max values for health
-                if (_currentHealth < 0f)
-                    _currentHealth = 0f;
-                else if (_currentHealth > maxHealth)
-                    _currentHealth = maxHealth;
-                
+                _currentHealth = Mathf.Clamp(value, 0f, maxHealth);
+               
                 //Fire the event everytime health is changed
                 OnHealthPctChanged(CurrentHealth, maxHealth);
             }
         }
+
         public bool CanHeal { get => CurrentHealth < maxHealth; }
-        public bool IsAlive { get => CurrentHealth > 0; }
+        public bool IsAlive { get => CurrentHealth > 0f; }
 
         public event Action<float, float> OnHealthPctChanged = delegate { }; //delegate is to avoid null checks
         public event Action<Health> OnEnemyDead = delegate { };
@@ -44,17 +44,18 @@ namespace ZombieAttack
 
         private void Awake()
         {
+            iconRenderer = GetComponentInChildren<SpriteRenderer>();
+            normalIconColor = iconRenderer.color;
             currentMaterial = GetComponent<Renderer>().material;
-            normalColor = currentMaterial.color;
+            normalMaterialColor = currentMaterial.color;
         }
 
         private void OnEnable()
         {
             CurrentHealth = maxHealth;
-            currentMaterial.SetColor("_Color", normalColor);
+            iconRenderer.color = normalIconColor;
+            currentMaterial.SetColor("_Color", normalMaterialColor);
         }
-
-        private void OnDisable() => CurrentHealth = maxHealth;
 
         void ModifyHealth(float amount)
         {
@@ -64,7 +65,7 @@ namespace ZombieAttack
             if (CurrentHealth == 0f)
             {
                 gameObject.SetActive(false);
-
+                    
                 if (gameObject.CompareTag("Finish"))  //Check if it's FinalObjective
                     OnObjectiveDestroyed.Invoke();  //Game Over by FinalObjective's death
 
@@ -76,14 +77,20 @@ namespace ZombieAttack
                     //Play sound               
             }
             else if (gameObject.activeInHierarchy)
-                StartCoroutine(nameof(ColorDamaged), temp > CurrentHealth ? damagedColor : healedColor);           
+                StartCoroutine(nameof(ColorDamaged), temp > CurrentHealth ? damagedColor : healedColor);  
+
+            //If current health > 0f and gameObject is not active in the scene
+            else
+                gameObject.SetActive(true);
         }
 
         IEnumerator ColorDamaged(Color damageColor)
         {
+            iconRenderer.color = damageColor;
             currentMaterial.SetColor("_Color", damageColor);
             yield return new WaitForSeconds(timeOfDamagedColor);
-            currentMaterial.SetColor("_Color", normalColor);        
+            currentMaterial.SetColor("_Color", normalMaterialColor);
+            iconRenderer.color = normalIconColor;
         }
 
         public void DealDamage(float damage) => ModifyHealth(-damage);
@@ -92,7 +99,7 @@ namespace ZombieAttack
 
         public void TryToDealPoisoningDamage()
         {
-            if (TryGetComponent(out PoisoningEffect poisoningEffect) && !poisoningEffect.IsPoisoned)
+            if (TryGetComponent(out PoisoningEffect poisoningEffect) && !poisoningEffect.IsPoisoned && IsAlive)
             {
                 if (Random.Range(0f, 1f) <= poisoningEffect.activationProbability)
                     poisoningEffect.IsPoisoned = true;
