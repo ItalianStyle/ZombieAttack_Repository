@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 6828858223877433066}
   - component: {fileID: 6828858223877433067}
   - component: {fileID: 6828858223877433068}
-  - component: {fileID: 6828858223877433069}
+  - component: {fileID: 6552377768867967033}
   m_Layer: 15
   m_Name: BarrieraLegno
   m_TagString: Untagged
@@ -108,8 +108,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6828858223877433070}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.75, z: 0}
-  m_LocalScale: {x: 4.6, y: 1.5, z: 0.20000002}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6297754332713809755}
   m_Father: {fileID: 0}
@@ -122,7 +122,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6828858223877433070}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -6755163845437498717, guid: 9cf87f48ce79a254bb5ffc65b0023e20, type: 3}
 --- !u!23 &6828858223877433068
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -162,8 +162,8 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &6828858223877433069
-BoxCollider:
+--- !u!64 &6552377768867967033
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -172,6 +172,7 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6755163845437498717, guid: 9cf87f48ce79a254bb5ffc65b0023e20, type: 3}
