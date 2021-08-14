@@ -46,7 +46,7 @@ namespace ZombieAttack
             input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
             Vector3 moveDir = Quaternion.Euler(0, cam.transform.eulerAngles.y, 0) * input;
             
-            if (input.magnitude > 0)
+            if (input.magnitude > 0 && !Input.GetMouseButton(0))
             {
                 Quaternion target = Quaternion.LookRotation(moveDir);
                 transform.rotation = Quaternion.Slerp(transform.rotation, target, .1f);
@@ -77,7 +77,7 @@ namespace ZombieAttack
             Controller.SimpleMove(moveDir.normalized * movSpeed);
         }
 
-        public void FaceCamera() => StartCoroutine(nameof(SmoothFaceCamera));
+        public void FaceCamera() => StartCoroutine(nameof(SmoothFaceCamera)); //transform.rotation = Quaternion.Euler(0, cam.transform.eulerAngles.y, 0); 
 
         IEnumerator SmoothFaceCamera()
         {
