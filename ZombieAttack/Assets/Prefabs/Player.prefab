@@ -365,6 +365,7 @@ MonoBehaviour:
   recoverStaminaFactor: 0.5
   staminaBar: {fileID: 0}
   isPlayerRunning: 0
+  canRecoverStamina: 0
 --- !u!114 &3905729872734965768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -381,6 +382,7 @@ MonoBehaviour:
   effectDuration: 5
   intervalOfDamage: 0.5
   poisonDamage: 1
+  _isPoisoned: 0
 --- !u!1001 &3028559204862732003
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -406,7 +408,7 @@ PrefabInstance:
     - target: {fileID: 6216645864491329763, guid: cc75d26f94588b94f9b0b8202fed9e5c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.55
+      value: 0.711
       objectReference: {fileID: 0}
     - target: {fileID: 6216645864491329763, guid: cc75d26f94588b94f9b0b8202fed9e5c,
         type: 3}
