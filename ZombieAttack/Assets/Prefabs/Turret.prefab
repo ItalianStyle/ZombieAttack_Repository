@@ -224,8 +224,6 @@ MonoBehaviour:
   damage: 1
   maxRange: 10
   rotationSpeed: 10
-  buildingCost: 1
-  sellingCost: 1
 --- !u!1 &2786896738083419787
 GameObject:
   m_ObjectHideFlags: 0
@@ -408,7 +406,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4888451813455845350}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 1, z: 0.44}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0.44}
   m_LocalScale: {x: 0.59999996, y: 0.59999996, z: 0.59999996}
   m_Children: []
   m_Father: {fileID: 3379516702459791801}
@@ -5395,7 +5393,7 @@ GameObject:
   - component: {fileID: 2745388250233957125}
   - component: {fileID: 4288989732172651030}
   - component: {fileID: 4854713354347959868}
-  m_Layer: 17
+  m_Layer: 8
   m_Name: BulletParticles
   m_TagString: Bullet
   m_Icon: {fileID: 0}
