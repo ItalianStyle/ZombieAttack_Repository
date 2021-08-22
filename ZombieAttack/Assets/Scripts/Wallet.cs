@@ -60,6 +60,8 @@ namespace ZombieAttack
                 CurrentMoney += amount;
             else
                 CurrentMoney -= amount;
+
+            UI_Manager.instance.UpdateMoneyText(amount, isReward);
         }
     }
 }
