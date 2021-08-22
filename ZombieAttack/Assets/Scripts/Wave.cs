@@ -31,10 +31,7 @@ namespace ZombieAttack
                 numbersToChooseFrom.Add(i);
         }
 
-        public int SelectEnemyType()
-        {
-            return numbersToChooseFrom.Count > 0? numbersToChooseFrom[Random.Range(0, numbersToChooseFrom.Count)] : -1;           
-        }
+        public int SelectEnemyType() => numbersToChooseFrom.Count > 0 ? numbersToChooseFrom[Random.Range(0, numbersToChooseFrom.Count)] : -1;
 
         public void DiscardEnemyType(int enemyTypeIndexToRemove)
         {
