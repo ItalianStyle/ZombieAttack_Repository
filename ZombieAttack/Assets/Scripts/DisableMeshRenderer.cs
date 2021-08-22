@@ -1,6 +1,5 @@
 ﻿
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ZombieAttack
@@ -14,7 +13,7 @@ namespace ZombieAttack
 
         private void Start()
         {
-            playerTransform = GameManager.instance.player.transform;
+            playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
             StartCoroutine(nameof(CheckObstacles));
         }
 
