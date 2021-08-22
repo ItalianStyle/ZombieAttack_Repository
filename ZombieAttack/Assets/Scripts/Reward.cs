@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ZombieAttack
 {
@@ -9,13 +8,11 @@ namespace ZombieAttack
 
         void Start()
         {
-            gameObject.GetComponent<Health>().OnEnemyDead += GiveMoneyToPlayer;
-        }
-
-        private void GiveMoneyToPlayer(Health obj)
-        {
-            Wallet.instance.UpdateCurrentMoney(money, true);
-            UI_Manager.instance.UpdateMoneyText();
+            gameObject.GetComponent<Health>().OnEnemyDead += (_) =>
+            {
+                Wallet.instance.UpdateCurrentMoney(money, true); //Give money to player
+                MyAudioManager.instance.PlayCashSFX();
+            };
         }
     }
 }
