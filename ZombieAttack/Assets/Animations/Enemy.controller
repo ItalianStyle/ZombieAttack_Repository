@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e22e350725094641adfc69b787cfd6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSFX: {fileID: 0}
-  attackSoundEffects: []
 --- !u!1102 &-5456949072504180923
 AnimatorState:
   serializedVersion: 5
@@ -104,8 +102,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e22e350725094641adfc69b787cfd6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSFX: {fileID: 0}
-  attackSoundEffects: []
 --- !u!91 &9100000
 AnimatorController:
   m_ObjectHideFlags: 0
