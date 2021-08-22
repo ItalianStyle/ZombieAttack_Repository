@@ -24,7 +24,7 @@ namespace ZombieAttack
         [SerializeField] Button exitGameButton = null;
         //[SerializeField] Button skipTutorialButton = null;
 
-        public GameObject player = null;
+        GameObject player = null;
         Vector3 startPlayerPosition;
         Quaternion startPlayerRotation;
         
@@ -39,7 +39,7 @@ namespace ZombieAttack
         {
             //Verifica se esiste un'altra istanza del GameManager nella scena
             if (instance != null && instance != this)
-                DestroyImmediate(gameObject);
+                Destroy(gameObject);
             else
             {
                 instance = this;
