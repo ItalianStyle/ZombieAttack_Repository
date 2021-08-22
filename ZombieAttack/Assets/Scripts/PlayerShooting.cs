@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ZombieAttack
 {
@@ -11,9 +9,7 @@ namespace ZombieAttack
         [SerializeField] bool canScrollMouse = false;
         [SerializeField] SimpleHealthBar gunBar = null;
 
-        Pickup pickup;
-
-         int CurrentGunIndex
+        int CurrentGunIndex
         {
             get => _currentGun;
             set
@@ -26,6 +22,8 @@ namespace ZombieAttack
             }
         }
 
+        Gun CurrentGun => guns[CurrentGunIndex];
+
         private void Awake() => guns = GetComponentsInChildren<Gun>();
 
         private void Start()
@@ -37,9 +35,9 @@ namespace ZombieAttack
         private void Update()
         {
             if (Input.GetMouseButton(0))
-                guns[CurrentGunIndex].Shoot(gunBar);
-            
-            if (canScrollMouse)
+                CurrentGun.Shoot(gunBar);
+
+            else if (canScrollMouse)
             {
                 if (Input.GetAxis("Mouse ScrollWheel") > 0) 
                     SetCurrentGun(CurrentGunIndex + 1);
@@ -56,7 +54,7 @@ namespace ZombieAttack
                 pickup.OnPickupTake += () =>
                 {
                     if (pickup.pickupType is Pickup.PickupType.Shotgun)
-                        SetCurrentGun();
+                        SetShotgunAsCurrentGun();
                 };
             }
         }
@@ -76,15 +74,10 @@ namespace ZombieAttack
                 guns[i].SetGunState(i == CurrentGunIndex);
         }
 
-        private void SetCurrentGun()
+        private void SetShotgunAsCurrentGun()
         {
             canScrollMouse = true;
-            SetCurrentGun(1); // 1 == Shotgun
-            pickup.OnPickupTake -= () =>
-            {
-                if (pickup.pickupType is Pickup.PickupType.Shotgun)
-                    SetCurrentGun();
-            };
+            SetCurrentGun(1); // 1 == Shotgun  
         }
 
         //Changes current gun of player by giving new gun index
@@ -92,9 +85,9 @@ namespace ZombieAttack
         {
             if (CurrentGunIndex != newCurrentGunIndex)
             {
-                guns[CurrentGunIndex].SetGunState(false);
+                CurrentGun.SetGunState(false);
                 CurrentGunIndex = newCurrentGunIndex;
-                guns[CurrentGunIndex].SetGunState(true);
+                CurrentGun.SetGunState(true);
             }
         }
     }
