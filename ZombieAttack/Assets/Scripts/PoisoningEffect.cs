@@ -43,7 +43,7 @@ namespace ZombieAttack
         }
 
         private void Awake() => playerHealth = GetComponent<Health>();
-        
+
         IEnumerator DealPoisonDamage()
         {
             float durationElapsed = 0f;
