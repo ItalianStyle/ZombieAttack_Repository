@@ -9,8 +9,16 @@ namespace ZombieAttack
 {
     public class EnemyManager : MonoBehaviour
     {
-        public static event Action OnWaveKilled = delegate { };
-        public static event Action OnAllWavesKilled = delegate { };
+        [SerializeField] Wave[] waves = null;
+
+        Transform finalObjectiveTransform = null;
+        int _currentWave = 0;
+        int killedEnemies = 0;
+        int[] spawnedEnemies;
+        List<GameObject> activeEnemies = null;
+        List<Transform> spawnPoints = null;
+
+        Transform SpawnPoint => spawnPoints[Random.Range(0, spawnPoints.Count)];
 
         public int CurrentWave
         {
@@ -29,15 +37,8 @@ namespace ZombieAttack
         public bool IsFirstWave => CurrentWave == 0;
 
         public static EnemyManager instance;
-
-        [SerializeField] List<Transform> spawnPoints = null;
-        [SerializeField] Wave[] waves = null;
-
-        Transform finalObjectiveTransform = null;
-        int _currentWave = 0;
-        int killedEnemies = 0;       
-        int[] spawnedEnemies;
-        List<GameObject> activeEnemies = new List<GameObject>();
+        public static event Action OnWaveKilled = delegate { };
+        public static event Action OnAllWavesKilled = delegate { };
 
         private void OnEnable()
         {
@@ -107,6 +108,7 @@ namespace ZombieAttack
             //GameManager.PrintExecutionLocation(this);
             foreach (GameObject enemy in activeEnemies)
                 enemy.SetActive(false);
+            activeEnemies.Clear();
 
             GetWavesFromAssets();
             foreach (Wave wave in waves)
@@ -114,7 +116,6 @@ namespace ZombieAttack
 
             CurrentWave = waveIndex;
             spawnedEnemies = new int[waves[CurrentWave].maxEnemyTypes.Length];
-            activeEnemies = new List<GameObject>();
             
             //Start the wave
             UI_Manager.instance.PlayWaveTextAnimation(isVictoryText: false);
@@ -186,10 +187,14 @@ namespace ZombieAttack
 
         private void SetupEnemy(GameObject enemy)
         {
+            //Reset any eventual velocity from past enemies killed
             enemy.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            
             //Choose spawnpoint
-            enemy.transform.position = spawnPoints[Random.Range(0, spawnPoints.Count)].position;
-            enemy.GetComponent<EnemyMovement>().SetDestination(enemy.CompareTag("EnemyMedium")? GameManager.instance.player.transform : finalObjectiveTransform);          
+            Transform spawnPoint = SpawnPoint;
+            enemy.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
+
+            enemy.GetComponent<EnemyMovement>().SetTargetDestination(enemy.CompareTag("EnemyMedium")? GameManager.instance.player.transform : finalObjectiveTransform);          
             enemy.GetComponent<Health>().OnEnemyDead += IncreaseKillCount;
         }
 
