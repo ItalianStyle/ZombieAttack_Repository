@@ -16,6 +16,7 @@ namespace ZombieAttack
         [SerializeField] Color deactivatedIconColor = Color.red;
         bool canProcessInput = false;
         SpriteRenderer iconRenderer = null;
+        AudioSource turretAudioSource = null;
 
         public Turret Turret
         {
@@ -31,6 +32,7 @@ namespace ZombieAttack
         {
             _turret = GetComponentInChildren<Turret>();
             iconRenderer = GetComponentInChildren<SpriteRenderer>();
+            turretAudioSource = GetComponent<AudioSource>();
         }
         
         private void Start() => CanEnableTurret(false);
@@ -53,12 +55,14 @@ namespace ZombieAttack
                 if (Turret.enabled)
                 {
                     Wallet.instance.UpdateCurrentMoney(Turret.SellingCost, true);
+                    MyAudioManager.instance.PlayCashSFX();
                     CanEnableTurret(false);
                 }
                 //Meccanica di acquisto
                 else if (Wallet.instance.HasEnoughMoneyFor(Turret.BuildingCost))
                 {
                     Wallet.instance.UpdateCurrentMoney(Turret.BuildingCost, false);
+                    MyAudioManager.instance.PlayCashSFX();
                     CanEnableTurret(true);
                 }
             }
