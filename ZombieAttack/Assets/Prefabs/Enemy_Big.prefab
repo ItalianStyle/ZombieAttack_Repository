@@ -426,11 +426,10 @@ MonoBehaviour:
   _breathSFX: {fileID: 8300000, guid: 1cdc8543f20cc6740a40de3a0b12efd0, type: 3}
   _attackSoundEffects:
   - {fileID: 8300000, guid: 90f3f7413d4c9f940ab9606a7d8416e8, type: 3}
-  hitSoundEffects:
+  _hitSoundEffects:
   - {fileID: 8300000, guid: 6fca8b9145e6a68498cd8e467e5ac97f, type: 3}
-  deadSoundEffects:
+  _deadSoundEffects:
   - {fileID: 8300000, guid: 323e088e25fd0e645890f1df0a700788, type: 3}
-  enemyAudioSource: {fileID: 0}
 --- !u!1 &7574764763013924653
 GameObject:
   m_ObjectHideFlags: 0

@@ -427,11 +427,10 @@ MonoBehaviour:
   _attackSoundEffects:
   - {fileID: 8300000, guid: 4dfeabcb5c32a6543a2a7ca3914eeed8, type: 3}
   - {fileID: 8300000, guid: ec6be1c3f4a68ef4da83771ce769ac85, type: 3}
-  hitSoundEffects:
+  _hitSoundEffects:
   - {fileID: 8300000, guid: 6fca8b9145e6a68498cd8e467e5ac97f, type: 3}
-  deadSoundEffects:
-  - {fileID: 8300000, guid: 7432da7d23838b2479fa13305688392f, type: 3}
-  enemyAudioSource: {fileID: 0}
+  _deadSoundEffects:
+  - {fileID: 8300000, guid: 323e088e25fd0e645890f1df0a700788, type: 3}
 --- !u!1 &7574764763013924653
 GameObject:
   m_ObjectHideFlags: 0
