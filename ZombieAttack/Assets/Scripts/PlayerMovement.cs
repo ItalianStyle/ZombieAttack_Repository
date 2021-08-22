@@ -52,6 +52,9 @@ namespace ZombieAttack
                 transform.rotation = Quaternion.Slerp(transform.rotation, target, .1f);
             }
 
+            if(Input.GetMouseButton(1))
+                FaceCamera();
+
             //Sprint mechanic -> https://www.youtube.com/watch?v=JUTFiyBjlnc&ab_channel=SingleSaplingGames
             //Stamina mechanic -> https://www.youtube.com/watch?v=x9zOct1AMxo&ab_channel=StuartSpence
             if (CanRun)
