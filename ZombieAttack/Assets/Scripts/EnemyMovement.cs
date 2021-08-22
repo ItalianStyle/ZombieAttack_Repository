@@ -3,13 +3,18 @@ using UnityEngine.AI;
 
 namespace ZombieAttack
 {
+    [RequireComponent(typeof(NavMeshAgent))]
     public class EnemyMovement : MonoBehaviour
     {
         NavMeshAgent enemyAgent;
+        Transform destination = null;
+        Animator enemyAnimator = null;
 
-        [SerializeField] Transform destination = null;
-
-        private void Awake() => enemyAgent = GetComponent<NavMeshAgent>();
+        private void Awake()
+        {
+            enemyAgent = GetComponent<NavMeshAgent>();
+            enemyAnimator = GetComponent<Animator>();
+        }
 
         private void Update()
         {
@@ -20,15 +25,21 @@ namespace ZombieAttack
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag("Finish") && !gameObject.CompareTag("EnemyMedium"))
-                enemyAgent.isStopped = true;           
+            {
+                enemyAgent.isStopped = true;
+                enemyAnimator.SetBool("CanAttackObjective", true);
+            }
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.gameObject.CompareTag("Finish"))            
-                enemyAgent.isStopped = false;        
-        }
+            if (other.gameObject.CompareTag("Finish"))
+            {
+                enemyAgent.isStopped = false;
+                enemyAnimator.SetBool("CanAttackObjective", false);
+            }
+        }       
 
-        public void SetDestination(Transform destinationTransform) => destination = destinationTransform;
+        public void SetTargetDestination(Transform targetDestinationTransform) => destination = targetDestinationTransform;
     }
 }
