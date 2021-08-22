@@ -17,6 +17,7 @@ namespace ZombieAttack
         public PickupType pickupType = PickupType.NotDefined;
 
         [Header("PowerUp properties and stats")]
+        [SerializeField] AudioClip pickupSFX;
         public float timeToRespawn;
         [SerializeField] [Min(0.1f)] float healAmount;
         [SerializeField] [Min(.1f)] float staminaRecoverAmount;
@@ -83,6 +84,7 @@ namespace ZombieAttack
                 if (canProcessInput && Input.GetKeyDown(KeyCode.E) && Wallet.instance.HasEnoughMoneyFor(gunToActivate.cost))
                 {
                     Wallet.instance.UpdateCurrentMoney(gunToActivate.cost, false);
+                    MyAudioManager.instance.PlayCashSFX();
                     SetPickup(false);
                 }
             }
@@ -97,10 +99,7 @@ namespace ZombieAttack
             }
         }
 
-        private void ResetPickup()
-        {
-            SetPickup(true);
-        }
+        private void ResetPickup() => SetPickup(true);
 
         void SetPickup(bool isActive)
         {
@@ -123,6 +122,8 @@ namespace ZombieAttack
                 meshRenderer.material.color = temp;
 
                 enabled = isActive;
+                if(!isActive)
+                    MyAudioManager.instance.PlayClipAt(pickupSFX, transform.position);
             }
 
             //Show up the world canvas for timer
