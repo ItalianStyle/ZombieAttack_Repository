@@ -44,9 +44,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playButton: {fileID: 0}
+  restartWaveButton: {fileID: 0}
   resumeButton: {fileID: 0}
   exitGameButton: {fileID: 0}
-  skipTutorialButton: {fileID: 0}
-  player: {fileID: 0}
-  currentGameState: 5
+  currentGameState: 6
   isPaused: 0
