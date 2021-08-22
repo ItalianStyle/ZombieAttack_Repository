@@ -13,6 +13,7 @@ namespace ZombieAttack
         [SerializeField] CanvasGroup finishPanel = null;
         [SerializeField] CanvasGroup playerPanel = null;
         [SerializeField] CanvasGroup restartPanel = null;
+        [SerializeField] CanvasGroup settingsPanel = null;
 
         [SerializeField] CanvasGroup finalObjectiveHPBarPanel = null;
         [SerializeField] CanvasGroup mainMenuPanel = null;
@@ -25,6 +26,8 @@ namespace ZombieAttack
         [SerializeField] Text pickupTimerText;
         [SerializeField] Text timerText = null;
         [SerializeField] Text moneyText = null;
+        [SerializeField] Text bonusMoneyText = null;
+        [SerializeField] Animator bonusMoneyTextAnimator = null;
 
         [Header("End screen stats")]
         [SerializeField] FinishScreen[] finishScreens = null;
@@ -33,7 +36,13 @@ namespace ZombieAttack
         [SerializeField] GameObject playButton = null;        
         [SerializeField] GameObject resumeButton = null;
         [SerializeField] GameObject restartWaveButton = null;
-        
+        [SerializeField] Button settingsButton = null;
+
+        [Header("Slider references")]
+        [SerializeField] Slider masterVolumeSlider;
+        [SerializeField] Slider musicVolumeSlider;
+        [SerializeField] Slider sfxVolumeSlider;
+
         Text titleFinishScreen = null;
 
         Camera cam;
@@ -55,6 +64,10 @@ namespace ZombieAttack
 
         private void OnDisable()
         {
+            PlayerPrefs.SetFloat(MyAudioManager.VolumeType.Master.ToString(), masterVolumeSlider.value);
+            PlayerPrefs.SetFloat(MyAudioManager.VolumeType.Music.ToString(), musicVolumeSlider.value);
+            PlayerPrefs.SetFloat(MyAudioManager.VolumeType.SFX.ToString(), sfxVolumeSlider.value);
+
             PauseListener.OnPauseKeyPressed -= () => SetFinishScreen(GameManager.GameState.Paused);
 
             Wallet.OnCurrentMoneyChanged -= UpdateMoneyText;
@@ -106,6 +119,12 @@ namespace ZombieAttack
                     //playerEquipment = GameObject.FindGameObjectWithTag("Player").GetComponent<Equipment>();
 
                     //Trova riferimento agli screen
+                    settingsPanel = GameObject.Find("UI/SettingsPanel").GetComponent<CanvasGroup>();
+
+                    masterVolumeSlider = settingsPanel.transform.Find("AudioPanel/MasterVolumePanel/VolumeSlider").GetComponent<Slider>();
+                    musicVolumeSlider = settingsPanel.transform.Find("AudioPanel/BackgroundVolumePanel/VolumeSlider").GetComponent<Slider>();
+                    sfxVolumeSlider = settingsPanel.transform.Find("AudioPanel/SFXVolumePanel/VolumeSlider").GetComponent<Slider>();
+
                     restartPanel = GameObject.FindGameObjectWithTag("RestartPanel").GetComponent<CanvasGroup>();
                     finishPanel = GameObject.FindGameObjectWithTag("FinishPanel").GetComponent<CanvasGroup>();
                     titleFinishScreen = finishPanel.transform.GetChild(0).GetComponent<Text>();
@@ -123,7 +142,10 @@ namespace ZombieAttack
                     poisonIconAnimator = playerPanel.transform.Find("PoisoningIcon_Background").GetComponent<Animator>();
 
                     timerText = playerPanel.transform.Find("TimerText").GetComponent<Text>();
+
                     moneyText = playerPanel.transform.Find("MoneyText").GetComponent<Text>();
+                    bonusMoneyText = moneyText.transform.GetChild(0).GetComponent<Text>();
+                    bonusMoneyTextAnimator = bonusMoneyText.GetComponent<Animator>();
 
                     //Trova il riferimento al tutorial
                     //tutorialPanel = GameObject.FindGameObjectWithTag("TutorialPanel").GetComponent<CanvasGroup>();
@@ -131,6 +153,7 @@ namespace ZombieAttack
                     //Trova il riferimento ai bottoni
                     resumeButton = GameObject.FindGameObjectWithTag("ResumeButton");
                     restartWaveButton = GameObject.FindGameObjectWithTag("RestartWaveButton");
+                    settingsButton = GameObject.FindGameObjectWithTag("OptionsButton").GetComponent<Button>();
                     break;
 
                 default:
@@ -175,13 +198,11 @@ namespace ZombieAttack
                     ResetUI();
 
                     UpdateMoneyText();
+                    settingsButton.onClick.AddListener(SetSliders);
+
                     //SetCanvasGroup(tutorialPanel, true);
                     GameManager.GameRestarted += (_) => ResetUI();
-                    GameManager.GameResumed += () =>
-                    {                      
-                        SetHUD(true);
-                        PlayWaveTextAnimation(isVictoryText: false);
-                    };
+                    GameManager.GameResumed += () => SetHUD(true);
 
                     PauseListener.OnPauseKeyPressed += () => SetFinishScreen(GameManager.GameState.Paused);
 
@@ -208,16 +229,40 @@ namespace ZombieAttack
             }
         }
 
+        private void SetSliders()
+        {
+            //Set visually sliders
+            masterVolumeSlider.value = PlayerPrefs.GetFloat(MyAudioManager.VolumeType.Master.ToString(), masterVolumeSlider.value);
+            musicVolumeSlider.value = PlayerPrefs.GetFloat(MyAudioManager.VolumeType.Music.ToString(), musicVolumeSlider.value);
+            sfxVolumeSlider.value = PlayerPrefs.GetFloat(MyAudioManager.VolumeType.SFX.ToString(), sfxVolumeSlider.value);
+
+            //Sliders functionality
+            masterVolumeSlider.onValueChanged.AddListener((newValue) =>
+            { 
+                MyAudioManager.instance.SetVolume(newValue, MyAudioManager.VolumeType.Master);
+                musicVolumeSlider.interactable = newValue != masterVolumeSlider.minValue;
+                sfxVolumeSlider.interactable = newValue != masterVolumeSlider.minValue;
+            });               
+            musicVolumeSlider.onValueChanged.AddListener((newValue) => MyAudioManager.instance.SetVolume(newValue, MyAudioManager.VolumeType.Music));
+            sfxVolumeSlider.onValueChanged.AddListener((newValue) =>
+            {
+                MyAudioManager.instance.SetVolume(newValue, MyAudioManager.VolumeType.SFX);
+                MyAudioManager.instance.PlayCashSFX();
+            });
+        }
+
         private void ResetUI()
         {  
             SetHUD(true);    
             timerText.enabled = false;
+            PlayWaveTextAnimation(isVictoryText: false);
         }
 
         public void SetHUD(bool canShow)
         {
             SetCanvasGroup(restartPanel, !canShow);
             SetCanvasGroup(finishPanel, !canShow);
+            SetCanvasGroup(settingsPanel, !canShow);
 
             SetHPBar(GameManager.EntityType.Player, canShow);
             SetHPBar(GameManager.EntityType.FinalObjective, canShow);
@@ -298,10 +343,17 @@ namespace ZombieAttack
         public void UpdateMoneyText()
         {
             if (Wallet.instance is null)
-                Wallet.InitializeWalletInstance();                   
+                Wallet.InitializeWalletInstance();
             moneyText.text = Wallet.instance.GetCurrentMoney().ToString() + " $";
         }
 
+        public void UpdateMoneyText(int amount, bool isReward)
+        {
+            UpdateMoneyText();
+            bonusMoneyText.text = isReward ? "+ " + amount + " $" : "- " + amount + " $";
+            bonusMoneyTextAnimator.SetTrigger(isReward ? "CanPlayRewardMoney" : "CanPlayDetractionMoney");
+        }
+        
         public void SetTimerTextAnimation(int maxTime, bool isWaveTimer)
         {
             if (timerText.TryGetComponent(out Animator timerAnimator))
