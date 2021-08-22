@@ -14,6 +14,7 @@ namespace ZombieAttack
         Health enemyHealth;
         AudioSource enemyAudioSource;
         bool isAudioPaused = false;
+        bool isPlayingHitSFX = false;
 
         AudioClip HitSFX => _hitSoundEffects[Random.Range(0, _hitSoundEffects.Length)];
         AudioClip DeadSFX => _deadSoundEffects[Random.Range(0, _deadSoundEffects.Length)];
@@ -67,8 +68,18 @@ namespace ZombieAttack
 
         public void PlayHitSFX(Health enemyHealth)
         {
-            if (enemyHealth.IsAlive)
+            if (enemyHealth.IsAlive && !isPlayingHitSFX)
+            {
+                isPlayingHitSFX = true;
                 MyAudioManager.instance.PlayAudioSourceWithClip(enemyAudioSource, HitSFX, true);
+                StartCoroutine(WaitForHitSFX());
+            }
+        }
+
+        private IEnumerator WaitForHitSFX()
+        {
+            yield return new WaitForSeconds(HitSFX.length);
+            isPlayingHitSFX = false;
         }
     }
 }
