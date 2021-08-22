@@ -30,7 +30,7 @@ namespace ZombieAttack
                 _currentHealth = Mathf.Clamp(value, 0f, maxHealth);
                
                 //Fire the event everytime health is changed
-                OnHealthPctChanged(CurrentHealth, maxHealth);
+                OnHealthPctChanged.Invoke(CurrentHealth, maxHealth);
             }
         }
 
@@ -65,7 +65,7 @@ namespace ZombieAttack
             if (CurrentHealth == 0f)
             {
                 gameObject.SetActive(false);
-                    
+
                 if (gameObject.CompareTag("Finish"))  //Check if it's FinalObjective
                     OnObjectiveDestroyed.Invoke();  //Game Over by FinalObjective's death
 
@@ -73,8 +73,8 @@ namespace ZombieAttack
                     OnPlayerDead.Invoke();  //Game Over by Player's death
 
                 else if (gameObject.layer == LayerMask.NameToLayer("Enemy"))
-                    OnEnemyDead.Invoke(this);   //Updating kill counter
-                    //Play sound               
+                    OnEnemyDead.Invoke(this);   //Updating kill counter   
+                
             }
             else if (gameObject.activeInHierarchy)
                 StartCoroutine(nameof(ColorDamaged), temp > CurrentHealth ? damagedColor : healedColor);  
