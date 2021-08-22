@@ -16,7 +16,9 @@ namespace ZombieAttack
         int killedEnemies = 0;
         int[] spawnedEnemies;
         List<GameObject> activeEnemies = null;
-        List<Transform> spawnPoints = null;
+        List<Transform> spawnPoints = new List<Transform>();
+
+        Transform playerTransform = null;
 
         Transform SpawnPoint => spawnPoints[Random.Range(0, spawnPoints.Count)];
 
@@ -62,6 +64,7 @@ namespace ZombieAttack
         {
             if(scene.buildIndex == 1)
             { 
+                playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
                 finalObjectiveTransform = GameObject.FindGameObjectWithTag("Finish").transform;
                 //Initialize Spawn points
                 for (int i = 0; i < transform.childCount; i++)
@@ -194,7 +197,7 @@ namespace ZombieAttack
             Transform spawnPoint = SpawnPoint;
             enemy.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
 
-            enemy.GetComponent<EnemyMovement>().SetTargetDestination(enemy.CompareTag("EnemyMedium")? GameManager.instance.player.transform : finalObjectiveTransform);          
+            enemy.GetComponent<EnemyMovement>().SetTargetDestination(enemy.CompareTag("EnemyMedium")? playerTransform : finalObjectiveTransform);          
             enemy.GetComponent<Health>().OnEnemyDead += IncreaseKillCount;
         }
 
