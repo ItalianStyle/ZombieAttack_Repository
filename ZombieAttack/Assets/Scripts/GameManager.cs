@@ -23,7 +23,7 @@ namespace ZombieAttack
         [SerializeField] Button resumeButton = null;
         [SerializeField] Button exitGameButton = null;
         //[SerializeField] Button skipTutorialButton = null;
-     
+
         public GameObject player = null;
         Vector3 startPlayerPosition;
         Quaternion startPlayerRotation;
@@ -91,7 +91,7 @@ namespace ZombieAttack
 
                     //skipTutorialButton.onClick.AddListener(delegate { SetMousePointer(false); });
                     
-                    Wallet.InitializeWalletInstance();
+                    Wallet.InitializeWalletInstance(100);
 
                     PauseListener.OnPauseKeyPressed += () => SetStatusGame(GameState.Paused);
 
@@ -179,11 +179,13 @@ namespace ZombieAttack
             switch(currentGameState)
             {
                 case GameState.Paused:
+                    isPaused = true;
                     //Informo che il gioco è in pausa
                     GamePaused?.Invoke();
                     break;
 
                 case GameState.Resumed:
+                    isPaused = false;
                     //Informo che il gioco è ripreso
                     GameResumed?.Invoke();
                     break;
