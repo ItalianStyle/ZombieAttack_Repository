@@ -15,6 +15,7 @@ namespace ZombieAttack
         public float damage;
         [SerializeField] float maxRange = 10f;
         [SerializeField] float rotationSpeed = 1f;
+
         public int BuildingCost 
         {
             get => 1;
@@ -118,10 +119,7 @@ namespace ZombieAttack
             transform.rotation = Quaternion.Euler(0f, rotation.y, 0f);
         }
 
-        private void CanShoot(bool canShoot)
-        {
-            gunAnimator.SetBool("canActiveTurret", canShoot);
-        }
+        private void CanShoot(bool canShoot) => gunAnimator.SetBool("canActiveTurret", canShoot);
 
         private void RemoveEnemyFromList(Health enemyToRemove)
         {
