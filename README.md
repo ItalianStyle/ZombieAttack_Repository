@@ -11,6 +11,8 @@ Grass Texture: https://www.freepik.com/photos/backgroundBackground photo created
 
 Sand Texture: https://www.deviantart.com/hhh316/art/Seamless-desert-sand-texture-183159331 by hhh316 "Seamless desert sand texture"
 
+Wood Texture: https://unblast.com/5-free-seamless-wood-textures-jpg/
+
 Cassaforte Texture: https://www.freecreatives.com/textures/dark-metal-textures.html
 
 Poisoning icon: http://clipart-library.com/free/poison-symbol-png.html
