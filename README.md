@@ -21,4 +21,8 @@ Cassaforte Texture: https://www.freecreatives.com/textures/dark-metal-textures.h
 
 Poisoning icon: http://clipart-library.com/free/poison-symbol-png.html
 
+Hit SFXs: https://freesound.org/people/rockittt/sounds/442288/
+
+Turret SFXs: https://freesound.org/people/Steelskull/sounds/153492/
+
 License https://creativecommons.org/licenses/by/3.0/
