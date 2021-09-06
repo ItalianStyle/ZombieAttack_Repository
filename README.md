@@ -7,6 +7,8 @@ HealthBar on characters: https://www.youtube.com/watch?v=CA2snUe7ARM
 
 Scriptable Objects: https://www.youtube.com/watch?v=aPXvoWVabPY
 
+Glow effect: https://www.youtube.com/watch?v=bkPe1hxOmbI&t=2s
+
 Tetto texture: https://www.deviantart.com/gurumedit/art/Roof-Shingles-1-208915509
 
 Grass Texture: https://www.freepik.com/photos/backgroundBackground photo created by lifeforstock - www.freepik.com
