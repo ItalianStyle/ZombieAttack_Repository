@@ -4,9 +4,8 @@ Gioco estivo 2020/21 per la Nautilus Academy
 Fonti:
 
 HealthBar on characters: https://www.youtube.com/watch?v=CA2snUe7ARM
-
 Scriptable Objects: https://www.youtube.com/watch?v=aPXvoWVabPY
-
+Camera Shake: https://www.youtube.com/watch?v=ACf1I27I6Tk
 Glow effect: https://www.youtube.com/watch?v=bkPe1hxOmbI&t=2s
 
 Tetto texture: https://www.deviantart.com/gurumedit/art/Roof-Shingles-1-208915509
